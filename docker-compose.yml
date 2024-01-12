@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+  postgres:
+    container_name: sigsaude_postgres
+    image: postgres
+    user: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: db_sigsaude
+      TZ: 'UTC'
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_db:/var/lib/postgresql/data
+
+networks:
+  sigsaude_net:
+    name: sigsaude_net
+
+volumes:
+  postgres_db:
