@@ -22,5 +22,6 @@ const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Specialty]);
     RemoveSpecialtieservice,
   ],
   imports: [TYPE_ORM_TEMPLATES],
+  exports: [SpecialtyRepository],
 })
 export class SpecialtyModule {}

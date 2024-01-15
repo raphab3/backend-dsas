@@ -3,7 +3,11 @@ import { IsEmail, IsNotEmpty } from 'class-validator';
 import { IUser } from '../interfaces/user.interface';
 
 export class CreateUserDto
-  implements Omit<IUser, 'id' | 'rules' | 'salt' | 'created_at' | 'updated_at'>
+  implements
+    Omit<
+      IUser,
+      'id' | 'rules' | 'salt' | 'person_sig' | 'created_at' | 'updated_at'
+    >
 {
   @ApiProperty({
     description: 'The email of the user',

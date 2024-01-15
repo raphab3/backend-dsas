@@ -18,7 +18,7 @@ import { RemovePersonSigService } from '@modules/persosnSig/services/remove.pers
 import { UpdatePersonSigService } from '@modules/persosnSig/services/update.personSig.service';
 
 @ApiTags('personSig')
-@Controller('personSig')
+@Controller('persons-sig')
 export class PersonSigController {
   constructor(
     private readonly createPersonSigService: CreatePersonSigService,

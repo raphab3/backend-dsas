@@ -1,4 +1,4 @@
-import { Role } from '@guards/rule.enum';
+import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
 
 export interface IUser {
   id: string;
@@ -6,7 +6,7 @@ export interface IUser {
   email: string;
   password: string;
   salt: string;
-  rules: Role[];
+  person_sig: PersonSig;
   created_at: Date;
   updated_at: Date;
 }

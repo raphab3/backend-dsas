@@ -7,14 +7,14 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor() {
     super();
   }
-
   // Aqui você pode adicionar lógica adicional se necessário
-  // handleRequest(err: any, user: any, _info: any, _context: any) {
-  //   if (err || !user) {
-  //     // Lida com erro ou usuário não autenticado
-  //     throw err || new UnauthorizedException();
-  //   }
+  handleRequest(err: any, user: any, _info: any, _context: any) {
+    if (err || !user) {
+      // Lida com erro ou usuário não autenticado
+      throw err || new UnauthorizedException();
+    }
+    console.log(user);
 
-  //   return user;
-  // }
+    return user;
+  }
 }

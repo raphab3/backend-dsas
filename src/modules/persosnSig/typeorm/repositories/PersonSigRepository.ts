@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
 import { paginate } from '@shared/utils/Pagination';
 import { PersonSig } from '../entities/personSig.entity';
+import { UpdatePersonSigDto } from '@modules/persosnSig/dto/update-personSig.dto';
 
 @Injectable()
 class PersonSigRepository implements IPersonSigRepository {
@@ -68,7 +69,7 @@ class PersonSigRepository implements IPersonSigRepository {
 
   public async update(
     id: string,
-    data: CreatePersonSigDto,
+    data: UpdatePersonSigDto,
   ): Promise<PersonSig> {
     const builder = this.ormRepository.createQueryBuilder();
     const personSig = await builder

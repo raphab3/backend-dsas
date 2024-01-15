@@ -6,6 +6,7 @@ import { ILike, Repository } from 'typeorm';
 import { Professional } from '../entities/professional.entity';
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
 import { paginate } from '@shared/utils/Pagination';
+import { UpdateProfessionalDto } from '@modules/professionals/dto/update-professional.dto';
 
 @Injectable()
 class ProfessionalRepository implements IProfessionalRepository {
@@ -24,9 +25,10 @@ class ProfessionalRepository implements IProfessionalRepository {
     let page = 1;
     let perPage = 10;
 
-    const usersCreateQueryBuilder = this.ormRepository
-      .createQueryBuilder('users')
-      .orderBy('users.created_at', 'DESC');
+    const professionalsCreateQueryBuilder = this.ormRepository
+      .createQueryBuilder('professionals')
+      .leftJoinAndSelect('professionals.person_sig', 'person_sig')
+      .orderBy('professionals.created_at', 'DESC');
 
     const where: Partial<any> = {};
 
@@ -41,10 +43,10 @@ class ProfessionalRepository implements IProfessionalRepository {
     if (query.page) page = query.page;
     if (query.perPage) perPage = query.perPage;
 
-    usersCreateQueryBuilder.where(where);
+    professionalsCreateQueryBuilder.where(where);
 
     const result: IPaginatedResult<any> = await paginate(
-      usersCreateQueryBuilder,
+      professionalsCreateQueryBuilder,
       {
         page,
         perPage,
@@ -56,6 +58,7 @@ class ProfessionalRepository implements IProfessionalRepository {
 
   public async findOne(id: string): Promise<Professional | undefined> {
     return this.ormRepository.findOne({
+      relations: ['specialties', 'person_sig'],
       where: {
         id,
       },
@@ -68,7 +71,7 @@ class ProfessionalRepository implements IProfessionalRepository {
 
   public async update(
     id: string,
-    data: CreateProfessionalDto,
+    data: UpdateProfessionalDto,
   ): Promise<Professional> {
     const builder = this.ormRepository.createQueryBuilder();
     const professional = await builder

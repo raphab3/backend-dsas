@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('persons_sigs')
+@Entity('persons_sig')
 export class PersonSig implements IPersonSig {
   @PrimaryGeneratedColumn('uuid')
   id: string;

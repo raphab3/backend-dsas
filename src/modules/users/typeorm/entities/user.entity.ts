@@ -2,12 +2,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Role } from '@guards/rule.enum';
 import { IUser } from '@modules/users/interfaces/user.interface';
 import { Exclude } from 'class-transformer';
+import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
 
 @Entity('users')
 export class User implements IUser {
@@ -42,8 +43,8 @@ export class User implements IUser {
   })
   salt: string;
 
-  @Column('enum', { enum: Role, array: true, default: [Role.User] })
-  rules: Role[];
+  @OneToOne(() => PersonSig)
+  person_sig: PersonSig;
 
   @CreateDateColumn()
   created_at: Date;

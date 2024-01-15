@@ -14,10 +14,11 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
 } from '@nestjs/common';
 
-@ApiTags('schedule')
-@Controller('schedule')
+@ApiTags('schedules')
+@Controller('schedules')
 export class ScheduleController {
   constructor(
     private readonly createScheduleService: CreateScheduleService,
@@ -29,15 +30,14 @@ export class ScheduleController {
 
   @Post()
   @ApiOperation({ summary: 'Create Schedule' })
-  // @ApiConsumes('multipart/form-data')
-  // @UseInterceptors(FileInterceptor('avatar'))
   create(@Body() createScheduleDto: CreateScheduleDto) {
     return this.createScheduleService.execute(createScheduleDto);
   }
 
   @Get()
-  findAll() {
-    return this.findAllScheduleService.findAll();
+  findAll(@Req() req: any) {
+    const query = req.query;
+    return this.findAllScheduleService.findAll(query);
   }
 
   @Get(':id')

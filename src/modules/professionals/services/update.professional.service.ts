@@ -4,7 +4,9 @@ import ProfessionalRepository from '../typeorm/repositories/ProfessionalReposito
 
 @Injectable()
 export class UpdateProfessionalService {
-  constructor(private readonly professionalRepository: ProfessionalRepository) {}
+  constructor(
+    private readonly professionalRepository: ProfessionalRepository,
+  ) {}
   update(id: string, updateProfessionalDto: UpdateProfessionalDto) {
     return this.professionalRepository.update(id, updateProfessionalDto);
   }

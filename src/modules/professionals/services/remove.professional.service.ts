@@ -3,7 +3,9 @@ import ProfessionalRepository from '../typeorm/repositories/ProfessionalReposito
 
 @Injectable()
 export class RemoveProfessionalService {
-  constructor(private readonly professionalRepository: ProfessionalRepository) {}
+  constructor(
+    private readonly professionalRepository: ProfessionalRepository,
+  ) {}
   remove(id: string) {
     return this.professionalRepository.delete(id);
   }

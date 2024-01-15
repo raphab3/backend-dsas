@@ -22,5 +22,6 @@ const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Professional]);
     RemoveProfessionalService,
   ],
   imports: [TYPE_ORM_TEMPLATES],
+  exports: [ProfessionalRepository],
 })
 export class ProfessionalModule {}

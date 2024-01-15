@@ -6,7 +6,6 @@ export class MeService {
   constructor(private findOneUsersService: FindOneUsersService) {}
 
   async execute(id: string): Promise<any> {
-    console.log('MeService -> execute -> id', id);
     if (!id) {
       throw new Error('User not found');
     }

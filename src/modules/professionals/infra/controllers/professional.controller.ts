@@ -17,8 +17,8 @@ import {
   Req,
 } from '@nestjs/common';
 
-@ApiTags('professional')
-@Controller('professional')
+@ApiTags('professionals')
+@Controller('professionals')
 export class ProfessionalController {
   constructor(
     private readonly createProfessionalService: CreateProfessionalService,
@@ -30,8 +30,6 @@ export class ProfessionalController {
 
   @Post()
   @ApiOperation({ summary: 'Create Professional' })
-  // @ApiConsumes('multipart/form-data')
-  // @UseInterceptors(FileInterceptor('avatar'))
   create(@Body() createProfessionalDto: CreateProfessionalDto) {
     return this.createProfessionalService.execute(createProfessionalDto);
   }

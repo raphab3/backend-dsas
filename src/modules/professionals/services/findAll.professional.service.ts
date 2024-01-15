@@ -3,7 +3,9 @@ import ProfessionalRepository from '../typeorm/repositories/ProfessionalReposito
 
 @Injectable()
 export class FindAllProfessionalService {
-  constructor(private readonly professionalRepository: ProfessionalRepository) {}
+  constructor(
+    private readonly professionalRepository: ProfessionalRepository,
+  ) {}
 
   async findAll(query: any): Promise<any> {
     return this.professionalRepository.list(query);
