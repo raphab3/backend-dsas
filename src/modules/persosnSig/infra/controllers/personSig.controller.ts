@@ -16,6 +16,8 @@ import { FindAllPersonSigService } from '@modules/persosnSig/services/findAll.pe
 import { FindOnePersonSigService } from '@modules/persosnSig/services/findOne.personSig.service';
 import { RemovePersonSigService } from '@modules/persosnSig/services/remove.personSig.service';
 import { UpdatePersonSigService } from '@modules/persosnSig/services/update.personSig.service';
+import { getPersonSigExternalDto } from '@modules/persosnSig/dto/get-personSigExternal.dto';
+import { FindExternalSigpmpbService } from '@modules/persosnSig/services/findExternal.sigpmpb.service';
 
 @ApiTags('personSig')
 @Controller('persons-sig')
@@ -26,12 +28,11 @@ export class PersonSigController {
     private readonly findOnePersonSigService: FindOnePersonSigService,
     private readonly updatePersonSigService: UpdatePersonSigService,
     private readonly removePersonSigService: RemovePersonSigService,
+    private readonly findExternalSigpmpbService: FindExternalSigpmpbService,
   ) {}
 
   @Post()
   @ApiOperation({ summary: 'Create PersonSig' })
-  // @ApiConsumes('multipart/form-data')
-  // @UseInterceptors(FileInterceptor('avatar'))
   create(@Body() createPersonSigDto: CreatePersonSigDto) {
     return this.createPersonSigService.execute(createPersonSigDto);
   }
@@ -40,6 +41,12 @@ export class PersonSigController {
   findAll(@Req() req: any) {
     const query = req.query;
     return this.findAllPersonSigService.findAll(query);
+  }
+
+  @Post('external')
+  findAllExternal(@Body() body: getPersonSigExternalDto) {
+    const matricula = body.matricula;
+    return this.findExternalSigpmpbService.execute(matricula);
   }
 
   @Get(':id')

@@ -52,8 +52,6 @@ export class CreateScheduleService {
       description: `
         Dr. ${professionalExists.person_sig.name} | 
         ${specialtyExistsInProfessional.name} 
-        (${0} / 
-          ${createScheduleDto.max_patients})
       `
         .replace(/\s+/g, ' ')
         .trim(),

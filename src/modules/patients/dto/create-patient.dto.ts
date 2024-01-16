@@ -2,9 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePatientDto {
   @ApiProperty({
-    description: 'The name of the patient',
+    description: 'Person Sig ID',
     type: 'string',
-    example: 'John Doe',
+    example: 'uuid',
   })
-  name?: string;
+  person_sig_id: string;
 }

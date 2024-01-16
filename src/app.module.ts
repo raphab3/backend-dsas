@@ -1,21 +1,17 @@
-import { AddressModule } from '@modules/adresses/address.module';
-import { AppointmentModule } from '@modules/Appointments/Appointment.module';
-import { AttachmentModule } from '@modules/attachments/attachment.module';
+import { AppointmentModule } from '@modules/appointments/appointment.module';
 import { AuthModule } from '@modules/auth/auth.module';
 import { CONFIGS_MODULES, PROVIDERS } from './config.module';
 import { Module } from '@nestjs/common';
 import { PatientModule } from '@modules/patients/patient.module';
+import { PersonSigModule } from '@modules/persosnSig/personSig.module';
+import { ProfessionalModule } from '@modules/professionals/professional.module';
 import { ScheduleModule } from '@modules/schedules/schedule.module';
 import { SpecialtyModule } from '@modules/specialties/Specialty.module';
 import { UsersModule } from '@modules/users/users.module';
-import { ProfessionalModule } from '@modules/professionals/professional.module';
-import { PersonSigModule } from '@modules/persosnSig/personSig.module';
 
 const MODULES = [
   UsersModule,
   AuthModule,
-  AddressModule,
-  AttachmentModule,
   PatientModule,
   PersonSigModule,
   ScheduleModule,

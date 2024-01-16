@@ -5,7 +5,7 @@ import PatientRepository from '../typeorm/repositories/PatientRepository';
 export class FindAllPatientService {
   constructor(private readonly patientRepository: PatientRepository) {}
 
-  async findAll(): Promise<any> {
-    return this.patientRepository.list();
+  async findAll(query: any): Promise<any> {
+    return this.patientRepository.list(query);
   }
 }

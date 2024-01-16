@@ -6,4 +6,5 @@ export class UpdateScheduleDto extends PartialType(CreateScheduleDto) {
   start_time?: string;
   end_time?: string;
   max_patients?: number;
+  patients_attended?: number;
 }

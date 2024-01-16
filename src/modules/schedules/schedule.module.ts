@@ -7,9 +7,9 @@ import { ProfessionalModule } from '@modules/professionals/professional.module';
 import { RemoveScheduleService } from './services/remove.schedule.service';
 import { Schedule } from './typeorm/entities/schedule.entity';
 import { ScheduleController } from './infra/controllers/schedule.controller';
+import { SpecialtyModule } from '@modules/specialties/Specialty.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UpdateScheduleService } from './services/update.schedule.service';
-import { SpecialtyModule } from '@modules/specialties/Specialty.module';
 
 const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Schedule]);
 
@@ -24,5 +24,6 @@ const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Schedule]);
     RemoveScheduleService,
   ],
   imports: [TYPE_ORM_TEMPLATES, ProfessionalModule, SpecialtyModule],
+  exports: [ScheduleRepository],
 })
 export class ScheduleModule {}

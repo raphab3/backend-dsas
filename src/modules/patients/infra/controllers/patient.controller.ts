@@ -14,10 +14,11 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
 } from '@nestjs/common';
 
-@ApiTags('patient')
-@Controller('patient')
+@ApiTags('patients')
+@Controller('patients')
 export class PatientController {
   constructor(
     private readonly createPatientService: CreatePatientService,
@@ -36,8 +37,9 @@ export class PatientController {
   }
 
   @Get()
-  findAll() {
-    return this.findAllPatientService.findAll();
+  findAll(@Req() req: any) {
+    const { query } = req;
+    return this.findAllPatientService.findAll(query);
   }
 
   @Get(':id')
@@ -47,10 +49,7 @@ export class PatientController {
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updatePatientDto: UpdatePatientDto,
-  ) {
+  update(@Param('id') id: string, @Body() updatePatientDto: UpdatePatientDto) {
     return this.updatePatientService.update(id, updatePatientDto);
   }
 

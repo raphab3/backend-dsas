@@ -7,6 +7,7 @@ export class CreatePersonSigService {
 
   async execute(createPersonSigDto: any) {
     const saved = await this.personSigRepository.create(createPersonSigDto);
-    console.log('CreatePersonSigService -> saved', saved);
+
+    return saved;
   }
 }

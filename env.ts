@@ -14,7 +14,7 @@ const envSchema = z.object({
   DB_PORT: z.coerce.number(),
   DB_DATABASE: z.string(),
   DB_PASSWORD: z.string(),
-  DB_USERNAME: z.string(),
+  Specialties: z.string(),
 
   TZ: z.string().default('America/Sao_Paulo'),
 
@@ -24,7 +24,7 @@ const envSchema = z.object({
   API_SIGPMPB: z.string(),
   SIGPMPB_PASS: z.string(),
   TOKEN_SIGPMPB: z.string(),
-  Referer_SIGPMPB: z.string(),
+  Referer: z.string(),
 });
 
 const env = envSchema.parse(process.env);

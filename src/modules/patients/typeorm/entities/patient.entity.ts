@@ -1,20 +1,26 @@
+import { Appointment } from '@modules/appointments/typeorm/entities/Appointment.entity';
+import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
 import {
-  Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('patients')
 export class Patient {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({
-    type: 'varchar',
-  })
-  name: string;
+  @OneToOne(() => PersonSig)
+  @JoinColumn()
+  person_sig: PersonSig;
+
+  @OneToMany(() => Appointment, (appointment) => appointment.patient)
+  appointments: Appointment[];
 
   @CreateDateColumn()
   created_at: Date;
