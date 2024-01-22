@@ -7,7 +7,7 @@ export class FindExternalSigpmpbService {
     const config: AxiosRequestConfig<any> = {
       headers: {
         Authorization: `${env.TOKEN_SIGPMPB}`,
-        referer: env.Referer_SIGPMPB,
+        Referer: env.Referer_SIGPMPB,
       },
     };
 
