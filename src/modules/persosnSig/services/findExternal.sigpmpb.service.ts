@@ -17,9 +17,7 @@ export class FindExternalSigpmpbService {
         config,
       );
 
-      console.log('status: ', response.status);
-      console.log('headers: ', response.headers);
-      console.log('data: ', response.data);
+      console.log('response: ', response);
 
       return response.data;
     } catch (error) {
