@@ -6,8 +6,11 @@ export class FindExternalSigpmpbService {
   async execute(matricula: string): Promise<any> {
     const config: AxiosRequestConfig<any> = {
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `${env.TOKEN_SIGPMPB}`,
         Referer: env.Referer_SIGPMPB,
+        'User-Agent':
+          'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)',
       },
     };
 
