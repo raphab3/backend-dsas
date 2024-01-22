@@ -7,8 +7,8 @@ export class FindExternalSigpmpbService {
     const config: AxiosRequestConfig<any> = {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `${env.TOKEN_SIGPMPB}`,
-        Referer: `${env.Referer_SIGPMPB}`,
+        Authorization: env.TOKEN_SIGPMPB,
+        Referer: env.REFERER_SIGPMPB,
       },
     };
 
@@ -18,10 +18,9 @@ export class FindExternalSigpmpbService {
         config,
       );
 
-      console.log('response: ', response);
-      console.log('apenas o data: ', await response.data);
+      console.log('response.data', response.data);
 
-      return response.data;
+      return await response.data;
     } catch (error) {
       console.error('Erro ao consultar a API externa', error);
       throw error;

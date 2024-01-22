@@ -24,7 +24,7 @@ const envSchema = z.object({
   API_SIGPMPB: z.string(),
   SIGPMPB_PASS: z.string(),
   TOKEN_SIGPMPB: z.string(),
-  Referer_SIGPMPB: z.string(),
+  REFERER_SIGPMPB: z.string(),
 });
 
 const env = envSchema.parse(process.env);
