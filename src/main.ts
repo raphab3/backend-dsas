@@ -1,5 +1,5 @@
 import env from '@config/env';
-import fastifyCsrfProtection from '@fastify/csrf-protection';
+// import fastifyCsrfProtection from '@fastify/csrf-protection';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestFactory } from '@nestjs/core';
@@ -36,7 +36,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  await app.register(fastifyCsrfProtection);
+  // await app.register(fastifyCsrfProtection);
 
   await app.listen(env.SERVER_PORT);
 }
