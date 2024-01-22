@@ -1,28 +1,22 @@
 import { Injectable } from '@nestjs/common';
-import axios from 'axios';
 import env from '@config/env';
 
 @Injectable()
 export class FindExternalSigpmpbService {
   async execute(matricula: string): Promise<any> {
-    const config = {
-      method: 'get',
-      url: `${env.API_SIGPMPB}/servidores/${matricula}`,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `${env.TOKEN_SIGPMPB}`,
-        referer: env.Referer_SIGPMPB,
-      },
-    };
-
     try {
-      axios(config)
-        .then(function (response) {
-          console.log(response);
-          return response.data;
-        })
-        .catch(function (error) {
-          console.log(error);
+      fetch(`${env.API_SIGPMPB}/servidores/${matricula}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${env.TOKEN_SIGPMPB}`,
+          referer: env.Referer_SIGPMPB,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          return data;
         });
     } catch (error) {
       console.error('Erro ao consultar a API externa', error);
