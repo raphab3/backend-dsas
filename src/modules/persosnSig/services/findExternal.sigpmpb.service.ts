@@ -17,6 +17,8 @@ export class FindExternalSigpmpbService {
         },
       );
 
+      console.log(response);
+
       if (!response.ok) {
         throw new Error(`Erro na API: ${response.status}`);
       }
