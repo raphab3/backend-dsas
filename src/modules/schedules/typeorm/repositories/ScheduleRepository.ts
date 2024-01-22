@@ -26,6 +26,10 @@ class ScheduleRepository implements IScheduleRepository {
       .createQueryBuilder('schedules')
       .leftJoinAndSelect('schedules.professional', 'professional')
       .leftJoinAndSelect('schedules.specialty', 'specialty')
+      .leftJoinAndSelect('schedules.appointments', 'appointments')
+      .leftJoinAndSelect('appointments.patient', 'patient')
+      .leftJoinAndSelect('patient.person_sig', 'person_sig')
+
       .orderBy('schedules.created_at', 'DESC');
 
     const where: Partial<IQuerySchedule> = {};
