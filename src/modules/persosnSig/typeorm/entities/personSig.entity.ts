@@ -62,6 +62,116 @@ export class PersonSig implements IPersonSig {
   })
   is_military: boolean;
 
+  @Column({
+    type: 'varchar',
+  })
+  name_war: string;
+
+  @Column({
+    type: 'varchar',
+  })
+  admission: Date;
+
+  @Column({
+    type: 'varchar',
+  })
+  registration: string;
+
+  @Column({
+    type: 'varchar',
+  })
+  regime: string;
+
+  @Column({
+    type: 'varchar',
+  })
+  cpf: string;
+
+  @Column({
+    type: 'varchar',
+  })
+  driver_license: string;
+
+  @Column({
+    type: 'varchar',
+  })
+  address: string;
+
+  @Column({
+    type: 'varchar',
+  })
+  number: string;
+
+  @Column({
+    type: 'varchar',
+  })
+  complement: string;
+
+  @Column({
+    type: 'varchar',
+  })
+  neighborhood: string;
+
+  @Column({
+    type: 'varchar',
+  })
+  city: string;
+
+  @Column({
+    type: 'varchar',
+  })
+  state: string;
+
+  @Column({
+    type: 'varchar',
+  })
+  cep: string;
+
+  @Column({
+    type: 'varchar',
+  })
+  father: string;
+
+  @Column({
+    type: 'varchar',
+  })
+  mother: string;
+
+  @Column({
+    type: 'varchar',
+  })
+  nationality: string;
+
+  @Column({
+    type: 'varchar',
+  })
+  marital_status: string;
+
+  @Column({
+    type: 'varchar',
+  })
+  ddd: string;
+
+  @Column({
+    type: 'varchar',
+  })
+  phone: string;
+
+  @Column({
+    type: 'varchar',
+  })
+  email: string;
+
+  @Column({
+    type: 'varchar',
+  })
+  rg: string;
+
+  @Column({
+    type: 'varchar',
+  })
+  organ_exp: string;
+
   @CreateDateColumn()
   created_at: Date;
 

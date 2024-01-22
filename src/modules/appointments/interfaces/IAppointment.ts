@@ -1,5 +1,5 @@
 import { Patient } from '@modules/patients/typeorm/entities/patient.entity';
-import { ISchedule } from '@modules/schedules/interfaces/ISchedule';
+import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
 
 export const statusAppointmentOfTypeEnum = [
   'scheduled',
@@ -13,7 +13,7 @@ export type StatusAppointmentType =
 
 export interface IAppointment {
   id: string;
-  schedule: ISchedule;
+  schedule: Schedule;
   patient: Patient;
   status: StatusAppointmentType;
   created_at: Date;
