@@ -10,7 +10,6 @@ export class FindExternalSigpmpbService {
         {
           method: 'GET',
           headers: {
-            'Content-Type': 'application/json',
             Authorization: `${env.TOKEN_SIGPMPB}`,
             referer: env.Referer_SIGPMPB,
           },
@@ -21,13 +20,10 @@ export class FindExternalSigpmpbService {
         throw new Error(`Erro na API: ${response.status}`);
       }
 
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
-        throw new Error('Resposta não é um JSON válido');
-      }
+      console.log('status', response.status);
+      console.log(response);
 
-      const data = await response.json();
-      console.log(data);
+      const data = response.body;
       return data;
     } catch (error) {
       console.error('Erro ao consultar a API externa', error);
