@@ -19,6 +19,7 @@ export class FindExternalSigpmpbService {
       );
 
       console.log('response: ', response);
+      console.log('apenas o data: ', await response.data);
 
       return response.data;
     } catch (error) {
