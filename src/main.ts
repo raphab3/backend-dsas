@@ -19,23 +19,23 @@ async function bootstrap() {
     methods: ['*'],
   });
 
-  const config = new DocumentBuilder()
-    .setTitle('SigSaúde API')
-    .setDescription('API do sistema de gestão de saúde')
-    .addServer(`${env.APP_API_URL}/api/v1`, `${env.NODE_ENV} - server`)
-    .addBearerAuth()
-    .setVersion('1.0')
-    .build();
+  // const config = new DocumentBuilder()
+  //   .setTitle('SigSaúde API')
+  //   .setDescription('API do sistema de gestão de saúde')
+  //   .addServer(`${env.APP_API_URL}/api/v1`, `${env.NODE_ENV} - server`)
+  //   .addBearerAuth()
+  //   .setVersion('1.0')
+  //   .build();
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('doc', app, document);
+  // const document = SwaggerModule.createDocument(app, config);
+  // SwaggerModule.setup('doc', app, document);
 
-  app.setGlobalPrefix('/api/v1');
-  app.useGlobalPipes(
-    new ValidationPipe({
-      transform: true,
-    }),
-  );
+  // app.setGlobalPrefix('/api/v1');
+  // app.useGlobalPipes(
+  //   new ValidationPipe({
+  //     transform: true,
+  //   }),
+  // );
   // await app.register(fastifyCsrfProtection);
 
   await app.listen(env.SERVER_PORT);
