@@ -11,7 +11,7 @@ export class FindExternalSigpmpbService {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `${env.TOKEN_SIGPMPB}`,
-        Referer: env.Referer_SIGPMPB,
+        referer: env.Referer_SIGPMPB,
       },
     };
 
