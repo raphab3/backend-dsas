@@ -17,6 +17,8 @@ export class FindExternalSigpmpbService {
         },
       );
 
+      console.log(response.headers);
+
       console.log(response);
 
       if (!response.ok) {
