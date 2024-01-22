@@ -10,40 +10,65 @@ export interface IPersonSig {
   unit: string;
   image: string;
   is_military: boolean;
+  name_war: string;
+  admission: Date;
+  registration: string;
+  regime: string;
+  cpf: string;
+  driver_license: string;
+  address: string;
+  number: string;
+  complement: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+  cep: string;
+  father: string;
+  mother: string;
+  nationality: string;
+  marital_status: string;
+  ddd: string;
+  phone: string;
+  email: string;
+  rg: string;
+  organ_exp: string;
   created_at: Date;
   updated_at: Date;
 }
 
-// "servidor":{
-//   "patente": "CB",
-//   "nome": "RAFAEL BATISTA SANTOS",
-//   "funcao": "Analista de Sistema",
-//   "identidade_militar": 24394,
-//   "data_nascimento": "16/03/1991",
-//   "cod_unidade": 4429,
-//   "unidade": "DSAS|DSAS 7",
-//   "imagem": "https://intranet.pm.pb.gov.br/temp/071791fad268d831e70a186124dc202d.jpg",
-//   "nome_guerra": "R BATISTA",
-//   "admissao": "2016-09-01T00:00:00-03:00",
-//   "matricula": "528991-2",
-//   "regime": "Ativa",
-//   "cpf": "084206984-40",
-//   "carteira_motorista": 5277715622,
-//   "vencimento_motorista": "",
-//   "sexo": "M",
-//   "email": "raphab33@gmail.com",
-//   "pai": "OSVALDO SANTOS",
-//   "mae": "ANA CRISTINA BATISTA SANTOS",
-//   "naturalidade": "PENEDO-AL",
-//   "estado_civil": "Casado",
-//   "ddd": "",
-//   "telefone": "",
-//   "endereco": "RUA PRAIA DOS MARISCOS",
-//   "numero": "S/N",
-//   "complemento": "ASPOM",
-//   "bairro": "MANGABEIRA 8",
-//   "cidade": "JOAO PESSOA",
-//   "estado": "PB",
-//   "cep": 58059845,
-//   "rg": 29036003,
-//   "orgao_exp": "SSP SE"
+export interface IServidor {
+  patente: string;
+  nome: string;
+  funcao: string;
+  identidade_militar: number;
+  data_nascimento: Date | string;
+  cod_unidade: number;
+  unidade: string;
+  imagem: string;
+  nome_guerra: string;
+  admissao: Date | string;
+  matricula: string;
+  regime: string;
+  cpf: string;
+  carteira_motorista: number;
+  vencimento_motorista: Date | string;
+  sexo: string;
+  email: string;
+  pai: string;
+  mae: string;
+  naturalidade: string;
+  estado_civil: string;
+  ddd: string;
+  telefone: string;
+  endereco: string;
+  numero: string;
+  complemento: string;
+  bairro: string;
+  cidade: string;
+  estado: string;
+  cep: number;
+  rg: number;
+  orgao_exp: string;
+}
+
+// dto IServidor from IPersonSig

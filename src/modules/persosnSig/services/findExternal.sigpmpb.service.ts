@@ -18,7 +18,7 @@ export class FindExternalSigpmpbService {
     try {
       axios(config)
         .then(function (response) {
-          console.log(response.data);
+          console.log(response);
           return response.data;
         })
         .catch(function (error) {
