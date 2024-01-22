@@ -8,9 +8,6 @@ export class FindExternalSigpmpbService {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `${env.TOKEN_SIGPMPB}`,
-        Referer: env.Referer_SIGPMPB,
-        'User-Agent':
-          'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)',
       },
     };
 
@@ -21,9 +18,7 @@ export class FindExternalSigpmpbService {
       );
 
       console.log('status: ', response.status);
-      console.log('statusText: ', response.statusText);
       console.log('headers: ', response.headers);
-      console.log('config: ', response.config);
       console.log('data: ', response.data);
 
       return response.data;
