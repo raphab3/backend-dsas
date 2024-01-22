@@ -10,6 +10,7 @@ export class FindExternalSigpmpbService {
         {
           method: 'GET',
           headers: {
+            'Content-Type': 'application/json',
             Authorization: `${env.TOKEN_SIGPMPB}`,
             referer: env.Referer_SIGPMPB,
           },
@@ -20,11 +21,17 @@ export class FindExternalSigpmpbService {
         throw new Error(`Erro na API: ${response.status}`);
       }
 
-      console.log('status', response.status);
-      console.log(response);
-
-      const data = response.body;
-      return data;
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        const data = await response.json();
+        console.log(data);
+        return data;
+      } else {
+        // Tratamento para respostas que não são JSON
+        const textData = await response.text();
+        console.log(textData);
+        return textData;
+      }
     } catch (error) {
       console.error('Erro ao consultar a API externa', error);
       throw error;
