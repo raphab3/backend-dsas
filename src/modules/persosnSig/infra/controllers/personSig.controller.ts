@@ -1,4 +1,14 @@
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { CreatePersonSigDto } from '@modules/persosnSig/dto/create-personSig.dto';
+import { CreatePersonSigService } from '@modules/persosnSig/services/create.personSig.service';
+import { FastifyRequest } from 'fastify';
+import { FindAllPersonSigService } from '@modules/persosnSig/services/findAll.personSig.service';
+import { FindExternalSigpmpbService } from '@modules/persosnSig/services/findExternal.sigpmpb.service';
+import { FindOnePersonSigService } from '@modules/persosnSig/services/findOne.personSig.service';
+import { getPersonSigExternalDto } from '@modules/persosnSig/dto/get-personSigExternal.dto';
+import { RemovePersonSigService } from '@modules/persosnSig/services/remove.personSig.service';
+import { UpdatePersonSigDto } from '@modules/persosnSig/dto/update-personSig.dto';
+import { UpdatePersonSigService } from '@modules/persosnSig/services/update.personSig.service';
 import {
   Controller,
   Get,
@@ -8,16 +18,8 @@ import {
   Param,
   Delete,
   Req,
+  HttpCode,
 } from '@nestjs/common';
-import { CreatePersonSigDto } from '@modules/persosnSig/dto/create-personSig.dto';
-import { UpdatePersonSigDto } from '@modules/persosnSig/dto/update-personSig.dto';
-import { CreatePersonSigService } from '@modules/persosnSig/services/create.personSig.service';
-import { FindAllPersonSigService } from '@modules/persosnSig/services/findAll.personSig.service';
-import { FindOnePersonSigService } from '@modules/persosnSig/services/findOne.personSig.service';
-import { RemovePersonSigService } from '@modules/persosnSig/services/remove.personSig.service';
-import { UpdatePersonSigService } from '@modules/persosnSig/services/update.personSig.service';
-import { getPersonSigExternalDto } from '@modules/persosnSig/dto/get-personSigExternal.dto';
-import { FindExternalSigpmpbService } from '@modules/persosnSig/services/findExternal.sigpmpb.service';
 
 @ApiTags('personSig')
 @Controller('persons-sig')
@@ -38,12 +40,13 @@ export class PersonSigController {
   }
 
   @Get()
-  findAll(@Req() req: any) {
+  findAll(@Req() req: FastifyRequest) {
     const query = req.query;
     return this.findAllPersonSigService.findAll(query);
   }
 
   @Post('external')
+  @HttpCode(200)
   findAllExternal(@Body() body: getPersonSigExternalDto) {
     const matricula = body.matricula;
     return this.findExternalSigpmpbService.execute(matricula);
