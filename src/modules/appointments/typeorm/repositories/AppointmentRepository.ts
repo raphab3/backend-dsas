@@ -17,7 +17,6 @@ class AppointmentRepository implements IAppointmentRepository {
 
   public async create(data: CreateAppointmentDto): Promise<Appointment> {
     const appointment = this.ormRepository.create({
-      ...data,
       schedule: {
         id: data.schedule_id,
       },
@@ -71,6 +70,7 @@ class AppointmentRepository implements IAppointmentRepository {
       where: {
         id,
       },
+      relations: ['schedule', 'patient'],
     });
   }
 
@@ -80,19 +80,19 @@ class AppointmentRepository implements IAppointmentRepository {
 
   public async update(
     id: string,
-    data: UpdateAppointmentDto,
+    data: UpdateAppointmentDto & { schedule_id: string; patient_id: string },
   ): Promise<Appointment> {
     const builder = this.ormRepository.createQueryBuilder();
     const appointment = await builder
       .update(Appointment)
       .set({
-        ...data,
         schedule: {
           id: data.schedule_id,
         },
         patient: {
           id: data.patient_id,
         },
+        status: data.status,
       })
       .where('id = :id', { id })
       .returning('*')

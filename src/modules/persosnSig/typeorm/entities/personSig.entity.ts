@@ -54,6 +54,7 @@ export class PersonSig implements IPersonSig {
 
   @Column({
     type: 'varchar',
+    default: null,
   })
   image: string;
 
@@ -64,111 +65,133 @@ export class PersonSig implements IPersonSig {
 
   @Column({
     type: 'varchar',
+    default: null,
   })
   name_war: string;
 
   @Column({
     type: 'varchar',
+    default: null,
   })
   admission: Date;
 
   @Column({
     type: 'varchar',
+    default: null,
   })
   registration: string;
 
   @Column({
     type: 'varchar',
+    default: null,
   })
   regime: string;
 
   @Column({
     type: 'varchar',
+    default: null,
   })
   cpf: string;
 
   @Column({
     type: 'varchar',
+    default: null,
   })
   driver_license: string;
 
   @Column({
     type: 'varchar',
+    default: null,
   })
   address: string;
 
   @Column({
     type: 'varchar',
+    default: null,
   })
   number: string;
 
   @Column({
     type: 'varchar',
+    default: null,
   })
   complement: string;
 
   @Column({
     type: 'varchar',
+    default: null,
   })
   neighborhood: string;
 
   @Column({
     type: 'varchar',
+    default: null,
   })
   city: string;
 
   @Column({
     type: 'varchar',
+    default: null,
   })
   state: string;
 
   @Column({
     type: 'varchar',
+    default: null,
   })
   cep: string;
 
   @Column({
     type: 'varchar',
+    default: null,
   })
   father: string;
 
   @Column({
     type: 'varchar',
+    default: null,
   })
   mother: string;
 
   @Column({
     type: 'varchar',
+    default: null,
   })
   nationality: string;
 
   @Column({
     type: 'varchar',
+    default: null,
   })
   marital_status: string;
 
   @Column({
     type: 'varchar',
+    default: null,
   })
   ddd: string;
 
   @Column({
     type: 'varchar',
+    default: null,
   })
   phone: string;
 
   @Column({
     type: 'varchar',
+    default: null,
   })
   email: string;
 
   @Column({
     type: 'varchar',
+    default: null,
   })
   rg: string;
 
   @Column({
     type: 'varchar',
+    default: null,
   })
   organ_exp: string;
 

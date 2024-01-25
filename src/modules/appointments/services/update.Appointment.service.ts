@@ -5,19 +5,24 @@ import AppointmentRepository from '../typeorm/repositories/AppointmentRepository
 @Injectable()
 export class UpdateAppointmentService {
   constructor(private readonly appointmentRepository: AppointmentRepository) {}
-  update(id: string, updateAppointmentDto: UpdateAppointmentDto) {
+  async update(id: string, updateAppointmentDto: UpdateAppointmentDto) {
     if (!id) {
       throw new Error('Appointment is required');
     }
 
-    if (!updateAppointmentDto.patient_id) {
-      throw new Error('Patient is required');
+    const appointment = await this.appointmentRepository.findOne(id);
+
+    if (!appointment) {
+      throw new Error('Appointment not found');
     }
 
-    if (!updateAppointmentDto.schedule_id) {
-      throw new Error('Schedule is required');
-    }
+    const dataUpdate = {
+      ...appointment,
+      status: updateAppointmentDto.status,
+      schedule_id: appointment.schedule.id,
+      patient_id: appointment.patient.id,
+    };
 
-    return this.appointmentRepository.update(id, updateAppointmentDto);
+    return this.appointmentRepository.update(id, dataUpdate);
   }
 }
