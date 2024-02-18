@@ -12,188 +12,101 @@ export class PersonSig implements IPersonSig {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({
-    type: 'varchar',
-  })
-  name: string;
+  @Column({ type: 'varchar', nullable: true })
+  patente: string;
 
-  @Column({
-    type: 'varchar',
-  })
-  patent: string;
+  @Column({ type: 'varchar', nullable: true })
+  nome: string;
 
-  @Column({
-    type: 'varchar',
-  })
-  post: string;
+  @Column({ type: 'varchar', nullable: true })
+  funcao: string;
 
-  @Column({
-    type: 'varchar',
-  })
-  military_identity: string;
+  @Column({ type: 'varchar', nullable: true })
+  identidade_militar: number;
 
-  @Column({
-    type: 'varchar',
-  })
-  date_birth: Date;
+  @Column({ type: 'varchar', nullable: true })
+  data_nascimento: string | Date;
 
-  @Column({
-    type: 'varchar',
-  })
-  cod_unit: string;
+  @Column({ type: 'varchar', nullable: true })
+  cod_unidade: number;
 
-  @Column({
-    type: 'varchar',
-  })
-  situation: string;
+  @Column({ type: 'varchar', nullable: true })
+  unidade: string;
 
-  @Column({
-    type: 'varchar',
-  })
-  unit: string;
+  @Column({ type: 'varchar', nullable: true })
+  imagem: string;
 
-  @Column({
-    type: 'varchar',
-    default: null,
-  })
-  image: string;
+  @Column({ type: 'varchar', nullable: true })
+  nome_guerra: string;
 
-  @Column({
-    type: 'varchar',
-  })
-  is_military: boolean;
+  @Column({ type: 'varchar', nullable: true })
+  admissao: string | Date;
 
-  @Column({
-    type: 'varchar',
-    default: null,
-  })
-  name_war: string;
+  @Column({ type: 'varchar', unique: true })
+  matricula: string;
 
-  @Column({
-    type: 'varchar',
-    default: null,
-  })
-  admission: Date;
-
-  @Column({
-    type: 'varchar',
-    default: null,
-  })
-  registration: string;
-
-  @Column({
-    type: 'varchar',
-    default: null,
-  })
+  @Column({ type: 'varchar', nullable: true })
   regime: string;
 
-  @Column({
-    type: 'varchar',
-    default: null,
-  })
+  @Column({ type: 'varchar', nullable: true })
   cpf: string;
 
-  @Column({
-    type: 'varchar',
-    default: null,
-  })
-  driver_license: string;
+  @Column({ type: 'varchar', nullable: true })
+  carteira_motorista: number;
 
-  @Column({
-    type: 'varchar',
-    default: null,
-  })
-  address: string;
+  @Column({ type: 'varchar', nullable: true })
+  vencimento_motorista: string | Date;
 
-  @Column({
-    type: 'varchar',
-    default: null,
-  })
-  number: string;
+  @Column({ type: 'varchar', nullable: true })
+  sexo: string;
 
-  @Column({
-    type: 'varchar',
-    default: null,
-  })
-  complement: string;
-
-  @Column({
-    type: 'varchar',
-    default: null,
-  })
-  neighborhood: string;
-
-  @Column({
-    type: 'varchar',
-    default: null,
-  })
-  city: string;
-
-  @Column({
-    type: 'varchar',
-    default: null,
-  })
-  state: string;
-
-  @Column({
-    type: 'varchar',
-    default: null,
-  })
-  cep: string;
-
-  @Column({
-    type: 'varchar',
-    default: null,
-  })
-  father: string;
-
-  @Column({
-    type: 'varchar',
-    default: null,
-  })
-  mother: string;
-
-  @Column({
-    type: 'varchar',
-    default: null,
-  })
-  nationality: string;
-
-  @Column({
-    type: 'varchar',
-    default: null,
-  })
-  marital_status: string;
-
-  @Column({
-    type: 'varchar',
-    default: null,
-  })
-  ddd: string;
-
-  @Column({
-    type: 'varchar',
-    default: null,
-  })
-  phone: string;
-
-  @Column({
-    type: 'varchar',
-    default: null,
-  })
+  @Column({ type: 'varchar', nullable: true })
   email: string;
 
-  @Column({
-    type: 'varchar',
-    default: null,
-  })
-  rg: string;
+  @Column({ type: 'varchar', nullable: true })
+  pai: string;
 
-  @Column({
-    type: 'varchar',
-    default: null,
-  })
-  organ_exp: string;
+  @Column({ type: 'varchar', nullable: true })
+  mae: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  naturalidade: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  estado_civil: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  ddd: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  telefone: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  endereco: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  numero: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  complemento: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  bairro: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  cidade: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  estado: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  cep: number;
+
+  @Column({ type: 'varchar', nullable: true })
+  rg: number;
+
+  @Column({ type: 'varchar', nullable: true })
+  orgao_exp: string;
 
   @CreateDateColumn()
   created_at: Date;

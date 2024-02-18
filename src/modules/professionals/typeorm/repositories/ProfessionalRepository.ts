@@ -1,5 +1,4 @@
 import IProfessionalRepository from './IProfessionalRepository';
-import { CreateProfessionalDto } from '@modules/professionals/dto/create-professional.dto';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
@@ -7,6 +6,7 @@ import { Professional } from '../entities/professional.entity';
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
 import { paginate } from '@shared/utils/Pagination';
 import { UpdateProfessionalDto } from '@modules/professionals/dto/update-professional.dto';
+import { ICreateProfessional } from '@modules/professionals/interfaces/IProfessional';
 
 @Injectable()
 class ProfessionalRepository implements IProfessionalRepository {
@@ -15,7 +15,7 @@ class ProfessionalRepository implements IProfessionalRepository {
     private ormRepository: Repository<Professional>,
   ) {}
 
-  public async create(data: CreateProfessionalDto): Promise<Professional> {
+  public async create(data: ICreateProfessional): Promise<Professional> {
     const professional = this.ormRepository.create(data);
     await this.ormRepository.save(professional);
     return professional;
@@ -28,6 +28,7 @@ class ProfessionalRepository implements IProfessionalRepository {
     const professionalsCreateQueryBuilder = this.ormRepository
       .createQueryBuilder('professionals')
       .leftJoinAndSelect('professionals.person_sig', 'person_sig')
+      .leftJoinAndSelect('professionals.specialties', 'specialties')
       .orderBy('professionals.created_at', 'DESC');
 
     const where: Partial<any> = {};

@@ -50,7 +50,7 @@ export class CreateScheduleService {
       ...createScheduleDto,
       available_date: createScheduleDto.available_date.split('T')[0],
       description: `
-        Dr. ${professionalExists.person_sig.name} | 
+        Dr. ${professionalExists.person_sig.nome} | 
         ${specialtyExistsInProfessional.name} 
       `
         .replace(/\s+/g, ' ')

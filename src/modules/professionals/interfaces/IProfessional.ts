@@ -1,13 +1,14 @@
 import { IPersonSig } from '@modules/persosnSig/interfaces/IPersonSig';
 import { ISpecialty } from '@modules/specialties/interfaces/ISpecialty';
-import { IUser } from '@modules/users/interfaces/user.interface';
 
 export interface IProfessional {
   id: string;
   crm: string;
-  user: IUser;
-  person_sig: IPersonSig;
+  person_sig: Partial<IPersonSig>;
   specialties: Partial<ISpecialty>[];
   created_at: Date;
   updated_at: Date;
 }
+
+export interface ICreateProfessional
+  extends Omit<IProfessional, 'id' | 'created_at' | 'updated_at'> {}

@@ -1,42 +1,5 @@
 export interface IPersonSig {
   id: string;
-  name: string;
-  patent: string;
-  post: string;
-  military_identity: string;
-  date_birth: Date;
-  cod_unit: string;
-  situation: string;
-  unit: string;
-  image: string;
-  is_military: boolean;
-  name_war: string;
-  admission: Date;
-  registration: string;
-  regime: string;
-  cpf: string;
-  driver_license: string;
-  address: string;
-  number: string;
-  complement: string;
-  neighborhood: string;
-  city: string;
-  state: string;
-  cep: string;
-  father: string;
-  mother: string;
-  nationality: string;
-  marital_status: string;
-  ddd: string;
-  phone: string;
-  email: string;
-  rg: string;
-  organ_exp: string;
-  created_at: Date;
-  updated_at: Date;
-}
-
-export interface IServidor {
   patente: string;
   nome: string;
   funcao: string;
@@ -70,5 +33,3 @@ export interface IServidor {
   rg: number;
   orgao_exp: string;
 }
-
-// dto IServidor from IPersonSig

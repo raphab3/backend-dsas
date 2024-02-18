@@ -1,7 +1,6 @@
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreatePersonSigDto } from '@modules/persosnSig/dto/create-personSig.dto';
 import { CreatePersonSigService } from '@modules/persosnSig/services/create.personSig.service';
-import { FastifyRequest } from 'fastify';
 import { FindAllPersonSigService } from '@modules/persosnSig/services/findAll.personSig.service';
 import { FindExternalSigpmpbService } from '@modules/persosnSig/services/findExternal.sigpmpb.service';
 import { FindOnePersonSigService } from '@modules/persosnSig/services/findOne.personSig.service';
@@ -17,9 +16,10 @@ import {
   Patch,
   Param,
   Delete,
-  Req,
   HttpCode,
+  Query,
 } from '@nestjs/common';
+import { GetAllPersonSiglDto } from '@modules/persosnSig/dto/GetAllPersonSig.dto';
 
 @ApiTags('personSig')
 @Controller('persons-sig')
@@ -36,12 +36,12 @@ export class PersonSigController {
   @Post()
   @ApiOperation({ summary: 'Create PersonSig' })
   create(@Body() createPersonSigDto: CreatePersonSigDto) {
-    return this.createPersonSigService.execute(createPersonSigDto);
+    return this.createPersonSigService.execute(createPersonSigDto.matricula);
   }
 
   @Get()
-  findAll(@Req() req: FastifyRequest) {
-    const query = req.query;
+  @ApiOperation({ summary: 'Find all PersonSig' })
+  findAll(@Query() query: GetAllPersonSiglDto) {
     return this.findAllPersonSigService.findAll(query);
   }
 

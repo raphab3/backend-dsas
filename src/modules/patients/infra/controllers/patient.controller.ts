@@ -30,8 +30,6 @@ export class PatientController {
 
   @Post()
   @ApiOperation({ summary: 'Create Patient' })
-  // @ApiConsumes('multipart/form-data')
-  // @UseInterceptors(FileInterceptor('avatar'))
   create(@Body() createPatientDto: CreatePatientDto) {
     return this.createPatientService.execute(createPatientDto);
   }

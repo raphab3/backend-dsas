@@ -1,34 +1,34 @@
-import { Injectable } from '@nestjs/common';
+import PersonSigRepository from '@modules/persosnSig/typeorm/repositories/PersonSigRepository';
 import ProfessionalRepository from '../typeorm/repositories/ProfessionalRepository';
 import { CreateProfessionalDto } from '../dto/create-professional.dto';
+import { HttpException, Injectable } from '@nestjs/common';
+import { ICreateProfessional } from '../interfaces/IProfessional';
 
-interface IRequest extends CreateProfessionalDto {
-  person_sig: {
-    id: string;
-  };
-  user: {
-    id: string;
-  };
-}
 @Injectable()
 export class CreateProfessionalService {
   constructor(
     private readonly professionalRepository: ProfessionalRepository,
+    private readonly personSigRepository: PersonSigRepository,
   ) {}
 
   async execute(createProfessionalDto: CreateProfessionalDto) {
-    const professional: IRequest = {
+    const personSig = await this.personSigRepository.findByMatricula(
+      createProfessionalDto.matricula,
+    );
+
+    console.log(personSig);
+
+    if (!personSig) {
+      throw new HttpException('Servidor não encontrado', 404);
+    }
+
+    const professional: ICreateProfessional = {
       ...createProfessionalDto,
       person_sig: {
-        id: createProfessionalDto.person_sig_id,
-      },
-      user: {
-        id: createProfessionalDto.user_id,
+        id: personSig.id,
       },
     };
 
-    const saved = await this.professionalRepository.create(professional);
-
-    return saved;
+    return await this.professionalRepository.create(professional);
   }
 }

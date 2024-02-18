@@ -8,6 +8,7 @@ import { Patient } from './typeorm/entities/patient.entity';
 import { PatientController } from './infra/controllers/patient.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UpdatePatientService } from './services/update.patient.service';
+import { PersonSigModule } from '@modules/persosnSig/personSig.module';
 
 const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Patient]);
 
@@ -21,6 +22,6 @@ const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Patient]);
     UpdatePatientService,
     RemovePatientService,
   ],
-  imports: [TYPE_ORM_TEMPLATES],
+  imports: [TYPE_ORM_TEMPLATES, PersonSigModule],
 })
 export class PatientModule {}

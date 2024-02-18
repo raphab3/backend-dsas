@@ -1,8 +1,9 @@
 import env from '@config/env';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RolesGuard } from './guards/RolesGuard';
+import { QueryFailedFilter } from '@shared/QueryFailedFilter';
 
 export const TYPE_ORM = TypeOrmModule.forRoot({
   type: 'postgres',
@@ -30,6 +31,10 @@ export const PROVIDERS = [
   {
     provide: APP_GUARD,
     useClass: RolesGuard,
+  },
+  {
+    provide: APP_FILTER,
+    useClass: QueryFailedFilter,
   },
 ];
 

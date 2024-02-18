@@ -7,6 +7,8 @@ import { IPaginatedResult } from '@shared/interfaces/IPaginations';
 import { paginate } from '@shared/utils/Pagination';
 import { PersonSig } from '../entities/personSig.entity';
 import { UpdatePersonSigDto } from '@modules/persosnSig/dto/update-personSig.dto';
+import { IPersonSig } from '@modules/persosnSig/interfaces/IPersonSig';
+import { IQueryPersonSig } from '@modules/persosnSig/interfaces/IQueryPersonSig';
 
 @Injectable()
 class PersonSigRepository implements IPersonSigRepository {
@@ -15,13 +17,22 @@ class PersonSigRepository implements IPersonSigRepository {
     private ormRepository: Repository<PersonSig>,
   ) {}
 
-  public async create(data: CreatePersonSigDto): Promise<PersonSig> {
+  public async matriculaExists(matricula: string): Promise<boolean> {
+    const personSig = await this.ormRepository.findOne({
+      where: {
+        matricula,
+      },
+    });
+    return !!personSig;
+  }
+
+  public async create(data: CreatePersonSigDto): Promise<IPersonSig> {
     const personSig = this.ormRepository.create(data);
     await this.ormRepository.save(personSig);
     return personSig;
   }
 
-  public async list(query: any): Promise<IPaginatedResult<any>> {
+  public async list(query: IQueryPersonSig): Promise<IPaginatedResult<any>> {
     let page = 1;
     let perPage = 10;
 
@@ -35,8 +46,12 @@ class PersonSigRepository implements IPersonSigRepository {
       where.id = query.id;
     }
 
-    if (query.name) {
-      where.name = ILike(`%${query.name}%`);
+    if (query.nome) {
+      where.nome = ILike(`%${query.nome}%`);
+    }
+
+    if (query.matricula) {
+      where.matricula = ILike(`%${query.matricula}%`);
     }
 
     if (query.page) page = query.page;
@@ -61,6 +76,15 @@ class PersonSigRepository implements IPersonSigRepository {
         id,
       },
     });
+  }
+
+  public async findByMatricula(
+    matricula: string,
+  ): Promise<PersonSig | undefined> {
+    return await this.ormRepository
+      .createQueryBuilder('person_sig')
+      .where('matricula LIKE :matricula', { matricula: `%${matricula}%` })
+      .getOne();
   }
 
   public async delete(id: string): Promise<void> {

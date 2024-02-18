@@ -1,5 +1,4 @@
 import IPatientRepository from './IPatientRepository';
-import { CreatePatientDto } from '@modules/patients/dto/create-patient.dto';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
@@ -7,6 +6,7 @@ import { Patient } from '../entities/patient.entity';
 import { UpdatePatientDto } from '@modules/patients/dto/update-patient.dto';
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
 import { paginate } from '@shared/utils/Pagination';
+import { ICreatePatient } from '@modules/patients/interfaces/ICreatePatient';
 
 @Injectable()
 class PatientRepository implements IPatientRepository {
@@ -15,7 +15,7 @@ class PatientRepository implements IPatientRepository {
     private ormRepository: Repository<Patient>,
   ) {}
 
-  public async create(data: CreatePatientDto): Promise<Patient> {
+  public async create(data: ICreatePatient): Promise<Patient> {
     const patient = this.ormRepository.create({
       ...data,
       person_sig: {
@@ -89,6 +89,16 @@ class PatientRepository implements IPatientRepository {
       .returning('*')
       .execute();
     return patient.raw[0];
+  }
+
+  public async findByMatricula(
+    matricula: string,
+  ): Promise<Patient | undefined> {
+    return this.ormRepository
+      .createQueryBuilder('patients')
+      .leftJoinAndSelect('patients.person_sig', 'person_sig')
+      .where('person_sig.matricula LIKE :matricula', { matricula })
+      .getOne();
   }
 }
 

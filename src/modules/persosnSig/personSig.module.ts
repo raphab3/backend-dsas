@@ -24,5 +24,6 @@ const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([PersonSig]);
     FindExternalSigpmpbService,
   ],
   imports: [TYPE_ORM_TEMPLATES],
+  exports: [PersonSigRepository],
 })
 export class PersonSigModule {}

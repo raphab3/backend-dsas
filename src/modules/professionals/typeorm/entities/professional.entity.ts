@@ -2,7 +2,6 @@ import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity
 import { IProfessional } from '@modules/professionals/interfaces/IProfessional';
 import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
 import { Specialty } from '@modules/specialties/typeorm/entities/Specialty.entity';
-import { User } from '@modules/users/typeorm/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -20,10 +19,6 @@ import {
 export class Professional implements IProfessional {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-
-  @OneToOne(() => User)
-  @JoinColumn({ name: 'user_id' })
-  user: User;
 
   @OneToOne(() => PersonSig)
   @JoinColumn({ name: 'person_sig_id' })

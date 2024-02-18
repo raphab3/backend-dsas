@@ -4,7 +4,6 @@ import { Specialty } from '@modules/specialties/typeorm/entities/Specialty.entit
 
 export class UpdateProfessionalDto extends PartialType(CreateProfessionalDto) {
   crm?: string;
-  user_id?: string;
   person_sig_id?: string;
   specialties?: Partial<Specialty>[];
 }
