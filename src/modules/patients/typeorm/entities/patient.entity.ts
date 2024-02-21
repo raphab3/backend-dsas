@@ -1,23 +1,30 @@
 import { Appointment } from '@modules/appointments/typeorm/entities/Appointment.entity';
+import { Dependent } from '@modules/dependents/typeorm/entities/dependent.entity';
 import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
 import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 
+@Unique(['person_sig', 'dependent'])
 @Entity('patients')
 export class Patient {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToOne(() => PersonSig)
+  @ManyToOne(() => PersonSig)
   @JoinColumn()
   person_sig: PersonSig;
+
+  @ManyToOne(() => Dependent, { nullable: true })
+  @JoinColumn()
+  dependent: Dependent;
 
   @OneToMany(() => Appointment, (appointment) => appointment.patient)
   appointments: Appointment[];

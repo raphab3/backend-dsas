@@ -1,12 +1,12 @@
 import IAppointmentRepository from './IAppointmentRepository';
 import { Appointment } from '../entities/Appointment.entity';
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
-import { CreateAppointmentDto } from '@modules/appointments/dto/create-Appointment.dto';
 import { UpdateAppointmentDto } from '@modules/appointments/dto/update-Appointment.dto';
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
 import { paginate } from '@shared/utils/Pagination';
+import { ICreateAppointment } from '@modules/appointments/interfaces/ICreateAppintment';
 
 @Injectable()
 class AppointmentRepository implements IAppointmentRepository {
@@ -15,7 +15,7 @@ class AppointmentRepository implements IAppointmentRepository {
     private ormRepository: Repository<Appointment>,
   ) {}
 
-  public async create(data: CreateAppointmentDto): Promise<Appointment> {
+  public async create(data: ICreateAppointment): Promise<Appointment> {
     const appointment = this.ormRepository.create({
       schedule: {
         id: data.schedule_id,
@@ -24,8 +24,19 @@ class AppointmentRepository implements IAppointmentRepository {
         id: data.patient_id,
       },
     });
-    await this.ormRepository.save(appointment);
-    return appointment;
+
+    try {
+      await this.ormRepository.save(appointment);
+      return appointment;
+    } catch (error) {
+      if (error.code === '23505') {
+        throw new HttpException(
+          'Erro ao criar agendamento, já existe um agendamento para este paciente e horário',
+          409,
+        );
+      }
+      new HttpException('Erro ao criar agendamento, tente novamente', 500);
+    }
   }
 
   public async list(query: any): Promise<IPaginatedResult<Appointment>> {
@@ -36,6 +47,7 @@ class AppointmentRepository implements IAppointmentRepository {
       .createQueryBuilder('appointments')
       .leftJoinAndSelect('appointments.schedule', 'schedule')
       .leftJoinAndSelect('appointments.patient', 'patient')
+      .leftJoinAndSelect('patient.dependent', 'dependent')
       .leftJoinAndSelect('patient.person_sig', 'person_sig')
       .orderBy('appointments.created_at', 'DESC');
 
@@ -72,6 +84,29 @@ class AppointmentRepository implements IAppointmentRepository {
       },
       relations: ['schedule', 'patient'],
     });
+  }
+
+  public async existsAppointmentForPatientSchedule(
+    patient_id,
+    schedule_id,
+  ): Promise<boolean> {
+    try {
+      const appointment = await this.ormRepository
+        .createQueryBuilder('appointments')
+        .leftJoinAndSelect('appointments.schedule', 'schedule')
+        .leftJoinAndSelect('appointments.patient', 'patient')
+        .leftJoinAndSelect('patient.person_sig', 'person_sig')
+        .where('schedule.id = :schedule_id AND patient.id = :patient_id', {
+          schedule_id,
+          patient_id,
+        })
+        .getOne();
+
+      return !!appointment;
+    } catch (error) {
+      console.error('Error fetching appointment:', error);
+      throw error; // ou trate o erro conforme necessário
+    }
   }
 
   public async delete(id: string): Promise<void> {

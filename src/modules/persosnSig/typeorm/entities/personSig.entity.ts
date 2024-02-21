@@ -1,8 +1,10 @@
+import { Dependent } from '@modules/dependents/typeorm/entities/dependent.entity';
 import { IPersonSig } from '@modules/persosnSig/interfaces/IPersonSig';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -107,6 +109,9 @@ export class PersonSig implements IPersonSig {
 
   @Column({ type: 'varchar', nullable: true })
   orgao_exp: string;
+
+  @ManyToMany(() => Dependent, (dependent) => dependent.person_sigs)
+  dependents: Dependent[];
 
   @CreateDateColumn()
   created_at: Date;

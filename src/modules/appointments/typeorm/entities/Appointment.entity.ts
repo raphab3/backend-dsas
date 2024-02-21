@@ -11,9 +11,11 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 
+@Unique(['schedule', 'patient'])
 @Entity('appointments')
 export class Appointment implements IAppointment {
   @PrimaryGeneratedColumn('uuid')

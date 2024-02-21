@@ -21,6 +21,9 @@ class PatientRepository implements IPatientRepository {
       person_sig: {
         id: data.person_sig_id,
       },
+      dependent: {
+        id: data.dependent_id,
+      },
     });
     await this.ormRepository.save(patient);
     return patient;
@@ -94,10 +97,22 @@ class PatientRepository implements IPatientRepository {
   public async findByMatricula(
     matricula: string,
   ): Promise<Patient | undefined> {
-    return this.ormRepository
+    return await this.ormRepository
       .createQueryBuilder('patients')
       .leftJoinAndSelect('patients.person_sig', 'person_sig')
-      .where('person_sig.matricula LIKE :matricula', { matricula })
+      .where('person_sig.matricula LIKE :matricula', {
+        matricula: `%${matricula}%`,
+      })
+      .getOne();
+  }
+
+  public async findByDependentId(
+    dependent_id: string,
+  ): Promise<Patient | undefined> {
+    return await this.ormRepository
+      .createQueryBuilder('patients')
+      .leftJoinAndSelect('patients.dependent', 'dependent')
+      .where('dependent.id = :dependent_id', { dependent_id })
       .getOne();
   }
 }

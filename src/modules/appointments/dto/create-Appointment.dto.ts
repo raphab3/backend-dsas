@@ -9,9 +9,16 @@ export class CreateAppointmentDto {
   schedule_id: string;
 
   @ApiProperty({
-    description: 'Patient of the appointment',
+    description: 'Matricula of the personSig',
+    type: 'string',
+    example: '123456',
+  })
+  matricula: string;
+
+  @ApiProperty({
+    description: 'Dependent id',
     type: 'string',
     example: 'uuid',
   })
-  patient_id: string;
+  dependent_id: string;
 }

@@ -9,6 +9,7 @@ import { PersonSigController } from './infra/controllers/personSig.controller';
 import { RemovePersonSigService } from './services/remove.personSig.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UpdatePersonSigService } from './services/update.personSig.service';
+import { FindByMatriculaPersonSigService } from './services/FindByMatriculaPersonSig.service';
 
 const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([PersonSig]);
 
@@ -22,6 +23,7 @@ const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([PersonSig]);
     UpdatePersonSigService,
     RemovePersonSigService,
     FindExternalSigpmpbService,
+    FindByMatriculaPersonSigService,
   ],
   imports: [TYPE_ORM_TEMPLATES],
   exports: [PersonSigRepository],

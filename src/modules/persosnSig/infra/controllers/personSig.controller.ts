@@ -20,6 +20,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { GetAllPersonSiglDto } from '@modules/persosnSig/dto/GetAllPersonSig.dto';
+import { FindByMatriculaPersonSigService } from '@modules/persosnSig/services/FindByMatriculaPersonSig.service';
+import { GetByMatriculaPersonSigDto } from '@modules/persosnSig/dto/GetByMatriculaPersonSigDto';
 
 @ApiTags('personSig')
 @Controller('persons-sig')
@@ -31,6 +33,7 @@ export class PersonSigController {
     private readonly updatePersonSigService: UpdatePersonSigService,
     private readonly removePersonSigService: RemovePersonSigService,
     private readonly findExternalSigpmpbService: FindExternalSigpmpbService,
+    private readonly findByMatriculaPersonSigService: FindByMatriculaPersonSigService,
   ) {}
 
   @Post()
@@ -56,6 +59,12 @@ export class PersonSigController {
   @ApiOperation({ summary: 'Find one PersonSig' })
   findOne(@Param('id') id: string) {
     return this.findOnePersonSigService.findOne(id);
+  }
+
+  @Get('matricula')
+  @ApiOperation({ summary: 'Find PersonSig by matricula' })
+  async findByMatricula(@Query() query: GetByMatriculaPersonSigDto) {
+    return await this.findByMatriculaPersonSigService.execute(query.matricula);
   }
 
   @Patch(':id')

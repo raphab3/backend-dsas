@@ -8,6 +8,9 @@ import { ProfessionalModule } from '@modules/professionals/professional.module';
 import { ScheduleModule } from '@modules/schedules/schedule.module';
 import { SpecialtyModule } from '@modules/specialties/Specialty.module';
 import { UsersModule } from '@modules/users/users.module';
+import { InvetaryModule } from '@modules/inventories/Inventery.module';
+import { AssetModule } from '@modules/assets/Asset.module';
+import { DependentModule } from '@modules/dependents/dependent.module';
 
 const MODULES = [
   UsersModule,
@@ -18,6 +21,9 @@ const MODULES = [
   AppointmentModule,
   SpecialtyModule,
   ProfessionalModule,
+  InvetaryModule,
+  AssetModule,
+  DependentModule,
 ];
 
 @Module({
