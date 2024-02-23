@@ -1,4 +1,4 @@
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '@modules/users/dto/create-user.dto';
 import { CreateUsersService } from '@modules/users/services/create.users.service';
 import { FindAllUsersService } from '@modules/users/services/findAll.users.service';
@@ -17,11 +17,19 @@ import {
   Catch,
   HttpException,
   Req,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { JwtAuthGuard } from '@modules/auth/jwt-auth.guard';
+import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
+import { AuditLog } from '@modules/audits/decorators';
 
 @Catch(HttpException)
 @ApiTags('users')
 @Controller('users')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth('JWT')
+@UseInterceptors(AuditInterceptor)
 export class UsersController {
   constructor(
     private readonly createUsersService: CreateUsersService,
@@ -31,10 +39,9 @@ export class UsersController {
     private readonly removeUsersService: RemoveUsersService,
   ) {}
 
+  @AuditLog('CRIAR USUÁRIO')
   @Post()
   @ApiOperation({ summary: 'Create user' })
-  // @ApiConsumes('multipart/form-data')
-  // @UseInterceptors(FileInterceptor('avatar'))
   async create(@Body() createUserDto: CreateUserDto) {
     const user = await this.createUsersService.execute(createUserDto);
 
@@ -53,11 +60,13 @@ export class UsersController {
     return this.findOneUsersService.findOne(id);
   }
 
+  @AuditLog('ATUALIZAR USUÁRIO')
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.updateUsersService.update(id, updateUserDto);
   }
 
+  @AuditLog('REMOVER USUÁRIO')
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.removeUsersService.remove(id);

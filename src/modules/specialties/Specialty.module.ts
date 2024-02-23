@@ -1,4 +1,5 @@
 import SpecialtyRepository from './typeorm/repositories/SpecialtyRepository';
+import { AuditModule } from '@modules/audits/Audit.module';
 import { CreateSpecialtieservice } from './services/create.Specialty.service';
 import { FindAllSpecialtieservice } from './services/findAll.Specialty.service';
 import { FindOneSpecialtieservice } from './services/findOne.Specialty.service';
@@ -21,7 +22,7 @@ const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Specialty]);
     UpdateSpecialtieservice,
     RemoveSpecialtieservice,
   ],
-  imports: [TYPE_ORM_TEMPLATES],
+  imports: [TYPE_ORM_TEMPLATES, AuditModule],
   exports: [SpecialtyRepository],
 })
 export class SpecialtyModule {}

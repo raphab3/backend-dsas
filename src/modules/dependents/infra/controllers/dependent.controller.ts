@@ -1,9 +1,11 @@
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AuditLog } from '@modules/audits/decorators';
 import { CreateDependentDto } from '@modules/dependents/dto/createDependentDto';
 import { CreateDependentService } from '@modules/dependents/services/create.dependent.service';
 import { FindAllDependentService } from '@modules/dependents/services/findAll.dependent.service';
 import { FindOneDependentService } from '@modules/dependents/services/findOne.dependent.service';
 import { GetAllDependentDto } from '@modules/dependents/dto/getAllDependentDto';
+import { JwtAuthGuard } from '@modules/auth/jwt-auth.guard';
 import { RemoveDependentService } from '@modules/dependents/services/remove.dependent.service';
 import { UpdateDependentService } from '@modules/dependents/services/update.dependent.service';
 import {
@@ -15,10 +17,16 @@ import {
   Param,
   Delete,
   Query,
+  UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
+import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
 
 @ApiTags('dependents')
 @Controller('dependents')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth('JWT')
+@UseInterceptors(AuditInterceptor)
 export class DependentController {
   constructor(
     private readonly createDependentService: CreateDependentService,
@@ -28,6 +36,7 @@ export class DependentController {
     private readonly removeDependentService: RemoveDependentService,
   ) {}
 
+  @AuditLog('CRIAR DEPENDENTE')
   @Post()
   @ApiOperation({ summary: 'Create Dependent' })
   create(@Body() createDependentDto: CreateDependentDto) {
@@ -45,6 +54,7 @@ export class DependentController {
     return this.findOneDependentService.findOne(id);
   }
 
+  @AuditLog('ATUALIZAR DEPENDENTE')
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -53,6 +63,7 @@ export class DependentController {
     return this.updateDependentService.update(id, updateDependentDto);
   }
 
+  @AuditLog('DELETAR DEPENDENTE')
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.removeDependentService.remove(id);

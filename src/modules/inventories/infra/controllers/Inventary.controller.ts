@@ -1,4 +1,4 @@
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   Controller,
   Get,
@@ -8,6 +8,8 @@ import {
   Param,
   Delete,
   Req,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CreateInventaryService } from '@modules/inventories/services/create.Inventary.service';
 import { FindAllInventaryService } from '@modules/inventories/services/findAll.Inventary.service';
@@ -16,9 +18,16 @@ import { RemoveInventaryService } from '@modules/inventories/services/remove.Inv
 import { UpdateInventaryService } from '@modules/inventories/services/update.Inventary.service';
 import { CreateInventaryDto } from '@modules/inventories/dto/CreateInventaryDto';
 import { UpdateInventaryDto } from '@modules/inventories/dto/UpdateInventaryDto';
+import { JwtAuthGuard } from '@modules/auth/jwt-auth.guard';
+import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
+import { AuditLog } from '@modules/audits/decorators';
 
 @ApiTags('inventories')
 @Controller('inventories')
+@Controller('assets')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth('JWT')
+@UseInterceptors(AuditInterceptor)
 export class InventaryController {
   constructor(
     private readonly createInventaryService: CreateInventaryService,
@@ -28,6 +37,7 @@ export class InventaryController {
     private readonly removeInventaryService: RemoveInventaryService,
   ) {}
 
+  @AuditLog('CRIAR INVENTARIO')
   @Post()
   @ApiOperation({ summary: 'Create Inventary' })
   create(@Body() createInventaryDto: CreateInventaryDto) {
@@ -46,6 +56,7 @@ export class InventaryController {
     return this.findOneInventaryService.findOne(id);
   }
 
+  @AuditLog('ATUALIZAR INVENTARIO')
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -54,6 +65,7 @@ export class InventaryController {
     return this.updateInventaryService.update(id, updateInventaryDto);
   }
 
+  @AuditLog('REMOVER INVENTARIO')
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.removeInventaryService.remove(id);

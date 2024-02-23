@@ -23,12 +23,27 @@ async function bootstrap() {
     .setTitle('SigSaúde API')
     .setDescription('API do sistema de gestão de saúde')
     .addServer(`${env.APP_API_URL}/api/v1`, `${env.NODE_ENV} - server`)
-    .addBearerAuth()
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'JWT Token',
+        name: 'JWT',
+      },
+      'JWT',
+    )
     .setVersion('1.0')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('doc', app, document);
+  SwaggerModule.setup('doc', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+      showMutatedRequest: true,
+      docExpansion: 'none',
+    },
+  });
 
   app.setGlobalPrefix('/api/v1');
   app.useGlobalPipes(

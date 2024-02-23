@@ -1,4 +1,4 @@
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateAppointmentDto } from '@modules/appointments/dto/create-Appointment.dto';
 import { CreateAppointmentService } from '@modules/appointments/services/create.Appointment.service';
 import { FindAllAppointmentService } from '@modules/appointments/services/findAll.Appointment.service';
@@ -15,10 +15,18 @@ import {
   Param,
   Delete,
   Req,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { JwtAuthGuard } from '@modules/auth/jwt-auth.guard';
+import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
+import { AuditLog } from '@modules/audits/decorators';
 
 @ApiTags('appointments')
 @Controller('appointments')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth('JWT')
+@UseInterceptors(AuditInterceptor)
 export class AppointmentController {
   constructor(
     private readonly createAppointmentService: CreateAppointmentService,
@@ -28,6 +36,7 @@ export class AppointmentController {
     private readonly removeAppointmentService: RemoveAppointmentService,
   ) {}
 
+  @AuditLog('CRIAR APPOINTMENT')
   @Post()
   @ApiOperation({ summary: 'Create Appointment' })
   create(@Body() createAppointmentDto: CreateAppointmentDto) {
@@ -46,6 +55,7 @@ export class AppointmentController {
     return this.findOneAppointmentService.findOne(id);
   }
 
+  @AuditLog('ATUALIZAR APPOINTMENT')
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -54,6 +64,7 @@ export class AppointmentController {
     return this.updateAppointmentService.update(id, updateAppointmentDto);
   }
 
+  @AuditLog('REMOVER APPOINTMENT')
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.removeAppointmentService.remove(id);

@@ -9,7 +9,7 @@ export class CreateDependentDto {
   @ApiProperty({
     description: 'The matricula of the dependent',
     type: 'string',
-    example: '123456',
+    example: '528991',
   })
   matricula: string;
 

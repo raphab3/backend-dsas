@@ -1,4 +1,4 @@
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateSpecialtieservice } from '@modules/specialties/services/create.Specialty.service';
 import { CreateSpecialtyDto } from '@modules/specialties/dto/create-Specialty.dto';
 import { FindAllSpecialtieservice } from '@modules/specialties/services/findAll.Specialty.service';
@@ -15,10 +15,18 @@ import {
   Param,
   Delete,
   Req,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { JwtAuthGuard } from '@modules/auth/jwt-auth.guard';
+import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
+import { AuditLog } from '@modules/audits/decorators';
 
 @ApiTags('specialties')
 @Controller('specialties')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth('JWT')
+@UseInterceptors(AuditInterceptor)
 export class SpecialtyController {
   constructor(
     private readonly createSpecialtieservice: CreateSpecialtieservice,
@@ -28,10 +36,9 @@ export class SpecialtyController {
     private readonly removeSpecialtieservice: RemoveSpecialtieservice,
   ) {}
 
+  @AuditLog('CRIAR ESPECIALIDADE')
   @Post()
   @ApiOperation({ summary: 'Create Specialty' })
-  // @ApiConsumes('multipart/form-data')
-  // @UseInterceptors(FileInterceptor('avatar'))
   create(@Body() createSpecialtyDto: CreateSpecialtyDto) {
     return this.createSpecialtieservice.execute(createSpecialtyDto);
   }
@@ -48,6 +55,7 @@ export class SpecialtyController {
     return this.findOneSpecialtieservice.findOne(id);
   }
 
+  @AuditLog('ATUALIZAR ESPECIALIDADE')
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -56,6 +64,7 @@ export class SpecialtyController {
     return this.updateSpecialtieservice.update(id, updateSpecialtyDto);
   }
 
+  @AuditLog('REMOVER ESPECIALIDADE')
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.removeSpecialtieservice.remove(id);

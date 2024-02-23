@@ -1,4 +1,5 @@
 import TemplateRepository from './typeorm/repositories/TemplateRepository';
+import { AuditModule } from '@modules/audits/Audit.module';
 import { CreateTemplateService } from './services/create.template.service';
 import { FindAllTemplateService } from './services/findAll.template.service';
 import { FindOneTemplateService } from './services/findOne.template.service';
@@ -21,6 +22,6 @@ const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Template]);
     UpdateTemplateService,
     RemoveTemplateService,
   ],
-  imports: [TYPE_ORM_TEMPLATES],
+  imports: [TYPE_ORM_TEMPLATES, AuditModule],
 })
 export class TemplateModule {}

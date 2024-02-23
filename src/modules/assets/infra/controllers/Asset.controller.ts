@@ -1,4 +1,14 @@
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AuditLog } from '@modules/audits/decorators';
+import { CreateAssetDto } from '@modules/assets/dto/CreateAssetDto';
+import { CreateAssetService } from '@modules/assets/services/create.Asset.service';
+import { FindAllAssetService } from '@modules/assets/services/findAll.Asset.service';
+import { FindOneAssetService } from '@modules/assets/services/findOne.Asset.service';
+import { JwtAuthGuard } from '@modules/auth/jwt-auth.guard';
+import { RemoveAssetService } from '@modules/assets/services/remove.Asset.service';
+import { UpdateAssetDto } from '@modules/assets/dto/UpdateInventaryDto';
+import { UpdateAssetService } from '@modules/assets/services/update.Asset.service';
 import {
   Controller,
   Get,
@@ -8,17 +18,15 @@ import {
   Param,
   Delete,
   Req,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
-import { CreateAssetDto } from '@modules/assets/dto/CreateAssetDto';
-import { UpdateAssetDto } from '@modules/assets/dto/UpdateInventaryDto';
-import { CreateAssetService } from '@modules/assets/services/create.Asset.service';
-import { FindAllAssetService } from '@modules/assets/services/findAll.Asset.service';
-import { FindOneAssetService } from '@modules/assets/services/findOne.Asset.service';
-import { RemoveAssetService } from '@modules/assets/services/remove.Asset.service';
-import { UpdateAssetService } from '@modules/assets/services/update.Asset.service';
 
 @ApiTags('assets')
 @Controller('assets')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth('JWT')
+@UseInterceptors(AuditInterceptor)
 export class AssetController {
   constructor(
     private readonly createAssetService: CreateAssetService,
@@ -28,6 +36,7 @@ export class AssetController {
     private readonly removeAssetService: RemoveAssetService,
   ) {}
 
+  @AuditLog('CRIAR PATRIMONIO')
   @Post()
   @ApiOperation({ summary: 'Create Asset' })
   create(@Body() createAssetDto: CreateAssetDto) {
@@ -46,11 +55,13 @@ export class AssetController {
     return this.findOneAssetService.findOne(id);
   }
 
+  @AuditLog('ATUALIZAR PATRIMONIO')
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateAssetDto: UpdateAssetDto) {
     return this.updateAssetService.update(id, updateAssetDto);
   }
 
+  @AuditLog('REMOVER PATRIMONIO')
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.removeAssetService.remove(id);

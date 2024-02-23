@@ -10,6 +10,7 @@ import { UpdateUsersService } from './services/update.users.service';
 import { User } from './typeorm/entities/user.entity';
 import { UsersController } from './infra/controllers/users.controller';
 import CryptoHashProvider from '@shared/providers/HashProvider/implementations/CryptoHashProvider';
+import { AuditModule } from '@modules/audits/Audit.module';
 
 const TYPE_ORM_USERS = TypeOrmModule.forFeature([User]);
 
@@ -25,15 +26,11 @@ const TYPE_ORM_USERS = TypeOrmModule.forFeature([User]);
     FindByEmailUsersService,
     CryptoHashProvider,
     {
-      provide: 'UsersRepository',
-      useExisting: UsersRepository,
-    },
-    {
       provide: 'HashProvider',
       useExisting: CryptoHashProvider,
     },
   ],
-  imports: [TYPE_ORM_USERS],
+  imports: [TYPE_ORM_USERS, AuditModule],
   exports: [FindByEmailUsersService, FindOneUsersService, UsersRepository],
 })
 export class UsersModule {}

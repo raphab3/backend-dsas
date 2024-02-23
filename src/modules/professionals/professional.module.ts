@@ -9,6 +9,7 @@ import { ProfessionalController } from './infra/controllers/professional.control
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UpdateProfessionalService } from './services/update.professional.service';
 import { PersonSigModule } from '@modules/persosnSig/personSig.module';
+import { AuditModule } from '@modules/audits/Audit.module';
 
 const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Professional]);
 
@@ -22,7 +23,7 @@ const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Professional]);
     UpdateProfessionalService,
     RemoveProfessionalService,
   ],
-  imports: [TYPE_ORM_TEMPLATES, PersonSigModule],
+  imports: [TYPE_ORM_TEMPLATES, PersonSigModule, AuditModule],
   exports: [ProfessionalRepository],
 })
 export class ProfessionalModule {}

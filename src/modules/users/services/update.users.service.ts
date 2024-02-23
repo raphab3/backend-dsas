@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { UpdateUserDto } from '../dto/update-user.dto';
 
 @Injectable()
 export class UpdateUsersService {
-  update(id: string, updateUserDto: UpdateUserDto) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  update(id: string, _updateUserDto: any) {
     return `This action updates a #${id} user`;
   }
 }

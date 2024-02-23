@@ -1,4 +1,4 @@
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreatePersonSigDto } from '@modules/persosnSig/dto/create-personSig.dto';
 import { CreatePersonSigService } from '@modules/persosnSig/services/create.personSig.service';
 import { FindAllPersonSigService } from '@modules/persosnSig/services/findAll.personSig.service';
@@ -18,13 +18,21 @@ import {
   Delete,
   HttpCode,
   Query,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { GetAllPersonSiglDto } from '@modules/persosnSig/dto/GetAllPersonSig.dto';
 import { FindByMatriculaPersonSigService } from '@modules/persosnSig/services/FindByMatriculaPersonSig.service';
 import { GetByMatriculaPersonSigDto } from '@modules/persosnSig/dto/GetByMatriculaPersonSigDto';
+import { JwtAuthGuard } from '@modules/auth/jwt-auth.guard';
+import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
+import { AuditLog } from '@modules/audits/decorators';
 
 @ApiTags('personSig')
 @Controller('persons-sig')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth('JWT')
+@UseInterceptors(AuditInterceptor)
 export class PersonSigController {
   constructor(
     private readonly createPersonSigService: CreatePersonSigService,
@@ -36,6 +44,7 @@ export class PersonSigController {
     private readonly findByMatriculaPersonSigService: FindByMatriculaPersonSigService,
   ) {}
 
+  @AuditLog('CRIAR SERVIDOR SIGPMPB')
   @Post()
   @ApiOperation({ summary: 'Create PersonSig' })
   create(@Body() createPersonSigDto: CreatePersonSigDto) {
@@ -48,6 +57,7 @@ export class PersonSigController {
     return this.findAllPersonSigService.findAll(query);
   }
 
+  @AuditLog('SYNC SERVIDOR SIGPMPB')
   @Post('external')
   @HttpCode(200)
   findAllExternal(@Body() body: getPersonSigExternalDto) {
@@ -67,6 +77,7 @@ export class PersonSigController {
     return await this.findByMatriculaPersonSigService.execute(query.matricula);
   }
 
+  @AuditLog('ATUALIZAR SERVIDOR SIGPMPB')
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -75,6 +86,7 @@ export class PersonSigController {
     return this.updatePersonSigService.update(id, updatePersonSigDto);
   }
 
+  @AuditLog('REMOVER SERVIDOR SIGPMPB')
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.removePersonSigService.remove(id);

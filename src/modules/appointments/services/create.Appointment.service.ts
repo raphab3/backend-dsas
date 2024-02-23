@@ -83,13 +83,9 @@ export class CreateAppointmentService {
       createAppointmentDto.schedule_id,
     );
 
-    const date = new Date(schedule.available_date);
-    const time = new Date(schedule.start_time);
+    const date = new Date(`${schedule.available_date}T${schedule.start_time}`);
 
-    if (
-      date < new Date() ||
-      (date.getDate() === new Date().getDate() && time < new Date())
-    ) {
+    if (date < new Date()) {
       throw new HttpException('Agenda passada', HttpStatus.CONFLICT);
     }
 

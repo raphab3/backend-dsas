@@ -1,4 +1,4 @@
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateProfessionalDto } from '@modules/professionals/dto/create-professional.dto';
 import { CreateProfessionalService } from '@modules/professionals/services/create.professional.service';
 import { FindAllProfessionalService } from '@modules/professionals/services/findAll.professional.service';
@@ -15,10 +15,18 @@ import {
   Param,
   Delete,
   Req,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { JwtAuthGuard } from '@modules/auth/jwt-auth.guard';
+import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
+import { AuditLog } from '@modules/audits/decorators';
 
 @ApiTags('professionals')
 @Controller('professionals')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth('JWT')
+@UseInterceptors(AuditInterceptor)
 export class ProfessionalController {
   constructor(
     private readonly createProfessionalService: CreateProfessionalService,
@@ -28,6 +36,7 @@ export class ProfessionalController {
     private readonly removeProfessionalService: RemoveProfessionalService,
   ) {}
 
+  @AuditLog('CRIAR PROFISSIONAL')
   @Post()
   @ApiOperation({ summary: 'Create Professional' })
   create(@Body() createProfessionalDto: CreateProfessionalDto) {
@@ -46,6 +55,7 @@ export class ProfessionalController {
     return this.findOneProfessionalService.findOne(id);
   }
 
+  @AuditLog('ATUALIZAR PROFISSIONAL')
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -54,6 +64,7 @@ export class ProfessionalController {
     return this.updateProfessionalService.update(id, updateProfessionalDto);
   }
 
+  @AuditLog('REMOVER PROFISSIONAL')
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.removeProfessionalService.remove(id);

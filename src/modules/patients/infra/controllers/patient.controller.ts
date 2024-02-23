@@ -1,4 +1,4 @@
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreatePatientDto } from '@modules/patients/dto/create-patient.dto';
 import { CreatePatientService } from '@modules/patients/services/create.patient.service';
 import { FindAllPatientService } from '@modules/patients/services/findAll.patient.service';
@@ -15,10 +15,18 @@ import {
   Param,
   Delete,
   Req,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { JwtAuthGuard } from '@modules/auth/jwt-auth.guard';
+import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
+import { AuditLog } from '@modules/audits/decorators';
 
 @ApiTags('patients')
 @Controller('patients')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth('JWT')
+@UseInterceptors(AuditInterceptor)
 export class PatientController {
   constructor(
     private readonly createPatientService: CreatePatientService,
@@ -28,6 +36,7 @@ export class PatientController {
     private readonly removePatientService: RemovePatientService,
   ) {}
 
+  @AuditLog('CRIAR PACIENTE')
   @Post()
   @ApiOperation({ summary: 'Create Patient' })
   create(@Body() createPatientDto: CreatePatientDto) {
@@ -46,11 +55,13 @@ export class PatientController {
     return this.findOnePatientService.findOne(id);
   }
 
+  @AuditLog('ATUALIZAR PACIENTE')
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePatientDto: UpdatePatientDto) {
     return this.updatePatientService.update(id, updatePatientDto);
   }
 
+  @AuditLog('REMOVER PACIENTE')
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.removePatientService.remove(id);

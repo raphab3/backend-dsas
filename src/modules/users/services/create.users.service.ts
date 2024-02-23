@@ -1,6 +1,6 @@
 import { HttpException, Inject, Injectable } from '@nestjs/common';
-import IUsersRepository from '../typeorm/repositories/IUsersRepository';
 import IHashProvider from '@shared/providers/HashProvider/interfaces/IHashProvider';
+import UsersRepository from '../typeorm/repositories/UsersRepository';
 
 export interface CreateUserInput {
   name: string;
@@ -21,8 +21,7 @@ interface ICreateUser extends CreateUserInput {
 @Injectable()
 export class CreateUsersService {
   constructor(
-    @Inject('UsersRepository')
-    private readonly usersRepository: IUsersRepository,
+    private readonly usersRepository: UsersRepository,
     @Inject('HashProvider')
     private hashProvider: IHashProvider,
   ) {}

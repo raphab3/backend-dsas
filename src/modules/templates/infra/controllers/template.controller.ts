@@ -1,4 +1,4 @@
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateTemplateDto } from '@modules/templates/dto/create-template.dto';
 import { CreateTemplateService } from '@modules/templates/services/create.template.service';
 import { FindAllTemplateService } from '@modules/templates/services/findAll.template.service';
@@ -15,10 +15,18 @@ import {
   Param,
   Delete,
   Req,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { JwtAuthGuard } from '@modules/auth/jwt-auth.guard';
+import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
+import { AuditLog } from '@modules/audits/decorators';
 
 @ApiTags('template')
 @Controller('template')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth('JWT')
+@UseInterceptors(AuditInterceptor)
 export class TemplateController {
   constructor(
     private readonly createTemplateService: CreateTemplateService,
@@ -28,10 +36,9 @@ export class TemplateController {
     private readonly removeTemplateService: RemoveTemplateService,
   ) {}
 
+  @AuditLog('CRIAR TEMPLATE')
   @Post()
   @ApiOperation({ summary: 'Create Template' })
-  // @ApiConsumes('multipart/form-data')
-  // @UseInterceptors(FileInterceptor('avatar'))
   create(@Body() createTemplateDto: CreateTemplateDto) {
     return this.createTemplateService.execute(createTemplateDto);
   }
@@ -48,6 +55,7 @@ export class TemplateController {
     return this.findOneTemplateService.findOne(id);
   }
 
+  @AuditLog('ATUALIZAR TEMPLATE')
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -56,6 +64,7 @@ export class TemplateController {
     return this.updateTemplateService.update(id, updateTemplateDto);
   }
 
+  @AuditLog('REMOVER TEMPLATE')
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.removeTemplateService.remove(id);

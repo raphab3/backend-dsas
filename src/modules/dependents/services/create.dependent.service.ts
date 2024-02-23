@@ -26,6 +26,7 @@ export class CreateDependentService {
 
     await this.dependentRepository.create({
       ...createDependentDto,
+      name: createDependentDto.name.toUpperCase(),
       person_sigs: [
         {
           id: personSig.id,

@@ -1,4 +1,5 @@
 import ScheduleRepository from './typeorm/repositories/ScheduleRepository';
+import { AuditModule } from '@modules/audits/Audit.module';
 import { CreateScheduleService } from './services/create.schedule.service';
 import { FindAllScheduleService } from './services/findAll.schedule.service';
 import { FindOneScheduleService } from './services/findOne.schedule.service';
@@ -23,7 +24,12 @@ const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Schedule]);
     UpdateScheduleService,
     RemoveScheduleService,
   ],
-  imports: [TYPE_ORM_TEMPLATES, ProfessionalModule, SpecialtyModule],
+  imports: [
+    TYPE_ORM_TEMPLATES,
+    ProfessionalModule,
+    SpecialtyModule,
+    AuditModule,
+  ],
   exports: [ScheduleRepository],
 })
 export class ScheduleModule {}

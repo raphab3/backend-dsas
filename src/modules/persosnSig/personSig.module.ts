@@ -1,6 +1,8 @@
 import PersonSigRepository from './typeorm/repositories/PersonSigRepository';
+import { AuditModule } from '@modules/audits/Audit.module';
 import { CreatePersonSigService } from './services/create.personSig.service';
 import { FindAllPersonSigService } from './services/findAll.personSig.service';
+import { FindByMatriculaPersonSigService } from './services/FindByMatriculaPersonSig.service';
 import { FindExternalSigpmpbService } from './services/findExternal.sigpmpb.service';
 import { FindOnePersonSigService } from './services/findOne.personSig.service';
 import { Module } from '@nestjs/common';
@@ -9,7 +11,6 @@ import { PersonSigController } from './infra/controllers/personSig.controller';
 import { RemovePersonSigService } from './services/remove.personSig.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UpdatePersonSigService } from './services/update.personSig.service';
-import { FindByMatriculaPersonSigService } from './services/FindByMatriculaPersonSig.service';
 
 const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([PersonSig]);
 
@@ -25,7 +26,7 @@ const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([PersonSig]);
     FindExternalSigpmpbService,
     FindByMatriculaPersonSigService,
   ],
-  imports: [TYPE_ORM_TEMPLATES],
+  imports: [TYPE_ORM_TEMPLATES, AuditModule],
   exports: [PersonSigRepository],
 })
 export class PersonSigModule {}
