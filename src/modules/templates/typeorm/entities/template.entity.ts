@@ -8,7 +8,7 @@ import {
 
 @Entity('templates')
 export class Template {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({

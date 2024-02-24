@@ -37,9 +37,8 @@ export class CreatePatientService {
       );
     }
 
-    const saved = await this.patientRepository.create({
+    await this.patientRepository.create({
       person_sig_id: personSig.id,
     });
-    console.log('CreatePatientService -> saved', saved);
   }
 }

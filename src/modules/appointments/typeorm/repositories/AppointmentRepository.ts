@@ -104,8 +104,7 @@ class AppointmentRepository implements IAppointmentRepository {
 
       return !!appointment;
     } catch (error) {
-      console.error('Error fetching appointment:', error);
-      throw error; // ou trate o erro conforme necessário
+      throw error;
     }
   }
 

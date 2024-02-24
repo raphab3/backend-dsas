@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import UsersRepository from '../typeorm/repositories/UsersRepository';
 import { IUserQuery } from '../interfaces/IUserQuery';
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
-import { IUser } from '../interfaces/user.interface';
+import { IUser } from '../interfaces/IUser';
 
 @Injectable()
 export class FindAllUsersService {

@@ -6,7 +6,6 @@ export class CreateTemplateService {
   constructor(private readonly templateRepository: TemplateRepository) {}
 
   async execute(createTemplateDto: any) {
-    const saved = await this.templateRepository.create(createTemplateDto);
-    console.log('CreateTemplateService -> saved', saved);
+    await this.templateRepository.create(createTemplateDto);
   }
 }

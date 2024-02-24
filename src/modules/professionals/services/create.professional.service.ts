@@ -16,8 +16,6 @@ export class CreateProfessionalService {
       createProfessionalDto.matricula,
     );
 
-    console.log(personSig);
-
     if (!personSig) {
       throw new HttpException('Servidor não encontrado', 404);
     }

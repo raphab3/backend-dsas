@@ -1,20 +1,22 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, ExecutionContext } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { Reflector } from '@nestjs/core';
+import { IS_PUBLIC_KEY } from './decorators';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  constructor() {
+  constructor(private reflector: Reflector) {
     super();
   }
-  // Aqui você pode adicionar lógica adicional se necessário
-  handleRequest(err: any, user: any, _info: any, _context: any) {
-    if (err || !user) {
-      // Lida com erro ou usuário não autenticado
-      throw err || new UnauthorizedException();
-    }
-    console.log(user);
 
-    return user;
+  canActivate(context: ExecutionContext) {
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (isPublic) {
+      return true;
+    }
+    return super.canActivate(context);
   }
 }

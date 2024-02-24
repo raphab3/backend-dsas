@@ -6,7 +6,6 @@ export class FindAllDependentService {
   constructor(private readonly dependentRepository: DependentRepository) {}
 
   async findAll(query: any): Promise<any> {
-    console.log('query', query);
     return this.dependentRepository.list(query);
   }
 }

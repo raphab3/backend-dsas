@@ -17,22 +17,21 @@ class AuditInterceptor implements NestInterceptor {
     private auditService: AuditService,
     private readonly reflector: Reflector,
   ) {}
+
   logger = new Logger(AuditInterceptor.name);
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const auditLog = this.reflector.get(AUDIT_LOG_DATA, context.getHandler());
-    console.log('auditLog before', auditLog);
-
     if (!auditLog) {
       return next.handle();
     }
 
     return next.handle().pipe(
       tap(() => {
-        console.log('auditLog after', auditLog);
         const request = context.switchToHttp().getRequest();
         const auditMethods = ['POST', 'PUT', 'PATCH', 'DELETE'];
         const { method, url, body, user, ip } = request;
+
         const excludeRoutes = ['auth'];
 
         const isToAudit = (req: any) => {

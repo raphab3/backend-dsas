@@ -1,14 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty } from 'class-validator';
-import { IUser } from '../interfaces/user.interface';
 
-export class CreateUserDto
-  implements
-    Omit<
-      IUser,
-      'id' | 'rules' | 'salt' | 'person_sig' | 'created_at' | 'updated_at'
-    >
-{
+export class CreateUserDto {
   @ApiProperty({
     description: 'The email of the user',
     type: 'string',
@@ -32,4 +25,12 @@ export class CreateUserDto
   })
   @IsNotEmpty({ message: 'Senha obrigatória' })
   password: string;
+
+  @ApiProperty({
+    description: 'The roles of the user',
+    type: 'array',
+    example: ['admin', 'user'],
+    required: false,
+  })
+  roles?: string[];
 }

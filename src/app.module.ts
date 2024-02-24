@@ -12,8 +12,10 @@ import { ProfessionalModule } from '@modules/professionals/professional.module';
 import { ScheduleModule } from '@modules/schedules/schedule.module';
 import { SpecialtyModule } from '@modules/specialties/Specialty.module';
 import { UsersModule } from '@modules/users/users.module';
+import { RoleModule } from '@modules/roles/role.module';
+import { PermissionModule } from '@modules/permissions/permission.module';
 
-const MODULES = [
+export const MODULES = [
   UsersModule,
   AuthModule,
   PatientModule,
@@ -26,6 +28,8 @@ const MODULES = [
   AssetModule,
   DependentModule,
   AuditModule,
+  RoleModule,
+  PermissionModule,
 ];
 
 @Module({

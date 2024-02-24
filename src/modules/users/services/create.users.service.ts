@@ -1,21 +1,15 @@
-import { HttpException, Inject, Injectable } from '@nestjs/common';
 import IHashProvider from '@shared/providers/HashProvider/interfaces/IHashProvider';
+import RoleRepository from '@modules/roles/typeorm/repositories/RoleRepository';
 import UsersRepository from '../typeorm/repositories/UsersRepository';
-
-export interface CreateUserInput {
-  name: string;
-  email: string;
-  password: string;
-}
+import { CreateUserDto } from '../dto/create-user.dto';
+import { HttpException, Inject, Injectable } from '@nestjs/common';
+import { Role } from '@modules/roles/typeorm/entities/role.entity';
 
 export interface CreateUserOutput {
   id: string;
   name: string;
   email: string;
-}
-
-interface ICreateUser extends CreateUserInput {
-  salt: string;
+  roles: Role[];
 }
 
 @Injectable()
@@ -24,26 +18,43 @@ export class CreateUsersService {
     private readonly usersRepository: UsersRepository,
     @Inject('HashProvider')
     private hashProvider: IHashProvider,
+    private rolesRepository: RoleRepository,
   ) {}
 
-  async execute(createUser: CreateUserInput): Promise<CreateUserOutput> {
+  async execute(createUser: CreateUserDto): Promise<CreateUserOutput> {
+    const userExists = await this.usersRepository.findByEmail(createUser.email);
+    if (userExists) {
+      throw new HttpException('Usuário já existe', 409);
+    }
+
     const { hash, salt } = await this.hashProvider.generateHash(
       createUser.password,
     );
 
-    const newUser: ICreateUser = {
+    const roles = await this.validateRoles(createUser.roles);
+
+    const newUser = await this.usersRepository.create({
       ...createUser,
       password: hash,
       salt: salt,
-    };
+      roles,
+    });
 
-    const userExists = await this.usersRepository.findByEmail(newUser.email);
+    newUser.password = undefined;
+    newUser.salt = undefined;
 
-    if (userExists) {
-      throw new HttpException('User already exists', 409);
+    return newUser;
+  }
+
+  private async validateRoles(roleNames: string[]): Promise<{ id: string }[]> {
+    if (!roleNames || roleNames.length === 0) return [];
+
+    const roles = await this.rolesRepository.findByNames(roleNames);
+
+    if (roles.length !== roleNames.length) {
+      throw new HttpException('Uma ou mais roles não existem', 400);
     }
 
-    const { id, name, email } = await this.usersRepository.create(newUser);
-    return { id, name, email };
+    return roles.map((role) => ({ id: role.id }));
   }
 }

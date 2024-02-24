@@ -15,8 +15,6 @@ export class CreateDependentService {
       createDependentDto.matricula,
     );
 
-    console.log(personSig);
-
     if (!personSig) {
       throw new HttpException(
         `Servidor com matrícula ${createDependentDto.matricula} não encontrado`,

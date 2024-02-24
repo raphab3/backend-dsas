@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import ScheduleRepository from '../typeorm/repositories/ScheduleRepository';
 import { CreateScheduleDto } from '../dto/create-schedule.dto';
 import ProfessionalRepository from '@modules/professionals/typeorm/repositories/ProfessionalRepository';
@@ -27,7 +27,7 @@ export class CreateScheduleService {
     );
 
     if (!specialtyExists) {
-      throw new Error('Specialty not found');
+      throw new HttpException('Especialidade não encontrada', 404);
     }
 
     const professionalExists = await this.professionalRepository.findOne(
@@ -35,7 +35,7 @@ export class CreateScheduleService {
     );
 
     if (!professionalExists) {
-      throw new Error('Professional not found');
+      throw new HttpException('Profissional não encontrado', 404);
     }
 
     const specialtyExistsInProfessional = professionalExists.specialties.find(
@@ -43,7 +43,10 @@ export class CreateScheduleService {
     );
 
     if (!specialtyExistsInProfessional) {
-      throw new Error('Specialty not found in professional');
+      throw new HttpException(
+        'Especialidade não encontrada nesse profissional',
+        404,
+      );
     }
 
     const schedule: ICreateRequest = {

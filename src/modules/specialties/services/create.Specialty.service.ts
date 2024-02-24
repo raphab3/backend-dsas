@@ -6,7 +6,6 @@ export class CreateSpecialtieservice {
   constructor(private readonly specialtyRepository: SpecialtyRepository) {}
 
   async execute(createSpecialtyDto: any) {
-    const saved = await this.specialtyRepository.create(createSpecialtyDto);
-    console.log('CreateSpecialtieservice -> saved', saved);
+    await this.specialtyRepository.create(createSpecialtyDto);
   }
 }

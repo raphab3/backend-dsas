@@ -1,13 +1,14 @@
 import IUsersRepository from './IUsersRepository';
-import { CreateUserDto } from '@modules/users/dto/create-user.dto';
+import { ICreateUser } from '@modules/users/interfaces/ICreateUser';
+import { ILike, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, Repository } from 'typeorm';
-import { User } from '../entities/user.entity';
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
-import { IUser } from '@modules/users/interfaces/user.interface';
-import { paginate } from '@shared/utils/Pagination';
+import { IUser } from '@modules/users/interfaces/IUser';
 import { IUserQuery } from '@modules/users/interfaces/IUserQuery';
+import { paginate } from '@shared/utils/Pagination';
+import { User } from '../entities/user.entity';
+import { IUpdateUser } from '@modules/users/interfaces/IUpdateUser';
 
 @Injectable()
 class UsersRepository implements IUsersRepository {
@@ -16,7 +17,7 @@ class UsersRepository implements IUsersRepository {
     private readonly ormRepository: Repository<User>,
   ) {}
 
-  public async create(userData: CreateUserDto): Promise<User> {
+  public async create(userData: ICreateUser): Promise<User> {
     const user = this.ormRepository.create(userData);
     await this.ormRepository.save(user);
     return user;
@@ -74,7 +75,25 @@ class UsersRepository implements IUsersRepository {
       where: {
         id,
       },
+      relations: ['roles'],
     });
+  }
+
+  public async update(user: IUpdateUser): Promise<User> {
+    return this.ormRepository.save(user);
+  }
+
+  public async getUserWithRolesAndPermissions(id: string): Promise<IUser> {
+    return await this.ormRepository
+      .createQueryBuilder('users')
+      .leftJoinAndSelect('users.roles', 'roles')
+      .leftJoinAndSelect('roles.permissions', 'permissions')
+      .leftJoinAndSelect(
+        'users.individual_permissions',
+        'individual_permissions',
+      )
+      .where('users.id = :id', { id })
+      .getOne();
   }
 }
 

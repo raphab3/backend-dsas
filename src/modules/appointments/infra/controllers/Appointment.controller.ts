@@ -1,8 +1,11 @@
+import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AuditLog } from '@modules/audits/decorators';
 import { CreateAppointmentDto } from '@modules/appointments/dto/create-Appointment.dto';
 import { CreateAppointmentService } from '@modules/appointments/services/create.Appointment.service';
 import { FindAllAppointmentService } from '@modules/appointments/services/findAll.Appointment.service';
 import { FindOneAppointmentService } from '@modules/appointments/services/findOne.Appointment.service';
+import { Permission } from '@modules/permissions/decorators';
 import { RemoveAppointmentService } from '@modules/appointments/services/remove.Appointment.service';
 import { UpdateAppointmentDto } from '@modules/appointments/dto/update-Appointment.dto';
 import { UpdateAppointmentService } from '@modules/appointments/services/update.Appointment.service';
@@ -15,16 +18,11 @@ import {
   Param,
   Delete,
   Req,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '@modules/auth/jwt-auth.guard';
-import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
-import { AuditLog } from '@modules/audits/decorators';
 
 @ApiTags('appointments')
 @Controller('appointments')
-@UseGuards(JwtAuthGuard)
 @ApiBearerAuth('JWT')
 @UseInterceptors(AuditInterceptor)
 export class AppointmentController {
@@ -44,8 +42,10 @@ export class AppointmentController {
   }
 
   @Get()
+  @Permission('find_all_appointments')
   findAll(@Req() req: any) {
     const { query } = req;
+
     return this.findAllAppointmentService.findAll(query);
   }
 

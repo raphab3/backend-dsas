@@ -19,8 +19,6 @@ export class CreateAppointmentService {
       createAppointmentDto.matricula,
     );
 
-    console.log('[22]: personSig', personSig);
-
     let patient: any = null;
 
     if (!personSig) {
@@ -31,8 +29,6 @@ export class CreateAppointmentService {
     }
 
     const isDependent = createAppointmentDto.dependent_id ? true : false;
-
-    console.log('[34]: isDependent', isDependent);
 
     if (isDependent) {
       const dependent = personSig.dependents.find(
@@ -50,20 +46,13 @@ export class CreateAppointmentService {
         createAppointmentDto.dependent_id,
       );
 
-      console.log('[52]: hasPatient', hasPatient);
-
       if (!hasPatient) {
-        console.log('[55]: hasPatient', hasPatient);
-
-        console.log('[57]: personSig', personSig.id);
-        console.log('[58]: dependent', dependent.id);
         patient = await this.patientRepository.create({
           person_sig_id: personSig.id,
           dependent_id: dependent.id,
         });
       } else {
         patient = hasPatient;
-        console.log('[62]: patient', patient);
       }
     } else {
       const hasPatient = await this.patientRepository.findByMatricula(

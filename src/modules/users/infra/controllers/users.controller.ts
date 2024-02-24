@@ -17,17 +17,15 @@ import {
   Catch,
   HttpException,
   Req,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '@modules/auth/jwt-auth.guard';
 import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
 import { AuditLog } from '@modules/audits/decorators';
+import { Permission } from '@modules/permissions/decorators';
 
 @Catch(HttpException)
 @ApiTags('users')
 @Controller('users')
-@UseGuards(JwtAuthGuard)
 @ApiBearerAuth('JWT')
 @UseInterceptors(AuditInterceptor)
 export class UsersController {
@@ -49,6 +47,7 @@ export class UsersController {
   }
 
   @Get()
+  @Permission('find_all_users')
   findAll(@Req() req: any) {
     const query = req.query;
     return this.findAllUsersService.findAll(query);
@@ -56,18 +55,21 @@ export class UsersController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Find one user' })
+  @Permission('find_one_user')
   findOne(@Param('id') id: string) {
     return this.findOneUsersService.findOne(id);
   }
 
   @AuditLog('ATUALIZAR USUÁRIO')
   @Patch(':id')
+  @Permission('update_user')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.updateUsersService.update(id, updateUserDto);
+    return this.updateUsersService.execute(id, updateUserDto);
   }
 
   @AuditLog('REMOVER USUÁRIO')
   @Delete(':id')
+  @Permission('remove_user')
   remove(@Param('id') id: string) {
     return this.removeUsersService.remove(id);
   }

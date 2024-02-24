@@ -1,10 +1,11 @@
 import env from '@config/env';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { RolesGuard } from './guards/RolesGuard';
+import { JwtAuthGuard } from '@modules/auth/jwt-auth.guard';
+import { PermissionsGuard } from '@modules/permissions/guards';
 import { QueryFailedFilter } from '@shared/QueryFailedFilter';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { TimeoutInterceptor } from '@shared/interceptors/TimeoutInterceptor';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 export const TYPE_ORM = TypeOrmModule.forRoot({
   type: 'postgres',
@@ -30,16 +31,20 @@ export const PROVIDERS = [
     useClass: ThrottlerGuard,
   },
   {
-    provide: APP_GUARD,
-    useClass: RolesGuard,
-  },
-  {
     provide: APP_FILTER,
     useClass: QueryFailedFilter,
   },
   {
     provide: APP_INTERCEPTOR,
     useClass: TimeoutInterceptor,
+  },
+  {
+    provide: APP_GUARD,
+    useClass: JwtAuthGuard,
+  },
+  {
+    provide: APP_GUARD,
+    useClass: PermissionsGuard,
   },
 ];
 

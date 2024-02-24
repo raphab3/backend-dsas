@@ -23,7 +23,6 @@ export class FindExternalSigpmpbService {
 
       return await servidor;
     } catch (error) {
-      console.error('Erro ao consultar a API externa', error);
       throw error;
     }
   }

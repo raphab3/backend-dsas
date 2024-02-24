@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IUser } from '../interfaces/user.interface';
+import { IUser } from '../interfaces/IUser';
 import UsersRepository from '../typeorm/repositories/UsersRepository';
 
 interface UserOutput extends IUser {}

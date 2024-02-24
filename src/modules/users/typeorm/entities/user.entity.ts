@@ -2,13 +2,17 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { IUser } from '@modules/users/interfaces/user.interface';
 import { Exclude } from 'class-transformer';
 import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
+import { Role } from '@modules/roles/typeorm/entities/role.entity';
+import { IUser } from '@modules/users/interfaces/IUser';
+import { Permission } from '@modules/permissions/typeorm/entities/permission.entity';
 
 @Entity('users')
 export class User implements IUser {
@@ -45,6 +49,25 @@ export class User implements IUser {
 
   @OneToOne(() => PersonSig)
   person_sig: PersonSig;
+
+  @ManyToMany(() => Role, (role) => role.users, {
+    cascade: true,
+  })
+  roles: Role[];
+
+  @ManyToMany(() => Permission)
+  @JoinTable({
+    name: 'users_permissions',
+    joinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'permission_id',
+      referencedColumnName: 'id',
+    },
+  })
+  individual_permissions: Permission[];
 
   @CreateDateColumn()
   created_at: Date;
