@@ -40,7 +40,9 @@ export class Role {
   })
   users: User[];
 
-  @ManyToMany(() => Permission, (permission) => permission.roles)
+  @ManyToMany(() => Permission, (permission) => permission.roles, {
+    cascade: true,
+  })
   @JoinTable({
     name: 'roles_permissions',
     joinColumn: {

@@ -71,6 +71,7 @@ class UsersRepository implements IUsersRepository {
   }
 
   public async findOne(id: string): Promise<User | undefined> {
+    console.log('CHEGOU AQUIIII', id);
     return await this.ormRepository.findOne({
       where: {
         id,

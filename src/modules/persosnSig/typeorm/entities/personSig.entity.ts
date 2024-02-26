@@ -1,10 +1,13 @@
 import { Dependent } from '@modules/dependents/typeorm/entities/dependent.entity';
 import { IPersonSig } from '@modules/persosnSig/interfaces/IPersonSig';
+import { User } from '@modules/users/typeorm/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -112,6 +115,13 @@ export class PersonSig implements IPersonSig {
 
   @ManyToMany(() => Dependent, (dependent) => dependent.person_sigs)
   dependents: Dependent[];
+
+  @OneToOne(() => User, (user) => user.person_sig, {
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
+  @JoinColumn()
+  user: User;
 
   @CreateDateColumn()
   created_at: Date;

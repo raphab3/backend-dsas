@@ -1,7 +1,7 @@
-import { Public } from '@modules/auth/decorators';
 import { SignInDto } from '@modules/auth/dto/signin.dto';
 import { AuthService } from '@modules/auth/services/auth.service';
 import { MeService } from '@modules/auth/services/me.service';
+import { ListOfPermissionsEnum } from '@modules/permissions/interfaces/listOfPermissionsEnum';
 import {
   Body,
   Controller,
@@ -12,6 +12,8 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Permission } from '@shared/decorators/Permission';
+import { Public } from '@shared/decorators/Public';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -25,11 +27,13 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Public()
   @Post('login')
+  // @Permission(ListOfPermissionsEnum.auth_sing_in)
   async signIn(@Body() signInDto: SignInDto) {
     return await this.authService.signIn(signInDto.email, signInDto.password);
   }
 
   @Get('me')
+  @Permission(ListOfPermissionsEnum.auth_me)
   async me(@Req() req: any) {
     const user = await this.meService.execute(req.user.userId);
     return user;

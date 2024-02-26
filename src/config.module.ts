@@ -1,13 +1,14 @@
 import env from '@config/env';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { JwtAuthGuard } from '@modules/auth/jwt-auth.guard';
-import { PermissionsGuard } from '@modules/permissions/guards';
 import { QueryFailedFilter } from '@shared/QueryFailedFilter';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { TimeoutInterceptor } from '@shared/interceptors/TimeoutInterceptor';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DataSourceOptions } from 'typeorm';
+import { PermissionsGuard } from '@shared/guards/PermissionsGuard';
+import { JwtAuthGuard } from '@shared/guards/Jwt-auth.guard';
 
-export const TYPE_ORM = TypeOrmModule.forRoot({
+export const databaseConfig: DataSourceOptions = {
   type: 'postgres',
   host: 'localhost',
   port: env.DB_PORT,
@@ -16,6 +17,10 @@ export const TYPE_ORM = TypeOrmModule.forRoot({
   database: env.DB_DATABASE,
   entities: ['dist/**/*.entity{.ts,.js}'],
   synchronize: true,
+};
+
+export const TYPE_ORM = TypeOrmModule.forRoot({
+  ...databaseConfig,
 });
 
 export const RATE_LIMIT = ThrottlerModule.forRoot([

@@ -21,7 +21,10 @@ import {
 } from '@nestjs/common';
 import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
 import { AuditLog } from '@modules/audits/decorators';
-import { Permission } from '@modules/permissions/decorators';
+import { Permission } from '@shared/decorators/Permission';
+import { ListOfPermissionsEnum } from '@modules/permissions/interfaces/listOfPermissionsEnum';
+import { AddedPermissionUserDto } from '@modules/users/dto/added-permission-user.dto';
+import { AddPermissionUserService } from '@modules/users/services/addPermissionUser.service';
 
 @Catch(HttpException)
 @ApiTags('users')
@@ -35,10 +38,12 @@ export class UsersController {
     private readonly findOneUsersService: FindOneUsersService,
     private readonly updateUsersService: UpdateUsersService,
     private readonly removeUsersService: RemoveUsersService,
+    private readonly addPermissionUserService: AddPermissionUserService,
   ) {}
 
   @AuditLog('CRIAR USUÁRIO')
   @Post()
+  @Permission(ListOfPermissionsEnum.create_user)
   @ApiOperation({ summary: 'Create user' })
   async create(@Body() createUserDto: CreateUserDto) {
     const user = await this.createUsersService.execute(createUserDto);
@@ -47,7 +52,7 @@ export class UsersController {
   }
 
   @Get()
-  @Permission('find_all_users')
+  @Permission(ListOfPermissionsEnum.find_all_users)
   findAll(@Req() req: any) {
     const query = req.query;
     return this.findAllUsersService.findAll(query);
@@ -55,22 +60,38 @@ export class UsersController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Find one user' })
-  @Permission('find_one_user')
+  @Permission(ListOfPermissionsEnum.find_one_user)
   findOne(@Param('id') id: string) {
     return this.findOneUsersService.findOne(id);
   }
 
   @AuditLog('ATUALIZAR USUÁRIO')
   @Patch(':id')
-  @Permission('update_user')
+  @Permission(ListOfPermissionsEnum.update_user)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.updateUsersService.execute(id, updateUserDto);
   }
 
   @AuditLog('REMOVER USUÁRIO')
   @Delete(':id')
-  @Permission('remove_user')
+  @Permission(ListOfPermissionsEnum.remove_user)
   remove(@Param('id') id: string) {
     return this.removeUsersService.remove(id);
+  }
+
+  @Post(':id/permissions')
+  @ApiOperation({ summary: 'Add permission to user' })
+  // @Permission(ListOfPermissionsEnum.add_user_permission)
+  async addPermission(
+    @Body() addedPermissionUserDto: AddedPermissionUserDto,
+    @Param('id') id: string,
+  ) {
+    const user = await this.addPermissionUserService.execute({
+      permission: addedPermissionUserDto.permission,
+      role: addedPermissionUserDto.role,
+      user_id: id,
+    });
+
+    return user;
   }
 }

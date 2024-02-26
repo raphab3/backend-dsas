@@ -1,6 +1,6 @@
 import IPermissionRepository from './IPermissionRepository';
 import { CreatePermissionDto } from '@modules/permissions/dto/create-permission.dto';
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import { Permission } from '../entities/permission.entity';
@@ -81,11 +81,19 @@ class PermissionRepository implements IPermissionRepository {
   }
 
   public async findByNames(names: string[]): Promise<Permission[]> {
-    return this.ormRepository.find({
-      where: {
-        name: ILike(`%${names}%`),
-      },
-    });
+    try {
+      const permissions = await this.ormRepository
+        .createQueryBuilder('permissions')
+        .where('permissions.name IN (:...names)', { names })
+        .getMany();
+
+      return permissions;
+    } catch (error) {
+      throw new HttpException(
+        `Erro ao encontrar a permissão: ${error.message}`,
+        error.status,
+      );
+    }
   }
 }
 

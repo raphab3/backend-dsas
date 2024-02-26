@@ -6,6 +6,7 @@ import { ILike, Repository } from 'typeorm';
 import { Role } from '../entities/role.entity';
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
 import { paginate } from '@shared/utils/Pagination';
+import { Permission } from '@modules/permissions/typeorm/entities/permission.entity';
 
 @Injectable()
 class RoleRepository implements IRoleRepository {
@@ -54,11 +55,20 @@ class RoleRepository implements IRoleRepository {
     return result;
   }
 
+  public async findByName(name: string): Promise<Role | undefined> {
+    return await this.ormRepository
+      .createQueryBuilder('roles')
+      .where('name = :name', { name })
+      .getOne();
+  }
+
   public async findByNames(roleNames: string[]): Promise<Role[]> {
     const roles = await this.ormRepository
       .createQueryBuilder()
-      .where('name IN (:...roleNames)', { roleNames });
-    return roles.getMany();
+      .where('name IN (:...roleNames)', { roleNames })
+      .getMany();
+
+    return roles;
   }
 
   public async findByIds(ids: string[]): Promise<Role[]> {
@@ -73,6 +83,7 @@ class RoleRepository implements IRoleRepository {
       where: {
         id,
       },
+      relations: ['permissions'],
     });
   }
 
@@ -89,6 +100,14 @@ class RoleRepository implements IRoleRepository {
       .returning('*')
       .execute();
     return role.raw[0];
+  }
+
+  public async addPermissions(
+    role: Role,
+    permissions: Permission[],
+  ): Promise<Role> {
+    role.permissions = permissions;
+    return this.ormRepository.save(role);
   }
 
   public async save(role: Role): Promise<Role> {

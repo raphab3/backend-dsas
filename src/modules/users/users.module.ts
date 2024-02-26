@@ -12,6 +12,8 @@ import { UsersController } from './infra/controllers/users.controller';
 import CryptoHashProvider from '@shared/providers/HashProvider/implementations/CryptoHashProvider';
 import { AuditModule } from '@modules/audits/Audit.module';
 import { RoleModule } from '@modules/roles/role.module';
+import { PermissionModule } from '@modules/permissions/permission.module';
+import { AddPermissionUserService } from './services/addPermissionUser.service';
 
 const TYPE_ORM_USERS = TypeOrmModule.forFeature([User]);
 
@@ -19,19 +21,26 @@ const TYPE_ORM_USERS = TypeOrmModule.forFeature([User]);
   controllers: [UsersController],
   providers: [
     UsersRepository,
+    CryptoHashProvider,
     FindOneUsersService,
     CreateUsersService,
     FindAllUsersService,
     UpdateUsersService,
     RemoveUsersService,
     FindByEmailUsersService,
-    CryptoHashProvider,
+    AddPermissionUserService,
     {
       provide: 'HashProvider',
       useExisting: CryptoHashProvider,
     },
   ],
-  imports: [TYPE_ORM_USERS, AuditModule, RoleModule],
-  exports: [FindByEmailUsersService, FindOneUsersService, UsersRepository],
+  imports: [TYPE_ORM_USERS, AuditModule, RoleModule, PermissionModule],
+  exports: [
+    CreateUsersService,
+    FindByEmailUsersService,
+    FindOneUsersService,
+    AddPermissionUserService,
+    UsersRepository,
+  ],
 })
 export class UsersModule {}

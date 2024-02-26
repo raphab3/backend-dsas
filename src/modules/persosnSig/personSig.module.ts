@@ -12,6 +12,8 @@ import { RemovePersonSigService } from './services/remove.personSig.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UpdatePersonSigService } from './services/update.personSig.service';
 
+import { UsersModule } from '@modules/users/users.module';
+
 const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([PersonSig]);
 
 @Module({
@@ -26,7 +28,7 @@ const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([PersonSig]);
     FindExternalSigpmpbService,
     FindByMatriculaPersonSigService,
   ],
-  imports: [TYPE_ORM_TEMPLATES, AuditModule],
+  imports: [TYPE_ORM_TEMPLATES, AuditModule, UsersModule],
   exports: [PersonSigRepository],
 })
 export class PersonSigModule {}

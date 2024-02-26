@@ -1,7 +1,7 @@
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FindAllAuditService } from '@modules/audits/services/findAll.Audit.service';
 import { Controller, Get, Req } from '@nestjs/common';
-import { Permission } from '@modules/permissions/decorators';
+import { Permission } from '@shared/decorators/Permission';
 
 @ApiTags('audits')
 @Controller('audits')

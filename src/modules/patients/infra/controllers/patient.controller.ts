@@ -18,9 +18,11 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '@modules/auth/jwt-auth.guard';
+import { JwtAuthGuard } from '@shared/guards/Jwt-auth.guard';
 import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
 import { AuditLog } from '@modules/audits/decorators';
+import { Permission } from '@shared/decorators/Permission';
+import { ListOfPermissionsEnum } from '@modules/permissions/interfaces/listOfPermissionsEnum';
 
 @ApiTags('patients')
 @Controller('patients')
@@ -39,11 +41,13 @@ export class PatientController {
   @AuditLog('CRIAR PACIENTE')
   @Post()
   @ApiOperation({ summary: 'Create Patient' })
+  @Permission(ListOfPermissionsEnum.create_patient)
   create(@Body() createPatientDto: CreatePatientDto) {
     return this.createPatientService.execute(createPatientDto);
   }
 
   @Get()
+  @Permission(ListOfPermissionsEnum.find_all_patients)
   findAll(@Req() req: any) {
     const { query } = req;
     return this.findAllPatientService.findAll(query);
@@ -51,18 +55,23 @@ export class PatientController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Find one Patient' })
+  @Permission(ListOfPermissionsEnum.find_one_patient)
   findOne(@Param('id') id: string) {
     return this.findOnePatientService.findOne(id);
   }
 
   @AuditLog('ATUALIZAR PACIENTE')
   @Patch(':id')
+  @ApiOperation({ summary: 'Update Patient' })
+  @Permission(ListOfPermissionsEnum.update_patient)
   update(@Param('id') id: string, @Body() updatePatientDto: UpdatePatientDto) {
     return this.updatePatientService.update(id, updatePatientDto);
   }
 
   @AuditLog('REMOVER PACIENTE')
   @Delete(':id')
+  @ApiOperation({ summary: 'Remove Patient' })
+  @Permission(ListOfPermissionsEnum.remove_patient)
   remove(@Param('id') id: string) {
     return this.removePatientService.remove(id);
   }

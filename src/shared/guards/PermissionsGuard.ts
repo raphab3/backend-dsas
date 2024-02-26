@@ -1,6 +1,6 @@
 import UsersRepository from '@modules/users/typeorm/repositories/UsersRepository';
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { PERMISSIONS_KEY } from '../decorators';
+import { PERMISSIONS_KEY } from '../../modules/permissions/decorators';
 import { Reflector } from '@nestjs/core';
 
 @Injectable()
@@ -19,16 +19,18 @@ export class PermissionsGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
     const user = await this.usersRepository.getUserWithRolesAndPermissions(
-      request.user.userId,
+      request?.user?.userId,
     );
 
+    console.log('individual_permissions', request);
+
     // Verifica se a permissão está diretamente atribuída ao usuário
-    const hasIndividualPermission = user.individual_permissions.some(
+    const hasIndividualPermission = user?.individual_permissions?.some(
       (permission) => permission.name === requiredPermission,
     );
 
     // Verifica se a permissão é concedida por alguma role do usuário
-    const hasRolePermission = user.roles.some((role) =>
+    const hasRolePermission = user?.roles?.some((role) =>
       role.permissions.some(
         (permission) => permission.name === requiredPermission,
       ),

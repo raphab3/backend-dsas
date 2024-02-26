@@ -1,26 +1,26 @@
 import InventaryRepository from './typeorm/repositories/InventaryRepository';
 import { AuditModule } from '@modules/audits/Audit.module';
-import { CreateInventaryService } from './services/create.Inventary.service';
-import { FindAllInventaryService } from './services/findAll.Inventary.service';
-import { FindOneInventaryService } from './services/findOne.Inventary.service';
-import { Inventary } from './typeorm/entities/Inventary.entity';
-import { InventaryController } from './infra/controllers/Inventary.controller';
+import { CreateInventoryService } from './services/create.Inventory.service';
+import { FindAllInventoryService } from './services/findAll.Inventory.service';
+import { FindOneInventoryService } from './services/findOne.Inventory.service';
+import { Inventory } from './typeorm/entities/Inventory.entity';
+import { InventoryController } from './infra/controllers/Inventory.controller';
 import { Module } from '@nestjs/common';
-import { RemoveInventaryService } from './services/remove.Inventary.service';
+import { RemoveInventoryService } from './services/remove.Inventory.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UpdateInventaryService } from './services/update.Inventary.service';
+import { UpdateInventoryService } from './services/update.Inventory.service';
 
-const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Inventary]);
+const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Inventory]);
 
 @Module({
-  controllers: [InventaryController],
+  controllers: [InventoryController],
   providers: [
     InventaryRepository,
-    CreateInventaryService,
-    FindAllInventaryService,
-    FindOneInventaryService,
-    UpdateInventaryService,
-    RemoveInventaryService,
+    CreateInventoryService,
+    FindAllInventoryService,
+    FindOneInventoryService,
+    UpdateInventoryService,
+    RemoveInventoryService,
   ],
   imports: [TYPE_ORM_TEMPLATES, AuditModule],
   exports: [InventaryRepository],

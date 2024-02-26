@@ -1,3 +1,4 @@
+import { PermissionsEnum } from '@modules/permissions/interfaces/listOfPermissionsEnum';
 import { Role } from '@modules/roles/typeorm/entities/role.entity';
 import {
   Column,
@@ -14,7 +15,9 @@ export class Permission {
   id: string;
 
   @Column({
-    type: 'varchar',
+    type: 'enum',
+    enum: [...PermissionsEnum],
+    unique: true,
   })
   name: string;
 

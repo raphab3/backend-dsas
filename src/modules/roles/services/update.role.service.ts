@@ -20,6 +20,8 @@ export class UpdateRoleService {
       const permissions = await this.permissionRepository.findByNames(
         updateRoleDto.permissions,
       );
+
+      console.log('permissions', permissions);
       role.permissions = permissions;
     }
 

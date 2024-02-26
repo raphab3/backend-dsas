@@ -1,8 +1,8 @@
-import { CreateInventaryService } from '@modules/inventories/services/create.Inventary.service';
-import { FindAllInventaryService } from '@modules/inventories/services/findAll.Inventary.service';
-import { FindOneInventaryService } from '@modules/inventories/services/findOne.Inventary.service';
-import { RemoveInventaryService } from '@modules/inventories/services/remove.Inventary.service';
-import { UpdateInventaryService } from '@modules/inventories/services/update.Inventary.service';
+import { createInventoryService } from '@modules/inventories/services/create.Inventory.service';
+import { FindAllInventaryService } from '@modules/inventories/services/findAll.Inventory.service';
+import { FindOneInventaryService } from '@modules/inventories/services/findOne.Inventory.service';
+import { RemoveInventaryService } from '@modules/inventories/services/remove.Inventory.service';
+import { UpdateInventaryService } from '@modules/inventories/services/update.Inventory.service';
 import { SpecialtyController } from '@modules/specialties/infra/controllers/Specialty.controller';
 import { Test, TestingModule } from '@nestjs/testing';
 
@@ -13,7 +13,7 @@ describe('SpecialtyController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [SpecialtyController],
       providers: [
-        CreateInventaryService,
+        createInventoryService,
         FindAllInventaryService,
         FindOneInventaryService,
         UpdateInventaryService,

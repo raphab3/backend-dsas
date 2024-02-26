@@ -5,4 +5,5 @@ export interface IUpdateUser {
   email?: string;
   name?: string;
   roles?: { id: string }[];
+  individual_permissions?: { id: string }[];
 }

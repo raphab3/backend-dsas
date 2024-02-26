@@ -3,18 +3,18 @@ import { CreateSpecialtyDto } from '@modules/specialties/dto/create-Specialty.dt
 import { ILike, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Inventary } from '../entities/Inventary.entity';
+import { Inventory } from '../entities/Inventory.entity';
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
 import { paginate } from '@shared/utils/Pagination';
 
 @Injectable()
 class InventaryRepository implements IInventaryRepository {
   constructor(
-    @InjectRepository(Inventary)
-    private ormRepository: Repository<Inventary>,
+    @InjectRepository(Inventory)
+    private ormRepository: Repository<Inventory>,
   ) {}
 
-  public async create(data: CreateSpecialtyDto): Promise<Inventary> {
+  public async create(data: CreateSpecialtyDto): Promise<Inventory> {
     const Specialty = this.ormRepository.create(data);
     await this.ormRepository.save(Specialty);
     return Specialty;
@@ -54,7 +54,7 @@ class InventaryRepository implements IInventaryRepository {
     return result;
   }
 
-  public async findOne(id: string): Promise<Inventary | undefined> {
+  public async findOne(id: string): Promise<Inventory | undefined> {
     return this.ormRepository.findOne({
       where: {
         id,
@@ -69,15 +69,15 @@ class InventaryRepository implements IInventaryRepository {
   public async update(
     id: string,
     data: CreateSpecialtyDto,
-  ): Promise<Inventary> {
+  ): Promise<Inventory> {
     const builder = this.ormRepository.createQueryBuilder();
-    const inventary = await builder
-      .update(Inventary)
+    const inventory = await builder
+      .update(Inventory)
       .set(data)
       .where('id = :id', { id })
       .returning('*')
       .execute();
-    return inventary.raw[0];
+    return inventory.raw[0];
   }
 }
 

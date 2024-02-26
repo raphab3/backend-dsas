@@ -18,11 +18,10 @@ class PersonSigRepository implements IPersonSigRepository {
   ) {}
 
   public async matriculaExists(matricula: string): Promise<boolean> {
-    const personSig = await this.ormRepository.findOne({
-      where: {
-        matricula,
-      },
-    });
+    const personSig = await this.ormRepository
+      .createQueryBuilder('person_sig')
+      .where('matricula LIKE :matricula', { matricula: `%${matricula}%` })
+      .getOne();
     return !!personSig;
   }
 

@@ -16,6 +16,11 @@ export class MeService {
       throw new Error('User not found');
     }
 
-    return user;
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      roles: user.roles,
+    };
   }
 }

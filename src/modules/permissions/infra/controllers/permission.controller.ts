@@ -18,9 +18,11 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '@modules/auth/jwt-auth.guard';
+import { JwtAuthGuard } from '@shared/guards/Jwt-auth.guard';
 import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
 import { AuditLog } from '@modules/audits/decorators';
+import { Permission } from '@shared/decorators/Permission';
+import { ListOfPermissionsEnum } from '@modules/permissions/interfaces/listOfPermissionsEnum';
 
 @ApiTags('permission')
 @Controller('permission')
@@ -39,11 +41,13 @@ export class PermissionController {
   @AuditLog('CRIAR TEMPLATE')
   @Post()
   @ApiOperation({ summary: 'Create Permission' })
+  @Permission(ListOfPermissionsEnum.create_permission)
   create(@Body() createPermissionDto: CreatePermissionDto) {
     return this.createPermissionService.execute(createPermissionDto);
   }
 
   @Get()
+  @Permission(ListOfPermissionsEnum.find_all_permissions)
   findAll(@Req() req: any) {
     const query = req.query;
     return this.findAllPermissionService.findAll(query);
@@ -51,12 +55,14 @@ export class PermissionController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Find one Permission' })
+  @Permission(ListOfPermissionsEnum.find_one_permission)
   findOne(@Param('id') id: string) {
     return this.findOnePermissionService.findOne(id);
   }
 
   @AuditLog('ATUALIZAR TEMPLATE')
   @Patch(':id')
+  @Permission(ListOfPermissionsEnum.update_permission)
   update(
     @Param('id') id: string,
     @Body() updatePermissionDto: UpdatePermissionDto,
@@ -66,6 +72,7 @@ export class PermissionController {
 
   @AuditLog('REMOVER TEMPLATE')
   @Delete(':id')
+  @Permission(ListOfPermissionsEnum.remove_permission)
   remove(@Param('id') id: string) {
     return this.removePermissionService.remove(id);
   }

@@ -14,6 +14,7 @@ import { SpecialtyModule } from '@modules/specialties/Specialty.module';
 import { UsersModule } from '@modules/users/users.module';
 import { RoleModule } from '@modules/roles/role.module';
 import { PermissionModule } from '@modules/permissions/permission.module';
+import { SeedsModule } from '@modules/seeds/seeds.module';
 
 export const MODULES = [
   UsersModule,
@@ -30,6 +31,7 @@ export const MODULES = [
   AuditModule,
   RoleModule,
   PermissionModule,
+  SeedsModule,
 ];
 
 @Module({

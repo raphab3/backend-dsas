@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import env from '@config/env';
 import axios, { AxiosRequestConfig } from 'axios';
 import { IPersonSig } from '../interfaces/IPersonSig';
@@ -23,7 +23,7 @@ export class FindExternalSigpmpbService {
 
       return await servidor;
     } catch (error) {
-      throw error;
+      new HttpException('FIND_EXTERNAL_SIGPMPB_SERVICE_ERROR', 500);
     }
   }
 }

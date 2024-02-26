@@ -35,6 +35,8 @@ export class CreateUsersService {
 
     const newUser = await this.usersRepository.create({
       ...createUser,
+      name: createUser.name.trim().toUpperCase(),
+      email: createUser.email.trim().toLowerCase(),
       password: hash,
       salt: salt,
       roles,
