@@ -22,16 +22,20 @@ export class PermissionsGuard implements CanActivate {
       request?.user?.userId,
     );
 
-    const hasIndividualPermission = user?.individual_permissions?.some(
-      (permission) => permission.name === requiredPermission,
-    );
+    if (!user) return false;
 
-    const hasRolePermission = user?.roles?.some((role) =>
-      role.permissions.some(
-        (permission) => permission.name === requiredPermission,
-      ),
-    );
+    const permissionsSet = new Set<string>();
 
-    return hasIndividualPermission || hasRolePermission;
+    user.individual_permissions?.forEach((permission) => {
+      permissionsSet.add(permission.name);
+    });
+
+    user.roles?.forEach((role) => {
+      role.permissions.forEach((permission) => {
+        permissionsSet.add(permission.name);
+      });
+    });
+
+    return permissionsSet.has(requiredPermission);
   }
 }
