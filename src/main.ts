@@ -8,12 +8,15 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import { EntityPropertyNotFoundExceptionFilter } from '@shared/interceptors/EntityPropertyNotFoundError';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter({ logger: true }),
   );
+
+  app.useGlobalFilters(new EntityPropertyNotFoundExceptionFilter());
 
   app.enableCors({
     methods: ['*'],

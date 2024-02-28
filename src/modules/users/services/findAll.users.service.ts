@@ -10,11 +10,14 @@ export class FindAllUsersService {
   public async findAll(
     query: Partial<IUserQuery>,
   ): Promise<IPaginatedResult<IUser>> {
-    try {
-      const users = await this.userRepository.list(query);
-      return users;
-    } catch (error: any) {
-      throw new Error(error);
-    }
+    const users = await this.userRepository.list(query);
+
+    users.data = users.data.map((user) => {
+      delete user.password;
+      delete user.salt;
+      return user;
+    });
+
+    return users;
   }
 }

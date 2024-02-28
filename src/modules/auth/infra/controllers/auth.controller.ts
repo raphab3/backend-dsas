@@ -12,8 +12,8 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Public } from '@shared/decorators';
 import { Permission } from '@shared/decorators/Permission';
-import { Public } from '@shared/decorators/Public';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -27,7 +27,6 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Public()
   @Post('login')
-  // @Permission(ListOfPermissionsEnum.auth_sing_in)
   async signIn(@Body() signInDto: SignInDto) {
     return await this.authService.signIn(signInDto.email, signInDto.password);
   }
@@ -35,7 +34,7 @@ export class AuthController {
   @Get('me')
   @Permission(ListOfPermissionsEnum.auth_me)
   async me(@Req() req: any) {
-    const user = await this.meService.execute(req.user.userId);
+    const user = await this.meService.execute(req?.user?.userId);
     return user;
   }
 }

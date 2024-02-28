@@ -2,8 +2,12 @@ import { IQuery } from '@shared/interfaces/IQuery';
 import { FindOperator } from 'typeorm/find-options/FindOperator';
 
 export interface IUserQuery extends IQuery {
-  uuid?: FindOperator<string> | string;
+  id?: FindOperator<string> | string;
   name?: FindOperator<string> | string;
   email?: FindOperator<string> | string;
+  matricula?: FindOperator<string> | string;
   role?: FindOperator<string> | string;
+  person_sig?: {
+    matricula?: FindOperator<string> | string;
+  };
 }

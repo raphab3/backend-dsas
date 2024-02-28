@@ -24,8 +24,8 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 
-@ApiTags('role')
-@Controller('role')
+@ApiTags('roles')
+@Controller('roles')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth('JWT')
 @UseInterceptors(AuditInterceptor)

@@ -29,11 +29,9 @@ export class UpdateUsersService {
       throw new HttpException('Usuário não encontrado', 404);
     }
 
-    // Atualizar propriedades simples
     userFound.email = updateUser.email;
     userFound.name = updateUser.name;
 
-    // Se a senha foi fornecida, atualize-a
     if (updateUser.password) {
       const { hash, salt } = await this.hashProvider.generateHash(
         updateUser.password,
@@ -42,7 +40,6 @@ export class UpdateUsersService {
       userFound.salt = salt;
     }
 
-    // Validar e atualizar roles
     if (updateUser.roles && updateUser.roles.length > 0) {
       const newRoles = await this.validateRoles(updateUser.roles);
       userFound.roles = await this.rolesRepository.findByIds(
@@ -50,10 +47,8 @@ export class UpdateUsersService {
       );
     }
 
-    // Salvar a entidade atualizada
     const updatedUser = await this.usersRepository.update(userFound);
 
-    // Remover propriedades sensíveis antes de retornar
     updatedUser.password = undefined;
     updatedUser.salt = undefined;
 
@@ -64,9 +59,6 @@ export class UpdateUsersService {
     if (!roleNames || roleNames.length === 0) return [];
 
     const roles = await this.rolesRepository.findByNames(roleNames);
-
-    console.log('validateRoles: roleNames', roleNames);
-    console.log('validateRoles: roles', roles);
 
     if (roles.length !== roleNames.length) {
       throw new HttpException('Uma ou mais roles não existem', 400);

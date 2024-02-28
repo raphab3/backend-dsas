@@ -13,8 +13,6 @@ export class GeneratePermissionsService {
         description: `Permissão para ${permission}`,
       };
 
-      console.log('new_permission', new_permission);
-
       await this.permissionRepository
         .create(new_permission)
         .catch((error) =>

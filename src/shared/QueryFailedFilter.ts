@@ -12,14 +12,31 @@ export class QueryFailedFilter extends BaseExceptionFilter {
   catch(exception: QueryFailedError, host: ArgumentsHost) {
     const context = host.switchToHttp();
     const response = context.getResponse();
-    const status = HttpStatus.INTERNAL_SERVER_ERROR; // Usando o HttpStatus para definir o status de erro
-    const message = 'Erro ao executar consulta no banco de dados';
+    const status = response.status || HttpStatus.INTERNAL_SERVER_ERROR;
+    const message =
+      response.message || 'Erro ao executar consulta no banco de dados';
 
     if (exception.message.includes('violates not-null constraint')) {
       throw new HttpException(`Database error: ${exception.message}`, 400);
     }
 
     if (exception.message.includes('violates unique constraint')) {
+      throw new HttpException(`Database error: ${exception.message}`, 400);
+    }
+
+    if (exception.message.includes('violates foreign key constraint')) {
+      throw new HttpException(`Database error: ${exception.message}`, 400);
+    }
+
+    if (exception.message.includes('violates check constraint')) {
+      throw new HttpException(`Database error: ${exception.message}`, 400);
+    }
+
+    if (exception.message.includes('violates exclusion constraint')) {
+      throw new HttpException(`Database error: ${exception.message}`, 400);
+    }
+
+    if (exception.message.includes('Make sure your query is correct')) {
       throw new HttpException(`Database error: ${exception.message}`, 400);
     }
 

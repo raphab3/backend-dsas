@@ -47,7 +47,7 @@ export class User implements IUser {
   })
   salt: string;
 
-  @OneToOne(() => PersonSig)
+  @OneToOne(() => PersonSig, (person_sig) => person_sig.user)
   person_sig: PersonSig;
 
   @ManyToMany(() => Role, (role) => role.users, {

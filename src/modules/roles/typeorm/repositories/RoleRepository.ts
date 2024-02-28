@@ -25,9 +25,10 @@ class RoleRepository implements IRoleRepository {
     let page = 1;
     let perPage = 10;
 
-    const usersCreateQueryBuilder = this.ormRepository
-      .createQueryBuilder('users')
-      .orderBy('users.created_at', 'DESC');
+    const rolesCreateQueryBuilder = this.ormRepository
+      .createQueryBuilder('roles')
+      .leftJoinAndSelect('roles.permissions', 'permissions')
+      .orderBy('roles.created_at', 'DESC');
 
     const where: Partial<any> = {};
 
@@ -42,10 +43,10 @@ class RoleRepository implements IRoleRepository {
     if (query.page) page = query.page;
     if (query.perPage) perPage = query.perPage;
 
-    usersCreateQueryBuilder.where(where);
+    rolesCreateQueryBuilder.where(where);
 
     const result: IPaginatedResult<any> = await paginate(
-      usersCreateQueryBuilder,
+      rolesCreateQueryBuilder,
       {
         page,
         perPage,

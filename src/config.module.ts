@@ -5,8 +5,9 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { TimeoutInterceptor } from '@shared/interceptors/TimeoutInterceptor';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSourceOptions } from 'typeorm';
-import { PermissionsGuard } from '@shared/guards/PermissionsGuard';
 import { JwtAuthGuard } from '@shared/guards/Jwt-auth.guard';
+import { PermissionsGuard } from '@shared/guards/Permissions.guard';
+import { EntityPropertyNotFoundExceptionFilter } from '@shared/interceptors/EntityPropertyNotFoundError';
 
 export const databaseConfig: DataSourceOptions = {
   type: 'postgres',
@@ -38,6 +39,10 @@ export const PROVIDERS = [
   {
     provide: APP_FILTER,
     useClass: QueryFailedFilter,
+  },
+  {
+    provide: APP_FILTER,
+    useClass: EntityPropertyNotFoundExceptionFilter,
   },
   {
     provide: APP_INTERCEPTOR,

@@ -21,7 +21,6 @@ export class UpdateRoleService {
         updateRoleDto.permissions,
       );
 
-      console.log('permissions', permissions);
       role.permissions = permissions;
     }
 

@@ -33,13 +33,15 @@ class UsersRepository implements IUsersRepository {
     let perPage = 10;
 
     const usersCreateQueryBuilder = this.ormRepository
-      .createQueryBuilder('users')
-      .orderBy('users.created_at', 'DESC');
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.roles', 'roles')
+      .leftJoinAndSelect('user.person_sig', 'person_sig')
+      .orderBy('user.created_at', 'DESC');
 
     const where: Partial<IUserQuery> = {};
 
-    if (query.uuid) {
-      where.uuid = query.uuid;
+    if (query.id) {
+      where.id = query.id;
     }
 
     if (query.name) {
@@ -52,6 +54,12 @@ class UsersRepository implements IUsersRepository {
 
     if (query.role) {
       where.role = query.role;
+    }
+
+    if (query.matricula) {
+      where.person_sig = {
+        matricula: ILike(`%${query.matricula}%`),
+      };
     }
 
     if (query.page) page = query.page;
@@ -71,12 +79,16 @@ class UsersRepository implements IUsersRepository {
   }
 
   public async findOne(id: string): Promise<User | undefined> {
-    return await this.ormRepository.findOne({
-      where: {
-        id,
-      },
-      relations: ['roles'],
-    });
+    try {
+      const user = await this.ormRepository.findOne({
+        where: { id },
+        relations: ['roles', 'roles.permissions', 'individual_permissions'],
+      });
+
+      return user;
+    } catch (error) {
+      console.log('error', error);
+    }
   }
 
   public async update(user: IUpdateUser): Promise<User> {
