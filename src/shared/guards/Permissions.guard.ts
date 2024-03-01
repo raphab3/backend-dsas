@@ -36,9 +36,6 @@ export class PermissionsGuard implements CanActivate {
       });
     });
 
-    console.log('requiredPermission: ', requiredPermission);
-    console.log('permissionsSet: ', permissionsSet);
-
     return permissionsSet.has(requiredPermission);
   }
 }

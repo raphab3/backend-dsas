@@ -63,6 +63,11 @@ export enum ListOfPermissionsEnum {
   remove_inventory = 'remove_inventory',
   auth_sing_in = 'auth_sing_in',
   auth_me = 'auth_me',
+  create_location = 'create_location',
+  find_all_locations = 'find_all_locations',
+  find_one_location = 'find_one_location',
+  update_location = 'update_location',
+  remove_location = 'remove_location',
   // system permissions
   seed_generate_permissions = 'seed_generate_permissions',
   seed_generate_roles = 'seed_generate_roles',
@@ -132,6 +137,11 @@ export const PermissionsEnum = [
   ListOfPermissionsEnum.remove_inventory,
   ListOfPermissionsEnum.auth_sing_in,
   ListOfPermissionsEnum.auth_me,
+  ListOfPermissionsEnum.create_location,
+  ListOfPermissionsEnum.find_all_locations,
+  ListOfPermissionsEnum.find_one_location,
+  ListOfPermissionsEnum.update_location,
+  ListOfPermissionsEnum.remove_location,
 
   // system permissions
   ListOfPermissionsEnum.seed_generate_roles,
@@ -160,6 +170,10 @@ export const groupsOfPermissions = {
     ListOfPermissionsEnum.update_dependent,
     ListOfPermissionsEnum.find_all_personSigs,
     ListOfPermissionsEnum.find_one_personSig,
+    ListOfPermissionsEnum.create_location,
+    ListOfPermissionsEnum.find_all_locations,
+    ListOfPermissionsEnum.find_one_location,
+    ListOfPermissionsEnum.update_location,
   ],
   professional: [
     ListOfPermissionsEnum.find_all_appointments,

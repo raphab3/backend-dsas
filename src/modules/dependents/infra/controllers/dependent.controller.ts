@@ -38,8 +38,8 @@ export class DependentController {
     private readonly removeDependentService: RemoveDependentService,
   ) {}
 
-  @AuditLog('CRIAR DEPENDENTE')
   @Post()
+  @AuditLog('CRIAR DEPENDENTE')
   @ApiOperation({ summary: 'Create Dependent' })
   @Permission(ListOfPermissionsEnum.create_dependent)
   create(@Body() createDependentDto: CreateDependentDto) {
