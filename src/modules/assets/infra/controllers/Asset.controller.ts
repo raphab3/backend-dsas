@@ -21,8 +21,8 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { Permission } from '@shared/decorators/Permission';
-import { ListOfPermissionsEnum } from '@modules/permissions/interfaces/listOfPermissionsEnum';
 import { JwtAuthGuard } from '@shared/guards/Jwt-auth.guard';
+import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum';
 
 @ApiTags('assets')
 @Controller('assets')
@@ -41,20 +41,20 @@ export class AssetController {
   @AuditLog('CRIAR PATRIMONIO')
   @Post()
   @ApiOperation({ summary: 'Create Asset' })
-  @Permission(ListOfPermissionsEnum.create_asset)
+  @Permission(PermissionsEnum.create_asset)
   create(@Body() createAssetDto: CreateAssetDto) {
     return this.createAssetService.execute(createAssetDto);
   }
 
   @Get()
-  @Permission(ListOfPermissionsEnum.find_all_assets)
+  @Permission(PermissionsEnum.find_all_assets)
   findAll(@Req() req: any) {
     const query = req.query;
     return this.findAllAssetService.findAll(query);
   }
 
   @Get(':id')
-  @Permission(ListOfPermissionsEnum.find_one_asset)
+  @Permission(PermissionsEnum.find_one_asset)
   @ApiOperation({ summary: 'Find one Asset' })
   findOne(@Param('id') id: string) {
     return this.findOneAssetService.findOne(id);
@@ -62,14 +62,14 @@ export class AssetController {
 
   @AuditLog('ATUALIZAR PATRIMONIO')
   @Patch(':id')
-  @Permission(ListOfPermissionsEnum.update_asset)
+  @Permission(PermissionsEnum.update_asset)
   update(@Param('id') id: string, @Body() updateAssetDto: UpdateAssetDto) {
     return this.updateAssetService.update(id, updateAssetDto);
   }
 
   @AuditLog('REMOVER PATRIMONIO')
   @Delete(':id')
-  @Permission(ListOfPermissionsEnum.remove_asset)
+  @Permission(PermissionsEnum.remove_asset)
   remove(@Param('id') id: string) {
     return this.removeAssetService.remove(id);
   }

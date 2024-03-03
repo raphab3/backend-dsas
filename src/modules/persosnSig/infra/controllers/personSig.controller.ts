@@ -28,7 +28,7 @@ import { JwtAuthGuard } from '@shared/guards/Jwt-auth.guard';
 import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
 import { AuditLog } from '@modules/audits/decorators';
 import { Permission } from '@shared/decorators/Permission';
-import { ListOfPermissionsEnum } from '@modules/permissions/interfaces/listOfPermissionsEnum';
+import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum';
 
 @ApiTags('personSig')
 @Controller('persons-sig')
@@ -50,14 +50,14 @@ export class PersonSigController {
   @Post()
   @ApiOperation({ summary: 'Create PersonSig' })
   @HttpCode(201)
-  @Permission(ListOfPermissionsEnum.create_personSig)
+  @Permission(PermissionsEnum.create_personSig)
   create(@Body() createPersonSigDto: CreatePersonSigDto) {
     return this.createPersonSigService.execute(createPersonSigDto.matricula);
   }
 
   @Get()
   @ApiOperation({ summary: 'Find all PersonSig' })
-  @Permission(ListOfPermissionsEnum.find_all_personSigs)
+  @Permission(PermissionsEnum.find_all_personSigs)
   findAll(@Query() query: GetAllPersonSiglDto) {
     return this.findAllPersonSigService.findAll(query);
   }
@@ -66,7 +66,7 @@ export class PersonSigController {
   @Post('external')
   @HttpCode(200)
   @ApiOperation({ summary: 'Find all PersonSig External' })
-  @Permission(ListOfPermissionsEnum.find_external_personSigs)
+  @Permission(PermissionsEnum.find_external_personSigs)
   findAllExternal(@Body() body: getPersonSigExternalDto) {
     const matricula = body.matricula;
     return this.findExternalSigpmpbService.execute(matricula);
@@ -74,14 +74,14 @@ export class PersonSigController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Find one PersonSig' })
-  @Permission(ListOfPermissionsEnum.find_one_personSig)
+  @Permission(PermissionsEnum.find_one_personSig)
   findOne(@Param('id') id: string) {
     return this.findOnePersonSigService.findOne(id);
   }
 
   @Get('matricula')
   @ApiOperation({ summary: 'Find PersonSig by matricula' })
-  @Permission(ListOfPermissionsEnum.find_one_personSig)
+  @Permission(PermissionsEnum.find_one_personSig)
   async findByMatricula(@Query() query: GetByMatriculaPersonSigDto) {
     return await this.findByMatriculaPersonSigService.execute(query.matricula);
   }
@@ -89,7 +89,7 @@ export class PersonSigController {
   @AuditLog('ATUALIZAR SERVIDOR SIGPMPB')
   @Patch(':id')
   @ApiOperation({ summary: 'Update PersonSig' })
-  @Permission(ListOfPermissionsEnum.update_personSig)
+  @Permission(PermissionsEnum.update_personSig)
   update(
     @Param('id') id: string,
     @Body() updatePersonSigDto: UpdatePersonSigDto,
@@ -100,7 +100,7 @@ export class PersonSigController {
   @AuditLog('REMOVER SERVIDOR SIGPMPB')
   @Delete(':id')
   @ApiOperation({ summary: 'Remove PersonSig' })
-  @Permission(ListOfPermissionsEnum.remove_personSig)
+  @Permission(PermissionsEnum.remove_personSig)
   remove(@Param('id') id: string) {
     return this.removePersonSigService.remove(id);
   }

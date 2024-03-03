@@ -22,7 +22,7 @@ import { JwtAuthGuard } from '@shared/guards/Jwt-auth.guard';
 import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
 import { AuditLog } from '@modules/audits/decorators';
 import { Permission } from '@shared/decorators/Permission';
-import { ListOfPermissionsEnum } from '@modules/permissions/interfaces/listOfPermissionsEnum';
+import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum';
 
 @ApiTags('specialties')
 @Controller('specialties')
@@ -41,14 +41,14 @@ export class SpecialtyController {
   @AuditLog('CRIAR ESPECIALIDADE')
   @Post()
   @ApiOperation({ summary: 'Create Specialty' })
-  @Permission(ListOfPermissionsEnum.create_specialty)
+  @Permission(PermissionsEnum.create_specialty)
   create(@Body() createSpecialtyDto: CreateSpecialtyDto) {
     return this.createSpecialtieservice.execute(createSpecialtyDto);
   }
 
   @Get()
   @ApiOperation({ summary: 'Find all Specialty' })
-  @Permission(ListOfPermissionsEnum.find_all_specialties)
+  @Permission(PermissionsEnum.find_all_specialties)
   findAll(@Req() req: any) {
     const query = req.query;
     return this.findAllSpecialtieservice.findAll(query);
@@ -56,7 +56,7 @@ export class SpecialtyController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Find one Specialty' })
-  @Permission(ListOfPermissionsEnum.find_one_specialty)
+  @Permission(PermissionsEnum.find_one_specialty)
   findOne(@Param('id') id: string) {
     return this.findOneSpecialtieservice.findOne(id);
   }
@@ -64,7 +64,7 @@ export class SpecialtyController {
   @AuditLog('ATUALIZAR ESPECIALIDADE')
   @Patch(':id')
   @ApiOperation({ summary: 'Update Specialty' })
-  @Permission(ListOfPermissionsEnum.update_specialty)
+  @Permission(PermissionsEnum.update_specialty)
   update(
     @Param('id') id: string,
     @Body() updateSpecialtyDto: UpdateSpecialtyDto,
@@ -75,7 +75,7 @@ export class SpecialtyController {
   @AuditLog('REMOVER ESPECIALIDADE')
   @Delete(':id')
   @ApiOperation({ summary: 'Remove Specialty' })
-  @Permission(ListOfPermissionsEnum.remove_specialty)
+  @Permission(PermissionsEnum.remove_specialty)
   remove(@Param('id') id: string) {
     return this.removeSpecialtieservice.remove(id);
   }

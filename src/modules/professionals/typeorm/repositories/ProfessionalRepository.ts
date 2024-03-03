@@ -1,12 +1,14 @@
 import IProfessionalRepository from './IProfessionalRepository';
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import { Professional } from '../entities/professional.entity';
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
 import { paginate } from '@shared/utils/Pagination';
-import { UpdateProfessionalDto } from '@modules/professionals/dto/update-professional.dto';
-import { ICreateProfessional } from '@modules/professionals/interfaces/IProfessional';
+import {
+  ICreateProfessional,
+  IUpdateProfessional,
+} from '@modules/professionals/interfaces/IProfessional';
 
 @Injectable()
 class ProfessionalRepository implements IProfessionalRepository {
@@ -16,9 +18,17 @@ class ProfessionalRepository implements IProfessionalRepository {
   ) {}
 
   public async create(data: ICreateProfessional): Promise<Professional> {
-    const professional = this.ormRepository.create(data);
-    await this.ormRepository.save(professional);
-    return professional;
+    try {
+      const professional = this.ormRepository.create({
+        ...data,
+      });
+
+      await this.ormRepository.save(professional);
+      return professional;
+    } catch (error) {
+      console.log('error', error);
+      throw new HttpException('Erro ao criar profissional', 500);
+    }
   }
 
   public async list(query: any): Promise<IPaginatedResult<any>> {
@@ -29,6 +39,7 @@ class ProfessionalRepository implements IProfessionalRepository {
       .createQueryBuilder('professionals')
       .leftJoinAndSelect('professionals.person_sig', 'person_sig')
       .leftJoinAndSelect('professionals.specialties', 'specialties')
+      .leftJoinAndSelect('professionals.locations', 'locations')
       .orderBy('professionals.created_at', 'DESC');
 
     const where: Partial<any> = {};
@@ -72,16 +83,10 @@ class ProfessionalRepository implements IProfessionalRepository {
 
   public async update(
     id: string,
-    data: UpdateProfessionalDto,
+    data: IUpdateProfessional,
   ): Promise<Professional> {
-    const builder = this.ormRepository.createQueryBuilder();
-    const professional = await builder
-      .update(Professional)
-      .set(data)
-      .where('id = :id', { id })
-      .returning('*')
-      .execute();
-    return professional.raw[0];
+    const professional = await this.ormRepository.save(data);
+    return professional;
   }
 }
 

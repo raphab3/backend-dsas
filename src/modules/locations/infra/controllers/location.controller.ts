@@ -22,10 +22,11 @@ import { JwtAuthGuard } from '@shared/guards/Jwt-auth.guard';
 import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
 import { AuditLog } from '@modules/audits/decorators';
 import { Permission } from '@shared/decorators/Permission';
-import { ListOfPermissionsEnum } from '@modules/permissions/interfaces/listOfPermissionsEnum';
+import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum';
+import { LocationCityEnum } from '@modules/locations/interfaces/ILocation';
 
-@ApiTags('location')
-@Controller('location')
+@ApiTags('locations')
+@Controller('locations')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth('JWT')
 @UseInterceptors(AuditInterceptor)
@@ -41,14 +42,18 @@ export class LocationController {
   @Post()
   @AuditLog('CRIAR TEMPLATE')
   @ApiOperation({ summary: 'Create Location' })
-  @Permission(ListOfPermissionsEnum.create_location)
+  @Permission(PermissionsEnum.create_location)
   create(@Body() createLocationDto: CreateLocationDto) {
-    return this.createLocationService.execute(createLocationDto);
+    return this.createLocationService.execute({
+      name: createLocationDto.name,
+      description: createLocationDto.description,
+      city: createLocationDto.city as LocationCityEnum,
+    });
   }
 
   @Get()
   @ApiOperation({ summary: 'Find all Location' })
-  @Permission(ListOfPermissionsEnum.find_all_locations)
+  @Permission(PermissionsEnum.find_all_locations)
   findAll(@Req() req: any) {
     const query = req.query;
     return this.findAllLocationService.findAll(query);
@@ -56,7 +61,7 @@ export class LocationController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Find one Location' })
-  @Permission(ListOfPermissionsEnum.find_one_location)
+  @Permission(PermissionsEnum.find_one_location)
   findOne(@Param('id') id: string) {
     return this.findOneLocationService.findOne(id);
   }
@@ -64,18 +69,22 @@ export class LocationController {
   @Patch(':id')
   @AuditLog('ATUALIZAR TEMPLATE')
   @ApiOperation({ summary: 'Update Location' })
-  @Permission(ListOfPermissionsEnum.update_location)
+  @Permission(PermissionsEnum.update_location)
   update(
     @Param('id') id: string,
     @Body() updateLocationDto: UpdateLocationDto,
   ) {
-    return this.updateLocationService.update(id, updateLocationDto);
+    return this.updateLocationService.update(id, {
+      name: updateLocationDto.name,
+      description: updateLocationDto.description,
+      city: updateLocationDto.city as LocationCityEnum,
+    });
   }
 
   @Delete(':id')
   @AuditLog('REMOVER TEMPLATE')
   @ApiOperation({ summary: 'Remove Location' })
-  @Permission(ListOfPermissionsEnum.remove_location)
+  @Permission(PermissionsEnum.remove_location)
   remove(@Param('id') id: string) {
     return this.removeLocationService.remove(id);
   }

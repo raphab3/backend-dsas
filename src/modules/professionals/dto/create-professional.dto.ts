@@ -1,3 +1,4 @@
+import { ILocation } from '@modules/locations/interfaces/ILocation';
 import { Specialty } from '@modules/specialties/typeorm/entities/Specialty.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -10,15 +11,16 @@ export class CreateProfessionalDto {
   matricula: string;
 
   @ApiProperty({
-    description: 'The crm of the professional',
+    description: 'The council of the professional',
     type: 'string',
     example: '123456PB',
   })
-  crm: string;
+  council: string;
 
   @ApiProperty({
     description: 'The specialties of the professional',
     type: 'array',
+    required: false,
     example: [
       {
         id: 'uuid',
@@ -26,4 +28,16 @@ export class CreateProfessionalDto {
     ],
   })
   specialties: Partial<Specialty>[];
+
+  @ApiProperty({
+    description: 'The locations of the professional',
+    type: 'array',
+    required: false,
+    example: [
+      {
+        id: 'uuid',
+      },
+    ],
+  })
+  locations: Partial<ILocation>[];
 }

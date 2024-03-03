@@ -23,7 +23,7 @@ import {
 import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
 import { AuditLog } from '@modules/audits/decorators';
 import { Permission } from '@shared/decorators/Permission';
-import { ListOfPermissionsEnum } from '@modules/permissions/interfaces/listOfPermissionsEnum';
+import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum';
 import { AddedPermissionUserDto } from '@modules/users/dto/added-permission-user.dto';
 import { AddPermissionUserService } from '@modules/users/services/addPermissionUser.service';
 import { EntityPropertyNotFoundExceptionFilter } from '@shared/interceptors/EntityPropertyNotFoundError';
@@ -46,7 +46,7 @@ export class UsersController {
 
   @AuditLog('CRIAR USUÁRIO')
   @Post()
-  @Permission(ListOfPermissionsEnum.create_user)
+  @Permission(PermissionsEnum.create_user)
   @ApiOperation({ summary: 'Create user' })
   async create(@Body() createUserDto: CreateUserDto) {
     const user = await this.createUsersService.execute(createUserDto);
@@ -55,7 +55,7 @@ export class UsersController {
   }
 
   @Get()
-  @Permission(ListOfPermissionsEnum.find_all_users)
+  @Permission(PermissionsEnum.find_all_users)
   findAll(@Req() req: any) {
     const query = req.query;
     return this.findAllUsersService.findAll(query);
@@ -63,28 +63,28 @@ export class UsersController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Find one user' })
-  @Permission(ListOfPermissionsEnum.find_one_user)
+  @Permission(PermissionsEnum.find_one_user)
   findOne(@Param('id') id: string) {
     return this.findOneUsersService.findOne(id);
   }
 
   @AuditLog('ATUALIZAR USUÁRIO')
   @Patch(':id')
-  @Permission(ListOfPermissionsEnum.update_user)
+  @Permission(PermissionsEnum.update_user)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.updateUsersService.execute(id, updateUserDto);
   }
 
   @AuditLog('REMOVER USUÁRIO')
   @Delete(':id')
-  @Permission(ListOfPermissionsEnum.remove_user)
+  @Permission(PermissionsEnum.remove_user)
   remove(@Param('id') id: string) {
     return this.removeUsersService.remove(id);
   }
 
   @Post(':id/permissions')
   @ApiOperation({ summary: 'Add permission to user' })
-  // @Permission(ListOfPermissionsEnum.add_user_permission)
+  // @Permission(PermissionsEnum.add_user_permission)
   async addPermission(
     @Body() addedPermissionUserDto: AddedPermissionUserDto,
     @Param('id') id: string,

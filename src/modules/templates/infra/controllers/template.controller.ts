@@ -22,7 +22,7 @@ import { JwtAuthGuard } from '@shared/guards/Jwt-auth.guard';
 import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
 import { AuditLog } from '@modules/audits/decorators';
 import { Permission } from '@shared/decorators/Permission';
-import { ListOfPermissionsEnum } from '@modules/permissions/interfaces/listOfPermissionsEnum';
+import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum';
 
 @ApiTags('template')
 @Controller('template')
@@ -41,14 +41,14 @@ export class TemplateController {
   @Post()
   @AuditLog('CRIAR TEMPLATE')
   @ApiOperation({ summary: 'Create Template' })
-  @Permission(ListOfPermissionsEnum.create_template)
+  @Permission(PermissionsEnum.create_template)
   create(@Body() createTemplateDto: CreateTemplateDto) {
     return this.createTemplateService.execute(createTemplateDto);
   }
 
   @Get()
   @ApiOperation({ summary: 'Find all Template' })
-  @Permission(ListOfPermissionsEnum.find_all_templates)
+  @Permission(PermissionsEnum.find_all_templates)
   findAll(@Req() req: any) {
     const query = req.query;
     return this.findAllTemplateService.findAll(query);
@@ -56,7 +56,7 @@ export class TemplateController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Find one Template' })
-  @Permission(ListOfPermissionsEnum.find_one_template)
+  @Permission(PermissionsEnum.find_one_template)
   findOne(@Param('id') id: string) {
     return this.findOneTemplateService.findOne(id);
   }
@@ -64,7 +64,7 @@ export class TemplateController {
   @Patch(':id')
   @AuditLog('ATUALIZAR TEMPLATE')
   @ApiOperation({ summary: 'Update Template' })
-  @Permission(ListOfPermissionsEnum.update_template)
+  @Permission(PermissionsEnum.update_template)
   update(
     @Param('id') id: string,
     @Body() updateTemplateDto: UpdateTemplateDto,
@@ -75,7 +75,7 @@ export class TemplateController {
   @Delete(':id')
   @AuditLog('REMOVER TEMPLATE')
   @ApiOperation({ summary: 'Remove Template' })
-  @Permission(ListOfPermissionsEnum.remove_template)
+  @Permission(PermissionsEnum.remove_template)
   remove(@Param('id') id: string) {
     return this.removeTemplateService.remove(id);
   }

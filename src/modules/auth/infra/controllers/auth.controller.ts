@@ -1,7 +1,7 @@
 import { SignInDto } from '@modules/auth/dto/signin.dto';
 import { AuthService } from '@modules/auth/services/auth.service';
 import { MeService } from '@modules/auth/services/me.service';
-import { ListOfPermissionsEnum } from '@modules/permissions/interfaces/listOfPermissionsEnum';
+import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum';
 import {
   Body,
   Controller,
@@ -32,7 +32,7 @@ export class AuthController {
   }
 
   @Get('me')
-  @Permission(ListOfPermissionsEnum.auth_me)
+  @Permission(PermissionsEnum.auth_me)
   async me(@Req() req: any) {
     const user = await this.meService.execute(req?.user?.userId);
     return user;

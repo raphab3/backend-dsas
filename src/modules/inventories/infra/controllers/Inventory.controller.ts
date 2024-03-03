@@ -6,7 +6,7 @@ import { CreateInventoryService } from '@modules/inventories/services/create.Inv
 import { FindAllInventoryService } from '@modules/inventories/services/findAll.Inventory.service';
 import { FindOneInventoryService } from '@modules/inventories/services/findOne.Inventory.service';
 import { JwtAuthGuard } from '@shared/guards/Jwt-auth.guard';
-import { ListOfPermissionsEnum } from '@modules/permissions/interfaces/listOfPermissionsEnum';
+import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum';
 import { Permission } from '@shared/decorators/Permission';
 import { RemoveInventoryService } from '@modules/inventories/services/remove.Inventory.service';
 import { UpdateInventaryDto } from '@modules/inventories/dto/UpdateInventaryDto';
@@ -42,13 +42,13 @@ export class InventoryController {
   @AuditLog('CRIAR INVENTARIO')
   @Post()
   @ApiOperation({ summary: 'Create Inventory' })
-  @Permission(ListOfPermissionsEnum.create_inventory)
+  @Permission(PermissionsEnum.create_inventory)
   create(@Body() createInventaryDto: CreateInventaryDto) {
     return this.createInventoryService.execute(createInventaryDto);
   }
 
   @Get()
-  @Permission(ListOfPermissionsEnum.find_all_inventories)
+  @Permission(PermissionsEnum.find_all_inventories)
   findAll(@Req() req: any) {
     const query = req.query;
     return this.findAllInventaryService.findAll(query);
@@ -56,7 +56,7 @@ export class InventoryController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Find one Inventory' })
-  @Permission(ListOfPermissionsEnum.find_one_inventory)
+  @Permission(PermissionsEnum.find_one_inventory)
   findOne(@Param('id') id: string) {
     return this.findOneInventaryService.findOne(id);
   }
@@ -64,7 +64,7 @@ export class InventoryController {
   @AuditLog('ATUALIZAR INVENTARIO')
   @Patch(':id')
   @ApiOperation({ summary: 'Update Inventory' })
-  @Permission(ListOfPermissionsEnum.update_inventory)
+  @Permission(PermissionsEnum.update_inventory)
   update(
     @Param('id') id: string,
     @Body() updateInventaryDto: UpdateInventaryDto,
@@ -75,7 +75,7 @@ export class InventoryController {
   @AuditLog('REMOVER INVENTARIO')
   @Delete(':id')
   @ApiOperation({ summary: 'Remove Inventory' })
-  @Permission(ListOfPermissionsEnum.remove_inventory)
+  @Permission(PermissionsEnum.remove_inventory)
   remove(@Param('id') id: string) {
     return this.removeInventaryService.remove(id);
   }

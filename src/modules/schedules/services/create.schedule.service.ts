@@ -3,16 +3,8 @@ import ScheduleRepository from '../typeorm/repositories/ScheduleRepository';
 import { CreateScheduleDto } from '../dto/create-schedule.dto';
 import ProfessionalRepository from '@modules/professionals/typeorm/repositories/ProfessionalRepository';
 import SpecialtyRepository from '@modules/specialties/typeorm/repositories/SpecialtyRepository';
+import { ICreateSchedule } from '../interfaces/ISchedule';
 
-interface ICreateRequest extends CreateScheduleDto {
-  description: string;
-  professional: {
-    id: string;
-  };
-  specialty: {
-    id: string;
-  };
-}
 @Injectable()
 export class CreateScheduleService {
   constructor(
@@ -49,12 +41,15 @@ export class CreateScheduleService {
       );
     }
 
-    const schedule: ICreateRequest = {
+    if (!createScheduleDto.location_id) {
+      throw new HttpException('Local não informado', 400);
+    }
+
+    const schedule: ICreateSchedule = {
       ...createScheduleDto,
       available_date: createScheduleDto.available_date.split('T')[0],
       description: `
-        Dr. ${professionalExists.person_sig.nome} | 
-        ${specialtyExistsInProfessional.name} 
+        ${professionalExists.person_sig.nome}
       `
         .replace(/\s+/g, ' ')
         .trim(),
@@ -63,6 +58,9 @@ export class CreateScheduleService {
       },
       specialty: {
         id: createScheduleDto.specialty_id,
+      },
+      location: {
+        id: createScheduleDto.location_id,
       },
     };
 

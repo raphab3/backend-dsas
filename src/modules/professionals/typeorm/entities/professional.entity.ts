@@ -1,3 +1,4 @@
+import { Location } from '@modules/locations/typeorm/entities/location.entity';
 import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
 import { IProfessional } from '@modules/professionals/interfaces/IProfessional';
 import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
@@ -26,8 +27,9 @@ export class Professional implements IProfessional {
 
   @Column({
     type: 'varchar',
+    nullable: true,
   })
-  crm: string;
+  council: string;
 
   @ManyToMany(() => Specialty)
   @JoinTable({
@@ -39,6 +41,14 @@ export class Professional implements IProfessional {
 
   @OneToMany(() => Schedule, (schedule) => schedule.professional)
   schedules: Schedule[];
+
+  @ManyToMany(() => Location)
+  @JoinTable({
+    name: 'professionals_locations',
+    joinColumns: [{ name: 'professional_id' }],
+    inverseJoinColumns: [{ name: 'location_id' }],
+  })
+  locations: Location[];
 
   @CreateDateColumn()
   created_at: Date;

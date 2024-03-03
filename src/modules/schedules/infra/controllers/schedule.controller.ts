@@ -22,7 +22,7 @@ import { JwtAuthGuard } from '@shared/guards/Jwt-auth.guard';
 import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
 import { AuditLog } from '@modules/audits/decorators';
 import { Permission } from '@shared/decorators/Permission';
-import { ListOfPermissionsEnum } from '@modules/permissions/interfaces/listOfPermissionsEnum';
+import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum';
 
 @ApiTags('schedules')
 @Controller('schedules')
@@ -41,14 +41,14 @@ export class ScheduleController {
   @AuditLog('CRIAR SCHEDULE')
   @Post()
   @ApiOperation({ summary: 'Create Schedule' })
-  @Permission(ListOfPermissionsEnum.create_appointment)
+  @Permission(PermissionsEnum.create_appointment)
   create(@Body() createScheduleDto: CreateScheduleDto) {
     return this.createScheduleService.execute(createScheduleDto);
   }
 
   @Get()
   @ApiOperation({ summary: 'Find all Schedule' })
-  @Permission(ListOfPermissionsEnum.find_all_appointments)
+  @Permission(PermissionsEnum.find_all_appointments)
   findAll(@Req() req: any) {
     const query = req.query;
     return this.findAllScheduleService.findAll(query);
@@ -56,7 +56,7 @@ export class ScheduleController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Find one Schedule' })
-  @Permission(ListOfPermissionsEnum.find_one_appointment)
+  @Permission(PermissionsEnum.find_one_appointment)
   findOne(@Param('id') id: string) {
     return this.findOneScheduleService.findOne(id);
   }
@@ -64,7 +64,7 @@ export class ScheduleController {
   @AuditLog('ATUALIZAR SCHEDULE')
   @Patch(':id')
   @ApiOperation({ summary: 'Update Schedule' })
-  @Permission(ListOfPermissionsEnum.update_appointment)
+  @Permission(PermissionsEnum.update_appointment)
   update(
     @Param('id') id: string,
     @Body() updateScheduleDto: UpdateScheduleDto,
@@ -75,7 +75,7 @@ export class ScheduleController {
   @AuditLog('REMOVER SCHEDULE')
   @Delete(':id')
   @ApiOperation({ summary: 'Remove Schedule' })
-  @Permission(ListOfPermissionsEnum.remove_appointment)
+  @Permission(PermissionsEnum.remove_appointment)
   remove(@Param('id') id: string) {
     return this.removeScheduleService.remove(id);
   }

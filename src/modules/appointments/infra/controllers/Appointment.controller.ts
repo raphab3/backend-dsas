@@ -20,7 +20,7 @@ import {
   Req,
   UseInterceptors,
 } from '@nestjs/common';
-import { ListOfPermissionsEnum } from '@modules/permissions/interfaces/listOfPermissionsEnum';
+import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum';
 
 @ApiTags('appointments')
 @Controller('appointments')
@@ -38,13 +38,13 @@ export class AppointmentController {
   @AuditLog('CRIAR APPOINTMENT')
   @Post()
   @ApiOperation({ summary: 'Create Appointment' })
-  @Permission(ListOfPermissionsEnum.create_appointment)
+  @Permission(PermissionsEnum.create_appointment)
   create(@Body() createAppointmentDto: CreateAppointmentDto) {
     return this.createAppointmentService.execute(createAppointmentDto);
   }
 
   @Get()
-  @Permission(ListOfPermissionsEnum.find_all_appointments)
+  @Permission(PermissionsEnum.find_all_appointments)
   findAll(@Req() req: any) {
     const { query } = req;
 
@@ -53,7 +53,7 @@ export class AppointmentController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Find one Appointment' })
-  @Permission(ListOfPermissionsEnum.find_one_appointment)
+  @Permission(PermissionsEnum.find_one_appointment)
   findOne(@Param('id') id: string) {
     return this.findOneAppointmentService.findOne(id);
   }
@@ -61,7 +61,7 @@ export class AppointmentController {
   @AuditLog('ATUALIZAR APPOINTMENT')
   @Patch(':id')
   @ApiOperation({ summary: 'Update Appointment' })
-  @Permission(ListOfPermissionsEnum.update_appointment)
+  @Permission(PermissionsEnum.update_appointment)
   update(
     @Param('id') id: string,
     @Body() updateAppointmentDto: UpdateAppointmentDto,
@@ -72,7 +72,7 @@ export class AppointmentController {
   @AuditLog('REMOVER APPOINTMENT')
   @Delete(':id')
   @ApiOperation({ summary: 'Remove Appointment' })
-  @Permission(ListOfPermissionsEnum.remove_appointment)
+  @Permission(PermissionsEnum.remove_appointment)
   remove(@Param('id') id: string) {
     return this.removeAppointmentService.remove(id);
   }

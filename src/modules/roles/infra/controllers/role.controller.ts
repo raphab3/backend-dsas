@@ -6,7 +6,7 @@ import { CreateRoleService } from '@modules/roles/services/create.role.service';
 import { FindAllRoleService } from '@modules/roles/services/findAll.role.service';
 import { FindOneRoleService } from '@modules/roles/services/findOne.role.service';
 import { JwtAuthGuard } from '@shared/guards/Jwt-auth.guard';
-import { ListOfPermissionsEnum } from '@modules/permissions/interfaces/listOfPermissionsEnum';
+import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum';
 import { Permission } from '@shared/decorators/Permission';
 import { RemoveRoleService } from '@modules/roles/services/remove.role.service';
 import { UpdateRoleDto } from '@modules/roles/dto/update-role.dto';
@@ -41,20 +41,20 @@ export class RoleController {
   @AuditLog('CRIAR ROLE')
   @Post()
   @ApiOperation({ summary: 'Create Role' })
-  @Permission(ListOfPermissionsEnum.create_role)
+  @Permission(PermissionsEnum.create_role)
   create(@Body() createRoleDto: CreateRoleDto) {
     return this.createRoleService.execute(createRoleDto);
   }
 
   @Get()
-  @Permission(ListOfPermissionsEnum.find_all_roles)
+  @Permission(PermissionsEnum.find_all_roles)
   findAll(@Req() req: any) {
     const query = req.query;
     return this.findAllRoleService.findAll(query);
   }
 
   @Get(':id')
-  @Permission(ListOfPermissionsEnum.find_one_role)
+  @Permission(PermissionsEnum.find_one_role)
   @ApiOperation({ summary: 'Find one Role' })
   findOne(@Param('id') id: string) {
     return this.findOneRoleService.findOne(id);
@@ -62,14 +62,14 @@ export class RoleController {
 
   @AuditLog('ATUALIZAR ROLE')
   @Patch(':id')
-  @Permission(ListOfPermissionsEnum.update_role)
+  @Permission(PermissionsEnum.update_role)
   update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
     return this.updateRoleService.update(id, updateRoleDto);
   }
 
   @AuditLog('REMOVER ROLE')
   @Delete(':id')
-  @Permission(ListOfPermissionsEnum.remove_role)
+  @Permission(PermissionsEnum.remove_role)
   remove(@Param('id') id: string) {
     return this.removeRoleService.remove(id);
   }

@@ -1,4 +1,5 @@
 import { Appointment } from '@modules/appointments/typeorm/entities/Appointment.entity';
+import { Location } from '@modules/locations/typeorm/entities/location.entity';
 import { Professional } from '@modules/professionals/typeorm/entities/professional.entity';
 import { ISchedule } from '@modules/schedules/interfaces/ISchedule';
 import { Specialty } from '@modules/specialties/typeorm/entities/Specialty.entity';
@@ -68,6 +69,9 @@ export class Schedule implements ISchedule {
 
   @OneToMany(() => Appointment, (appointment) => appointment.schedule)
   appointments: Appointment[];
+
+  @ManyToOne(() => Location, (location) => location.schedules)
+  location: Location;
 
   @CreateDateColumn()
   created_at: Date;

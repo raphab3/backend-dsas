@@ -42,4 +42,11 @@ export class CreateScheduleDto {
     example: 'uuid',
   })
   specialty_id: string;
+
+  @ApiProperty({
+    description: 'Location of the schedule',
+    type: 'string',
+    example: 'uuid',
+  })
+  location_id: string;
 }

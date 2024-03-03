@@ -1,10 +1,10 @@
 import ILocationRepository from './ILocationRepository';
-import { CreateLocationDto } from '@modules/locations/dto/create-location.dto';
+import { ICreateLocation } from '@modules/locations/interfaces/ILocation';
+import { ILike, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, Repository } from 'typeorm';
-import { Location } from '../entities/location.entity';
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
+import { Location } from '../entities/location.entity';
 import { paginate } from '@shared/utils/Pagination';
 
 @Injectable()
@@ -14,8 +14,12 @@ class LocationRepository implements ILocationRepository {
     private ormRepository: Repository<Location>,
   ) {}
 
-  public async create(data: CreateLocationDto): Promise<Location> {
-    const location = this.ormRepository.create(data);
+  public async create(data: ICreateLocation): Promise<Location> {
+    const location = this.ormRepository.create({
+      name: data.name,
+      description: data.description,
+      city: data.city,
+    });
     await this.ormRepository.save(location);
     return location;
   }
@@ -66,7 +70,7 @@ class LocationRepository implements ILocationRepository {
     await this.ormRepository.delete(id);
   }
 
-  public async update(id: string, data: CreateLocationDto): Promise<Location> {
+  public async update(id: string, data: ICreateLocation): Promise<Location> {
     const builder = this.ormRepository.createQueryBuilder();
     const location = await builder
       .update(Location)

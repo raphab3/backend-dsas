@@ -7,7 +7,6 @@ import { FindAllDependentService } from '@modules/dependents/services/findAll.de
 import { FindOneDependentService } from '@modules/dependents/services/findOne.dependent.service';
 import { GetAllDependentDto } from '@modules/dependents/dto/getAllDependentDto';
 import { JwtAuthGuard } from '@shared/guards/Jwt-auth.guard';
-import { ListOfPermissionsEnum } from '@modules/permissions/interfaces/listOfPermissionsEnum';
 import { Permission } from '@shared/decorators/Permission';
 import { RemoveDependentService } from '@modules/dependents/services/remove.dependent.service';
 import { UpdateDependentService } from '@modules/dependents/services/update.dependent.service';
@@ -23,6 +22,7 @@ import {
   UseInterceptors,
   UseGuards,
 } from '@nestjs/common';
+import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum';
 
 @ApiTags('dependents')
 @Controller('dependents')
@@ -41,27 +41,27 @@ export class DependentController {
   @Post()
   @AuditLog('CRIAR DEPENDENTE')
   @ApiOperation({ summary: 'Create Dependent' })
-  @Permission(ListOfPermissionsEnum.create_dependent)
+  @Permission(PermissionsEnum.create_dependent)
   create(@Body() createDependentDto: CreateDependentDto) {
     return this.createDependentService.execute(createDependentDto);
   }
 
   @Get()
-  @Permission(ListOfPermissionsEnum.find_all_dependents)
+  @Permission(PermissionsEnum.find_all_dependents)
   findAll(@Query() query?: GetAllDependentDto) {
     return this.findAllDependentService.findAll(query);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Find one Dependent' })
-  @Permission(ListOfPermissionsEnum.find_one_dependent)
+  @Permission(PermissionsEnum.find_one_dependent)
   findOne(@Param('id') id: string) {
     return this.findOneDependentService.findOne(id);
   }
 
   @AuditLog('ATUALIZAR DEPENDENTE')
   @Patch(':id')
-  @Permission(ListOfPermissionsEnum.update_dependent)
+  @Permission(PermissionsEnum.update_dependent)
   update(
     @Param('id') id: string,
     @Body() updateDependentDto: CreateDependentDto,
@@ -71,7 +71,7 @@ export class DependentController {
 
   @AuditLog('DELETAR DEPENDENTE')
   @Delete(':id')
-  @Permission(ListOfPermissionsEnum.remove_dependent)
+  @Permission(PermissionsEnum.remove_dependent)
   remove(@Param('id') id: string) {
     return this.removeDependentService.remove(id);
   }

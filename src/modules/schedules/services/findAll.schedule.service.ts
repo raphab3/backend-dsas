@@ -7,6 +7,8 @@ export class FindAllScheduleService {
   constructor(private readonly scheduleRepository: ScheduleRepository) {}
 
   async findAll(query: IQuerySchedule): Promise<any> {
-    return this.scheduleRepository.list(query);
+    return this.scheduleRepository.list({
+      ...query,
+    });
   }
 }

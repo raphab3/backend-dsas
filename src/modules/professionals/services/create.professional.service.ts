@@ -27,6 +27,9 @@ export class CreateProfessionalService {
       },
     };
 
+    console.log('professional', professional);
+    delete professional?.id;
+
     return await this.professionalRepository.create(professional);
   }
 }
