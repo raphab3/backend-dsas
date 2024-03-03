@@ -15,6 +15,17 @@ async function bootstrap() {
   switch (seedOption) {
     case '0':
       /*
+       * Executa o serviço de seed de Gerar roles
+       * Usa o serviço GenerateRolesService
+       * Usado para popular dados de roles no banco de dados
+       * */
+      console.log('Executando GenerateRolesService...');
+      const seederGenerateRolesService = app.get(GenerateRolesService);
+      await seederGenerateRolesService.execute();
+
+      break;
+    case '1':
+      /*
        * Executa o serviço de sincronização de permissões
        * Usa o serviço SyncPermissionsService
        * Usado para criar as permissões no banco de dados
@@ -24,7 +35,7 @@ async function bootstrap() {
       const seederSyncPermissionsService = app.get(SyncPermissionsService);
       await seederSyncPermissionsService.execute();
       break;
-    case '1':
+    case '2':
       /*
        * Executa o serviço de sincronização de permissões em roles
        * Usa o serviço SyncPermissionsInRolesService
@@ -35,7 +46,7 @@ async function bootstrap() {
       const seederRoles = app.get(SyncPermissionsInRolesService);
       await seederRoles.execute();
       break;
-    case '2':
+    case '3':
       /*
        * Executa o serviço de seed de localização
        * Usa o serviço LocationSeedService
@@ -46,17 +57,6 @@ async function bootstrap() {
       await seederLocation.execute();
       break;
 
-    case '3':
-      /*
-       * Executa o serviço de seed de Gerar roles
-       * Usa o serviço GenerateRolesService
-       * Usado para popular dados de roles no banco de dados
-       * */
-      console.log('Executando GenerateRolesService...');
-      const seederGenerateRolesService = app.get(GenerateRolesService);
-      await seederGenerateRolesService.execute();
-
-      break;
     default:
       console.log('Executando todas as seeds...');
       const seederSyncPermissionsServiceDefault = app.get(
