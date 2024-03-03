@@ -12,7 +12,7 @@ export class GenerateRolesService {
   ) {}
 
   async execute(): Promise<void> {
-    Object.keys(groupsOfPermissions).map(async (role) => {
+    for await (const role of Object.keys(groupsOfPermissions)) {
       console.log('role selected', role);
 
       const roleExists = await this.roleRepository.findOne({
@@ -32,7 +32,7 @@ export class GenerateRolesService {
       }
 
       console.log('role created');
-    });
+    }
 
     console.log('Finished roles generation');
   }
