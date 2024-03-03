@@ -4,6 +4,7 @@ import { SyncPermissionsService } from './services/SyncPermissions.service';
 import { LocationSeedService } from './services/Location.seed.service';
 import { NestFactory } from '@nestjs/core';
 import { SyncPermissionsInRolesService } from './services/SyncPermissionsInRoles.service';
+import { GenerateRolesService } from './services/GenerateRoles.service';
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
@@ -43,6 +44,18 @@ async function bootstrap() {
       console.log('Executando LocationSeedService...');
       const seederLocation = app.get(LocationSeedService);
       await seederLocation.execute();
+      break;
+
+    case '3':
+      /*
+       * Executa o serviço de seed de Gerar roles
+       * Usa o serviço GenerateRolesService
+       * Usado para popular dados de roles no banco de dados
+       * */
+      console.log('Executando GenerateRolesService...');
+      const seederGenerateRolesService = app.get(GenerateRolesService);
+      await seederGenerateRolesService.execute();
+
       break;
     default:
       console.log('Executando todas as seeds...');

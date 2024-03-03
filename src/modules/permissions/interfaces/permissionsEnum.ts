@@ -115,6 +115,8 @@ export const groupsOfPermissions = {
     PermissionsEnum.update_dependent,
     PermissionsEnum.find_all_personSigs,
     PermissionsEnum.find_one_personSig,
+    PermissionsEnum.find_all_locations,
+    PermissionsEnum.find_one_location,
   ],
   patient: [
     PermissionsEnum.find_all_appointments,
