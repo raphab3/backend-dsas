@@ -24,21 +24,11 @@ export class CreatePatientService {
       );
     }
 
-    const patientExists = await this.patientRepository.findByMatricula(
-      createPatientDto.matricula,
-    );
-
-    if (patientExists) {
-      throw new HttpException(
-        {
-          message: 'Paciente já cadastrado',
-        },
-        404,
-      );
-    }
-
     await this.patientRepository.create({
       person_sig_id: personSig.id,
+      dependent_id: createPatientDto.dependent_id
+        ? createPatientDto.dependent_id
+        : null,
     });
   }
 }

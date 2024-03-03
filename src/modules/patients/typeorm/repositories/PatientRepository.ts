@@ -1,5 +1,5 @@
 import IPatientRepository from './IPatientRepository';
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import { Patient } from '../entities/patient.entity';
@@ -15,18 +15,53 @@ class PatientRepository implements IPatientRepository {
     private ormRepository: Repository<Patient>,
   ) {}
 
-  public async create(data: ICreatePatient): Promise<Patient> {
-    const patient = this.ormRepository.create({
-      ...data,
+  public async create(data: ICreatePatient): Promise<any> {
+    const exists = await this.exists(data.person_sig_id, data.dependent_id);
+
+    if (exists) {
+      throw new HttpException(
+        {
+          message: 'Paciente já cadastrado',
+        },
+        409,
+      );
+    }
+
+    // Procede com a criação se não existir
+    const patientData: any = {
       person_sig: {
         id: data.person_sig_id,
       },
-      dependent: {
-        id: data.dependent_id,
-      },
-    });
+    };
+
+    if (data.dependent_id) {
+      patientData.dependent = { id: data.dependent_id };
+    }
+
+    const patient = this.ormRepository.create(patientData);
     await this.ormRepository.save(patient);
     return patient;
+  }
+
+  public async exists(
+    personSigId: string,
+    dependentId?: string,
+  ): Promise<boolean> {
+    let queryBuilder = this.ormRepository
+      .createQueryBuilder('patient')
+      .leftJoin('patient.person_sig', 'person_sig')
+      .where('person_sig.id = :personSigId', { personSigId });
+
+    if (dependentId) {
+      queryBuilder = queryBuilder
+        .leftJoin('patient.dependent', 'dependent')
+        .andWhere('dependent.id = :dependentId', { dependentId });
+    } else {
+      queryBuilder = queryBuilder.andWhere('patient.dependent IS NULL');
+    }
+
+    const count = await queryBuilder.getCount();
+    return count > 0;
   }
 
   public async list(query: any): Promise<IPaginatedResult<Patient>> {
@@ -36,6 +71,7 @@ class PatientRepository implements IPatientRepository {
     const professionalsCreateQueryBuilder = this.ormRepository
       .createQueryBuilder('patients')
       .leftJoinAndSelect('patients.person_sig', 'person_sig')
+      .leftJoinAndSelect('patients.dependent', 'dependent')
       .orderBy('patients.created_at', 'DESC');
 
     const where: Partial<any> = {};
@@ -100,9 +136,22 @@ class PatientRepository implements IPatientRepository {
     return await this.ormRepository
       .createQueryBuilder('patients')
       .leftJoinAndSelect('patients.person_sig', 'person_sig')
+      .leftJoinAndSelect('patients.dependent', 'dependent')
       .where('person_sig.matricula LIKE :matricula', {
         matricula: `%${matricula}%`,
       })
+      .getOne();
+  }
+
+  public async findPatientByPersonIdWithoutDependent(
+    person_sig_id: string,
+  ): Promise<Patient | undefined> {
+    return await this.ormRepository
+      .createQueryBuilder('patients')
+      .leftJoinAndSelect('patients.person_sig', 'person_sig')
+      .leftJoinAndSelect('patients.dependent', 'dependent')
+      .where('person_sig.id = :person_sig_id', { person_sig_id })
+      .andWhere('patients.dependent IS NULL')
       .getOne();
   }
 

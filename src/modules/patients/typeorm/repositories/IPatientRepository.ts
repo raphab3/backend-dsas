@@ -11,4 +11,7 @@ export default interface IPatientRepository {
   update(id: string, data: CreatePatientDto): Promise<Patient>;
   findByMatricula(matricula: string): Promise<Patient | undefined>;
   findByDependentId(dependent_id: string): Promise<Patient | undefined>;
+  findPatientByPersonIdWithoutDependent(
+    person_sig_id: string,
+  ): Promise<Patient | undefined>;
 }

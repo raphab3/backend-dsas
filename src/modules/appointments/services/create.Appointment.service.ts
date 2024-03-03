@@ -15,11 +15,17 @@ export class CreateAppointmentService {
   ) {}
 
   async execute(createAppointmentDto: CreateAppointmentDto) {
+    /*
+     * Verifica se o servidor existe
+     * Verifica a disponibilidade da agenda antes de processar o paciente
+     * Refatoração para criação/recuperação do paciente, deve criar com o person_sig_id e o dependent_id
+     * Criação do agendamento
+     * Atualização da agenda
+     * */
+
     const personSig = await this.personSigRepository.findByMatricula(
       createAppointmentDto.matricula,
     );
-
-    let patient: any = null;
 
     if (!personSig) {
       throw new HttpException(
@@ -28,95 +34,113 @@ export class CreateAppointmentService {
       );
     }
 
-    const isDependent = createAppointmentDto.dependent_id ? true : false;
-
-    if (isDependent) {
-      const dependent = personSig.dependents.find(
-        (dependent) => dependent.id === createAppointmentDto.dependent_id,
-      );
-
-      if (!dependent) {
-        throw new HttpException(
-          'Dependente não encontrado',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-
-      const hasPatient = await this.patientRepository.findByDependentId(
-        createAppointmentDto.dependent_id,
-      );
-
-      if (!hasPatient) {
-        patient = await this.patientRepository.create({
-          person_sig_id: personSig.id,
-          dependent_id: dependent.id,
-        });
-      } else {
-        patient = hasPatient;
-      }
-    } else {
-      const hasPatient = await this.patientRepository.findByMatricula(
-        personSig.matricula,
-      );
-
-      if (!hasPatient) {
-        patient = await this.patientRepository.create({
-          person_sig_id: personSig.id,
-        });
-      } else {
-        patient = hasPatient;
-      }
-    }
-
-    const schedule = await this.scheduleRepository.findOne(
+    // Verifica a disponibilidade da agenda antes de processar o paciente
+    const schedule = await this.validateSchedule(
       createAppointmentDto.schedule_id,
     );
 
-    const date = new Date(`${schedule.available_date}T${schedule.start_time}`);
+    // Refatoração para criação/recuperação do paciente
+    const patient = await this.findOrCreatePatient(
+      personSig,
+      createAppointmentDto.dependent_id,
+    );
 
-    if (date < new Date()) {
-      throw new HttpException('Agenda passada', HttpStatus.CONFLICT);
+    console.log('patient', patient);
+
+    // Criação do agendamento
+    const savedAppointment = await this.createAppointment(
+      schedule.id,
+      patient.id,
+    );
+
+    // Atualização da agenda
+    await this.updateSchedule(schedule.id, schedule.patients_attended + 1);
+
+    return savedAppointment;
+  }
+
+  private async validateSchedule(scheduleId: string) {
+    if (!scheduleId) {
+      throw new HttpException('Agenda é obrigatório', HttpStatus.BAD_REQUEST);
+    }
+
+    const schedule = await this.scheduleRepository.findOne(scheduleId);
+    const currentDate = new Date();
+    const scheduleDate = new Date(
+      `${schedule.available_date}T${schedule.start_time}`,
+    );
+
+    if (!schedule || scheduleDate < currentDate) {
+      throw new HttpException(
+        'Agenda não encontrada ou passada',
+        HttpStatus.NOT_FOUND,
+      );
     }
 
     if (schedule.max_patients <= schedule.patients_attended) {
       throw new HttpException('Agenda cheia', HttpStatus.CONFLICT);
     }
 
-    // const appointment =
-    //   await this.appointmentRepository.existsAppointmentForPatientSchedule(
-    //     patient.id,
-    //     createAppointmentDto.schedule_id,
-    //   );
+    return schedule;
+  }
 
-    // if (appointment) {
-    //   throw new HttpException(
-    //     'Paciente já agendado para essa agenda',
-    //     HttpStatus.CONFLICT,
-    //   );
-    // }
+  private async findOrCreatePatient(personSig, dependentId?: string) {
+    let patient;
 
-    if (!patient.id) {
-      throw new HttpException('Paciente não encontrado', HttpStatus.NOT_FOUND);
+    if (dependentId) {
+      // Lógica para dependente
+      const dependent = personSig.dependents.find(
+        (dependent) => dependent.id === dependentId,
+      );
+      if (!dependent) {
+        throw new HttpException(
+          'Dependente não encontrado',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      // Busca especificamente por dependent_id
+      patient = await this.patientRepository.findByDependentId(dependentId);
+      if (!patient) {
+        patient = await this.patientRepository.create({
+          person_sig_id: personSig.id,
+          dependent_id: dependentId, // Certifique-se de que este campo exista no seu modelo de dados
+        });
+      }
+    } else {
+      // Lógica para titular
+      patient =
+        await this.patientRepository.findPatientByPersonIdWithoutDependent(
+          personSig.id,
+        );
+
+      if (!patient) {
+        patient = await this.patientRepository.create({
+          person_sig_id: personSig.id,
+          // Não passa dependent_id, indicando que é um titular
+        });
+      }
     }
 
-    if (!createAppointmentDto.schedule_id) {
-      throw new HttpException('Agenda é obrigatório', HttpStatus.BAD_REQUEST);
+    if (!patient) {
+      throw new HttpException(
+        'Falha ao criar ou encontrar paciente',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
 
-    if (!schedule) {
-      throw new HttpException('Agenda não encontrada', HttpStatus.NOT_FOUND);
-    }
+    return patient;
+  }
 
-    const saved = await this.appointmentRepository.create({
-      schedule_id: schedule.id,
-      patient_id: patient.id,
+  private async createAppointment(scheduleId: string, patientId: string) {
+    return this.appointmentRepository.create({
+      schedule_id: scheduleId,
+      patient_id: patientId,
     });
+  }
 
-    await this.scheduleRepository.update(schedule.id, {
-      ...schedule,
-      patients_attended: schedule.patients_attended + 1,
+  private async updateSchedule(scheduleId: string, patientsAttended: number) {
+    return this.scheduleRepository.update(scheduleId, {
+      patients_attended: patientsAttended,
     });
-
-    return saved;
   }
 }
