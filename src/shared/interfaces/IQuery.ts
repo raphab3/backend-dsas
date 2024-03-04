@@ -2,6 +2,13 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class IQuery {
   @ApiProperty({
+    description: 'The id of the item',
+    type: 'string',
+    required: false,
+  })
+  id?: string;
+
+  @ApiProperty({
     description: 'The page number',
     type: 'number',
     example: 1,

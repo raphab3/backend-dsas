@@ -7,6 +7,7 @@ import { UpdateAppointmentDto } from '@modules/appointments/dto/update-Appointme
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
 import { paginate } from '@shared/utils/Pagination';
 import { ICreateAppointment } from '@modules/appointments/interfaces/ICreateAppintment';
+import { QueryAppointmentDto } from '@modules/appointments/dto/query-Appointment.dto';
 
 @Injectable()
 class AppointmentRepository implements IAppointmentRepository {
@@ -39,7 +40,9 @@ class AppointmentRepository implements IAppointmentRepository {
     }
   }
 
-  public async list(query: any): Promise<IPaginatedResult<Appointment>> {
+  public async list(
+    query: QueryAppointmentDto,
+  ): Promise<IPaginatedResult<Appointment>> {
     let page = 1;
     let perPage = 10;
 
@@ -57,8 +60,23 @@ class AppointmentRepository implements IAppointmentRepository {
       where.id = query.id;
     }
 
-    if (query.name) {
-      where.name = ILike(`%${query.name}%`);
+    console.log('query.available_date', query.available_date);
+
+    // search by available_date using typeorm for date format
+    if (query.available_date) {
+      const date = query.available_date.split('T')[0];
+      console.log('date', date);
+      where.schedule = {
+        available_date: date,
+      };
+    }
+
+    if (query.matricula) {
+      where.patient = {
+        person_sig: {
+          matricula: ILike(`%${query.matricula}%`),
+        },
+      };
     }
 
     if (query.page) page = query.page;

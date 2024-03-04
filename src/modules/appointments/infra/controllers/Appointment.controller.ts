@@ -17,10 +17,11 @@ import {
   Patch,
   Param,
   Delete,
-  Req,
   UseInterceptors,
+  Query,
 } from '@nestjs/common';
 import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum';
+import { QueryAppointmentDto } from '@modules/appointments/dto/query-Appointment.dto';
 
 @ApiTags('appointments')
 @Controller('appointments')
@@ -45,10 +46,8 @@ export class AppointmentController {
 
   @Get()
   @Permission(PermissionsEnum.find_all_appointments)
-  findAll(@Req() req: any) {
-    const { query } = req;
-
-    return this.findAllAppointmentService.findAll(query);
+  findAll(@Query() dto: QueryAppointmentDto) {
+    return this.findAllAppointmentService.findAll(dto);
   }
 
   @Get(':id')
