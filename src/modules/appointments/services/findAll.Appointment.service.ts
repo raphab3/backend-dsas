@@ -7,7 +7,6 @@ export class FindAllAppointmentService {
   constructor(private readonly appointmentRepository: AppointmentRepository) {}
 
   async findAll(query: QueryAppointmentDto): Promise<any> {
-    console.log('query', query);
     return this.appointmentRepository.list({
       ...query,
     });

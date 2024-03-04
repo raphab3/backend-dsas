@@ -9,7 +9,6 @@ export class UpdateProfessionalService {
     private readonly professionalRepository: ProfessionalRepository,
   ) {}
   update(id: string, updateProfessionalDto: UpdateProfessionalDto) {
-    console.log('updateProfessionalDto', updateProfessionalDto);
     const professionalExists = this.professionalRepository.findOne(id);
 
     if (!professionalExists) {

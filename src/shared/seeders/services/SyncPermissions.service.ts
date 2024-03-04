@@ -35,16 +35,6 @@ export class SyncPermissionsService {
       }
 
       console.log('Finished permissions sync');
-
-      // // Remover permissões que não estão na enumeração
-      // const permissionsToRemove = allExistingPermissions.filter(
-      //   (p) => !allPermissionsEnumValues.includes(p.name as any),
-      // );
-
-      // for await (const permission of permissionsToRemove) {
-      //   await this.permissionRepository.remove(permission);
-      //   console.log('Permission removed', permission);
-      // }
     } catch (error) {
       console.error('Erro ao executar a sincronização de permissões', error);
     }

@@ -42,8 +42,6 @@ export class UpdateScheduleService {
       max_patients: updateScheduleDto.max_patients,
     };
 
-    console.log('schedule', schedule);
-
     return this.scheduleRepository.update(id, schedule);
   }
 }

@@ -60,12 +60,9 @@ class AppointmentRepository implements IAppointmentRepository {
       where.id = query.id;
     }
 
-    console.log('query.available_date', query.available_date);
-
     // search by available_date using typeorm for date format
     if (query.available_date) {
       const date = query.available_date.split('T')[0];
-      console.log('date', date);
       where.schedule = {
         available_date: date,
       };
