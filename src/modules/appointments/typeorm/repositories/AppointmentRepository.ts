@@ -79,6 +79,14 @@ class AppointmentRepository implements IAppointmentRepository {
       };
     }
 
+    if (query.location_id) {
+      where.schedule = {
+        location: {
+          id: query.location_id,
+        },
+      };
+    }
+
     if (query.page) page = query.page;
     if (query.perPage) perPage = query.perPage;
 

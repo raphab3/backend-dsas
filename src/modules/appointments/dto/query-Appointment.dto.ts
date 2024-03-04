@@ -15,4 +15,11 @@ export class QueryAppointmentDto extends IQuery {
     required: false,
   })
   available_date?: string;
+
+  @ApiProperty({
+    description: 'The location id of the appomentment',
+    type: 'string',
+    required: false,
+  })
+  location_id?: string;
 }
