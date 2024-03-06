@@ -100,6 +100,7 @@ export const groupsOfPermissions = {
     PermissionsEnum.update_specialty,
     PermissionsEnum.find_all_specialties,
     PermissionsEnum.find_one_specialty,
+    PermissionsEnum.create_dependent,
     PermissionsEnum.find_all_dependents,
     PermissionsEnum.find_one_dependent,
     PermissionsEnum.update_dependent,
