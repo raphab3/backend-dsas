@@ -41,7 +41,7 @@ export class ProfessionalController {
   @AuditLog('CRIAR PROFISSIONAL')
   @Post()
   @ApiOperation({ summary: 'Create Professional' })
-  @Permission(PermissionsEnum.cretae_professional)
+  @Permission(PermissionsEnum.create_professional)
   create(@Body() createProfessionalDto: CreateProfessionalDto) {
     return this.createProfessionalService.execute(createProfessionalDto);
   }
