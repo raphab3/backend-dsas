@@ -58,17 +58,7 @@ async function bootstrap() {
       break;
 
     default:
-      console.log('Executando todas as seeds...');
-      const seederSyncPermissionsServiceDefault = app.get(
-        SyncPermissionsService,
-      );
-      await seederSyncPermissionsServiceDefault.execute();
-
-      const seederLocationDefault = app.get(LocationSeedService);
-      await seederLocationDefault.execute();
-
-      const seederRolesDefault = app.get(SyncPermissionsInRolesService);
-      await seederRolesDefault.execute();
+      console.log('Escolha uma opção válida para executar a seed.');
       break;
   }
 

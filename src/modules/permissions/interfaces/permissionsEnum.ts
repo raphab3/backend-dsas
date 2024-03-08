@@ -82,6 +82,7 @@ export const groupsOfPermissions = {
   user: [PermissionsEnum.auth_sing_in, PermissionsEnum.auth_me],
   receptionist: [
     PermissionsEnum.find_external_personSigs,
+    PermissionsEnum.create_personSig,
     PermissionsEnum.create_appointment,
     PermissionsEnum.find_all_appointments,
     PermissionsEnum.find_one_appointment,
