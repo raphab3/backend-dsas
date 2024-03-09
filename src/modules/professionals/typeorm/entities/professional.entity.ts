@@ -31,7 +31,7 @@ export class Professional implements IProfessional {
   })
   council: string;
 
-  @ManyToMany(() => Specialty)
+  @ManyToMany(() => Specialty, (specialty) => specialty.professionals)
   @JoinTable({
     name: 'professionals_specialties',
     joinColumns: [{ name: 'professional_id' }],

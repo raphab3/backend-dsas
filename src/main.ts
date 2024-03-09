@@ -2,13 +2,13 @@ import env from '@config/env';
 import fastifyCsrfProtection from '@fastify/csrf-protection';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { EntityExceptionFilter } from '@shared/interceptors/EntityPropertyNotFoundError';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { EntityPropertyNotFoundExceptionFilter } from '@shared/interceptors/EntityPropertyNotFoundError';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -16,7 +16,7 @@ async function bootstrap() {
     new FastifyAdapter({ logger: true }),
   );
 
-  app.useGlobalFilters(new EntityPropertyNotFoundExceptionFilter());
+  app.useGlobalFilters(new EntityExceptionFilter());
 
   app.enableCors({
     methods: ['*'],

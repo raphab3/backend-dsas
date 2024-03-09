@@ -1,10 +1,6 @@
 import { IDependent } from './IDependent';
 
-export type ICreateDependent = Omit<
+export type IUpdateDependent = Omit<
   IDependent,
   'id' | 'created_at' | 'updated_at' | 'sig_person'
-> & {
-  person_sigs?: {
-    id: string;
-  }[];
-};
+>;

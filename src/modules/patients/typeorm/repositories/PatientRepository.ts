@@ -1,12 +1,13 @@
 import IPatientRepository from './IPatientRepository';
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Patient } from '../entities/patient.entity';
 import { UpdatePatientDto } from '@modules/patients/dto/update-patient.dto';
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
 import { paginate } from '@shared/utils/Pagination';
 import { ICreatePatient } from '@modules/patients/interfaces/ICreatePatient';
+import { IQueryPatients } from '@modules/patients/interfaces/IQueryPatients';
 
 @Injectable()
 class PatientRepository implements IPatientRepository {
@@ -64,35 +65,39 @@ class PatientRepository implements IPatientRepository {
     return count > 0;
   }
 
-  public async list(query: any): Promise<IPaginatedResult<Patient>> {
+  public async list(query: IQueryPatients): Promise<IPaginatedResult<Patient>> {
     let page = 1;
     let perPage = 10;
 
-    const professionalsCreateQueryBuilder = this.ormRepository
+    const patientCreateQueryBuilder = this.ormRepository
       .createQueryBuilder('patients')
       .leftJoinAndSelect('patients.person_sig', 'person_sig')
       .leftJoinAndSelect('patients.dependent', 'dependent')
       .orderBy('patients.created_at', 'DESC');
 
-    const where: Partial<any> = {};
-
     if (query.id) {
-      where.id = query.id;
     }
 
     if (query.name) {
-      where.person_sig = {
-        name: ILike(`%${query.name}%`),
-      };
+      patientCreateQueryBuilder.where(
+        `COALESCE(dependent.name, person_sig.nome) ILIKE :name`,
+        {
+          name: `%${query.name}%`,
+        },
+      );
+    }
+
+    if (query.matricula) {
+      patientCreateQueryBuilder.where(`person_sig.matricula ILIKE :matricula`, {
+        matricula: `%${query.matricula}%`,
+      });
     }
 
     if (query.page) page = query.page;
     if (query.perPage) perPage = query.perPage;
 
-    professionalsCreateQueryBuilder.where(where);
-
     const result: IPaginatedResult<any> = await paginate(
-      professionalsCreateQueryBuilder,
+      patientCreateQueryBuilder,
       {
         page,
         perPage,

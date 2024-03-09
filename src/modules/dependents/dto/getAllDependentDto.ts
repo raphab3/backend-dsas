@@ -15,4 +15,11 @@ export class GetAllDependentDto extends IQuery {
     required: false,
   })
   cpf?: string;
+
+  @ApiProperty({
+    description: 'The matricula of the dependent',
+    type: 'string',
+    required: false,
+  })
+  matricula?: string;
 }

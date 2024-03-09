@@ -2,6 +2,7 @@ import DependentRepository from '../typeorm/repositories/DependentRepository';
 import PersonSigRepository from '@modules/persosnSig/typeorm/repositories/PersonSigRepository';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ICreateDependent } from '../interfaces/ICreateDependent';
+import { CreateDependentDto } from '../dto/createDependentDto';
 
 @Injectable()
 export class CreateDependentService {
@@ -10,7 +11,7 @@ export class CreateDependentService {
     private readonly personSigRepository: PersonSigRepository,
   ) {}
 
-  async execute(createDependentDto: ICreateDependent): Promise<void> {
+  async execute(createDependentDto: CreateDependentDto): Promise<void> {
     const personSig = await this.personSigRepository.findByMatricula(
       createDependentDto.matricula,
     );
@@ -22,14 +23,22 @@ export class CreateDependentService {
       );
     }
 
-    await this.dependentRepository.create({
-      ...createDependentDto,
+    const newDependent: ICreateDependent = {
+      degree_of_kinship: createDependentDto.degree_of_kinship,
       name: createDependentDto.name.toUpperCase(),
+      birth_date: createDependentDto.birth_date,
+      cpf: createDependentDto.cpf,
+      gender: createDependentDto.gender,
+      phone: createDependentDto.phone,
       person_sigs: [
         {
           id: personSig.id,
         },
       ],
-    });
+    };
+
+    console.log('newDependent: ', newDependent);
+
+    await this.dependentRepository.create(newDependent);
   }
 }

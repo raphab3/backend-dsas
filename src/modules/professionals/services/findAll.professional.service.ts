@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import ProfessionalRepository from '../typeorm/repositories/ProfessionalRepository';
+import { IQueryProfessional } from '../interfaces/IQueryProfessional';
 
 @Injectable()
 export class FindAllProfessionalService {
@@ -7,7 +8,7 @@ export class FindAllProfessionalService {
     private readonly professionalRepository: ProfessionalRepository,
   ) {}
 
-  async findAll(query: any): Promise<any> {
+  async findAll(query: IQueryProfessional): Promise<any> {
     return this.professionalRepository.list(query);
   }
 }

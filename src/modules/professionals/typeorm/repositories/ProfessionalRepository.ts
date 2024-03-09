@@ -1,7 +1,7 @@
 import IProfessionalRepository from './IProfessionalRepository';
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Professional } from '../entities/professional.entity';
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
 import { paginate } from '@shared/utils/Pagination';
@@ -42,20 +42,46 @@ class ProfessionalRepository implements IProfessionalRepository {
       .leftJoinAndSelect('professionals.locations', 'locations')
       .orderBy('professionals.created_at', 'DESC');
 
-    const where: Partial<any> = {};
-
     if (query.id) {
-      where.id = query.id;
+      professionalsCreateQueryBuilder.andWhere('professionals.id = :id', {
+        id: query.id,
+      });
     }
 
     if (query.name) {
-      where.name = ILike(`%${query.name}%`);
+      professionalsCreateQueryBuilder.andWhere('person_sig.nome ILike :name', {
+        name: `%${query.name}%`,
+      });
+    }
+
+    if (query.matricula) {
+      professionalsCreateQueryBuilder.andWhere(
+        'person_sig.matricula ILike :matricula',
+        { matricula: `%${query.matricula}%` },
+      );
+    }
+
+    if (query.specialty) {
+      professionalsCreateQueryBuilder.where(
+        'specialties.name ILike :specialty',
+        { specialty: `%${query.specialty}%` },
+      );
+    }
+
+    if (query.location_id) {
+      professionalsCreateQueryBuilder.where('locations.id = :location', {
+        location: query.location_id,
+      });
+    }
+
+    if (query.specialty_id) {
+      professionalsCreateQueryBuilder.andWhere('specialties.id = :specialty', {
+        specialty: query.specialty_id,
+      });
     }
 
     if (query.page) page = query.page;
     if (query.perPage) perPage = query.perPage;
-
-    professionalsCreateQueryBuilder.where(where);
 
     const result: IPaginatedResult<any> = await paginate(
       professionalsCreateQueryBuilder,

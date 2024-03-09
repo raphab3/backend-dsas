@@ -10,7 +10,6 @@ import { AuthModule } from '@modules/auth/auth.module';
 import { DataSourceOptions } from 'typeorm';
 import { Dependent } from '@modules/dependents/typeorm/entities/dependent.entity';
 import { DependentModule } from '@modules/dependents/dependent.module';
-import { EntityPropertyNotFoundExceptionFilter } from '@shared/interceptors/EntityPropertyNotFoundError';
 import { Inventory } from '@modules/inventories/typeorm/entities/Inventory.entity';
 import { InvetaryModule } from '@modules/inventories/Inventery.module';
 import { JwtAuthGuard } from '@shared/guards/Jwt-auth.guard';
@@ -38,6 +37,7 @@ import { TimeoutInterceptor } from '@shared/interceptors/TimeoutInterceptor';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '@modules/users/typeorm/entities/user.entity';
 import { UsersModule } from '@modules/users/users.module';
+import { EntityExceptionFilter } from '@shared/interceptors/EntityPropertyNotFoundError';
 
 export const entities = [
   User,
@@ -121,7 +121,7 @@ export const PROVIDERS = [
   },
   {
     provide: APP_FILTER,
-    useClass: EntityPropertyNotFoundExceptionFilter,
+    useClass: EntityExceptionFilter,
   },
   {
     provide: APP_INTERCEPTOR,

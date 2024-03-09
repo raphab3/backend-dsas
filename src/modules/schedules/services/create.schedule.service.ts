@@ -26,6 +26,8 @@ export class CreateScheduleService {
       createScheduleDto.professional_id,
     );
 
+    console.log('professionalExists', professionalExists);
+
     if (!professionalExists) {
       throw new HttpException('Profissional não encontrado', 404);
     }

@@ -26,14 +26,14 @@ import { Permission } from '@shared/decorators/Permission';
 import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum';
 import { AddedPermissionUserDto } from '@modules/users/dto/added-permission-user.dto';
 import { AddPermissionUserService } from '@modules/users/services/addPermissionUser.service';
-import { EntityPropertyNotFoundExceptionFilter } from '@shared/interceptors/EntityPropertyNotFoundError';
+import { EntityExceptionFilter } from '@shared/interceptors/EntityPropertyNotFoundError';
 
 @Catch(HttpException)
 @ApiTags('users')
 @Controller('users')
 @ApiBearerAuth('JWT')
 @UseInterceptors(AuditInterceptor)
-@UseFilters(new EntityPropertyNotFoundExceptionFilter())
+@UseFilters(new EntityExceptionFilter())
 export class UsersController {
   constructor(
     private readonly createUsersService: CreateUsersService,

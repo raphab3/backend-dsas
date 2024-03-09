@@ -1,11 +1,13 @@
 import IDependentRepository from './IDependentRepository';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Dependent } from '../entities/dependent.entity';
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
 import { paginate } from '@shared/utils/Pagination';
 import { ICreateDependent } from '@modules/dependents/interfaces/ICreateDependent';
+import { IQueryDependents } from '@modules/dependents/interfaces/IQueryDependents';
+import { IUpdateDependent } from '@modules/dependents/interfaces/IUpdateDependent';
 
 @Injectable()
 class DependentRepository implements IDependentRepository {
@@ -16,11 +18,13 @@ class DependentRepository implements IDependentRepository {
 
   public async create(data: ICreateDependent): Promise<Dependent> {
     const dependent = this.ormRepository.create(data);
+
+    console.log('create: ', dependent);
     await this.ormRepository.save(dependent);
     return dependent;
   }
 
-  public async list(query: any): Promise<IPaginatedResult<any>> {
+  public async list(query: IQueryDependents): Promise<IPaginatedResult<any>> {
     let page = 1;
     let perPage = 10;
 
@@ -29,20 +33,35 @@ class DependentRepository implements IDependentRepository {
       .leftJoinAndSelect('dependents.person_sigs', 'person_sigs')
       .orderBy('dependents.created_at', 'DESC');
 
-    const where: Partial<any> = {};
-
     if (query.id) {
-      where.id = query.id;
+      dependentsCreateQueryBuilder.andWhere('dependents.id = :id', {
+        id: query.id,
+      });
     }
 
     if (query.name) {
-      where.name = ILike(`%${query.name}%`);
+      dependentsCreateQueryBuilder.andWhere('dependents.name ILike :name', {
+        name: `%${query.name}%`,
+      });
+    }
+
+    if (query.matricula) {
+      dependentsCreateQueryBuilder.andWhere(
+        'person_sigs.matricula ILike :matricula',
+        {
+          matricula: `%${query.matricula}%`,
+        },
+      );
+    }
+
+    if (query.cpf) {
+      dependentsCreateQueryBuilder.where('dependents.cpf ILike :cpf', {
+        cpf: `%${query.cpf}%`,
+      });
     }
 
     if (query.page) page = query.page;
     if (query.perPage) perPage = query.perPage;
-
-    dependentsCreateQueryBuilder.where(where);
 
     const result: IPaginatedResult<any> = await paginate(
       dependentsCreateQueryBuilder,
@@ -56,18 +75,18 @@ class DependentRepository implements IDependentRepository {
   }
 
   public async findOne(id: string): Promise<Dependent | undefined> {
-    return this.ormRepository.findOne({
-      where: {
-        id,
-      },
-    });
+    return this.ormRepository
+      .createQueryBuilder('dependents')
+      .leftJoinAndSelect('dependents.person_sigs', 'person_sigs')
+      .where('dependents.id = :id', { id })
+      .getOne();
   }
 
   public async delete(id: string): Promise<void> {
     await this.ormRepository.delete(id);
   }
 
-  public async update(id: string, data: ICreateDependent): Promise<Dependent> {
+  public async update(id: string, data: IUpdateDependent): Promise<Dependent> {
     const builder = this.ormRepository.createQueryBuilder();
     const dependent = await builder
       .update(Dependent)

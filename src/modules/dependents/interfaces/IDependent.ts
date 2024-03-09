@@ -20,6 +20,8 @@ export const DegreeOfKinshipEnuns = [
   'mother',
   'son',
   'daughter',
+  'grandparent',
+  'grandchild',
 ] as const;
 export type DegreeOfKinshipType = (typeof DegreeOfKinshipEnuns)[number];
 

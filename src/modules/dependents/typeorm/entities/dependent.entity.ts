@@ -3,6 +3,7 @@ import {
   DegreeOfKinshipType,
   IDependent,
 } from '@modules/dependents/interfaces/IDependent';
+import { Patient } from '@modules/patients/typeorm/entities/patient.entity';
 import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
 import {
   Column,
@@ -10,6 +11,7 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -28,7 +30,7 @@ export class Dependent implements IDependent {
   @Column({ type: 'date', nullable: true })
   birth_date: string;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'varchar', nullable: true, unique: true })
   cpf: string;
 
   @Column({ type: 'varchar', nullable: true })
@@ -52,6 +54,9 @@ export class Dependent implements IDependent {
     },
   })
   person_sigs: PersonSig[];
+
+  @OneToMany(() => Patient, (patient) => patient.dependent)
+  patients: Patient[];
 
   @CreateDateColumn()
   created_at: Date;

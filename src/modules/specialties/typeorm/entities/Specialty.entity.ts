@@ -1,8 +1,10 @@
+import { Professional } from '@modules/professionals/typeorm/entities/professional.entity';
 import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -20,6 +22,9 @@ export class Specialty {
 
   @OneToMany(() => Schedule, (schedule) => schedule.specialty)
   schedules: Schedule[];
+
+  @ManyToMany(() => Professional, (professional) => professional.specialties)
+  professionals: Professional[];
 
   @CreateDateColumn()
   created_at: Date;

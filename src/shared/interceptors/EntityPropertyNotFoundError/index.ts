@@ -6,14 +6,11 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
-import { EntityPropertyNotFoundError } from 'typeorm/error/EntityPropertyNotFoundError';
+import { TypeORMError } from 'typeorm';
 
-@Catch(EntityPropertyNotFoundError, HttpException)
-export class EntityPropertyNotFoundExceptionFilter implements ExceptionFilter {
-  catch(
-    exception: EntityPropertyNotFoundError | HttpException,
-    host: ArgumentsHost,
-  ) {
+@Catch(TypeORMError, HttpException)
+export class EntityExceptionFilter implements ExceptionFilter {
+  catch(exception: TypeORMError | HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<FastifyReply>();
     const request = ctx.getRequest<Request>();
@@ -27,9 +24,17 @@ export class EntityPropertyNotFoundExceptionFilter implements ExceptionFilter {
         ? exception.getResponse()
         : 'Internal server error';
 
-    if (exception instanceof EntityPropertyNotFoundError) {
+    if (exception instanceof TypeORMError) {
       status = HttpStatus.BAD_REQUEST;
       message = exception.message;
+
+      if (
+        exception.message.includes(
+          'duplicate key value violates unique constraint',
+        )
+      ) {
+        message = 'Esse registro já existe';
+      }
     }
 
     response

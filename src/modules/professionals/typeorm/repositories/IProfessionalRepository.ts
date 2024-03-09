@@ -4,10 +4,11 @@ import {
   ICreateProfessional,
   IUpdateProfessional,
 } from '@modules/professionals/interfaces/IProfessional';
+import { IQueryProfessional } from '@modules/professionals/interfaces/IQueryProfessional';
 
 export default interface IProfessionalRepository {
   create(data: ICreateProfessional): Promise<Professional>;
-  list(query: any): Promise<IPaginatedResult<any>>;
+  list(query: IQueryProfessional): Promise<IPaginatedResult<any>>;
   findOne(id: string): Promise<Professional | undefined>;
   delete(id: string): Promise<void>;
   update(id: string, data: IUpdateProfessional): Promise<Professional>;
