@@ -19,9 +19,11 @@ import {
   Delete,
   UseInterceptors,
   Query,
+  Req,
 } from '@nestjs/common';
 import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum';
 import { QueryAppointmentDto } from '@modules/appointments/dto/query-Appointment.dto';
+import { Locations } from '@shared/decorators/Location';
 
 @ApiTags('appointments')
 @Controller('appointments')
@@ -46,7 +48,14 @@ export class AppointmentController {
 
   @Get()
   @Permission(PermissionsEnum.find_all_appointments)
-  findAll(@Query() dto: QueryAppointmentDto) {
+  @Locations()
+  findAll(@Req() req: any, @Query() dto: QueryAppointmentDto) {
+    const userLocations = req.userLocations;
+
+    if (userLocations) {
+      dto.locations = userLocations;
+    }
+
     return this.findAllAppointmentService.findAll(dto);
   }
 

@@ -23,5 +23,6 @@
       "@shared/*": ["src/shared/*"],
       "@guards/*": ["src/guards/*"]
     }
-  }
+  },
+  "include": ["src/**/*", "types/**/*"]
 }

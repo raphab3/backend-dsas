@@ -17,15 +17,14 @@ export class MeService {
       throw new Error('User not found');
     }
 
-    // const individualPermissions = user?.individual_permissions.map(
-    //   (permission) => permission.name,
-    // );
+    console.log('user: ', user);
 
     return {
       id: user.id,
       email: user.email,
       name: user.name,
       roles: user?.roles,
+      locations: user?.person_sig?.locations,
     };
   }
 }

@@ -31,7 +31,6 @@ export enum PermissionsEnum {
   update_patient = 'update_patient',
   remove_patient = 'remove_patient',
   create_professional = 'create_professional',
-  cretae_professional = 'cretae_professional',
   find_all_professionals = 'find_all_professionals',
   find_one_professional = 'find_one_professional',
   update_professional = 'update_professional',
@@ -80,6 +79,12 @@ export type PermissionType = (typeof PermissionsEnumList)[number];
 export const groupsOfPermissions = {
   admin: [...PermissionsEnumList],
   user: [PermissionsEnum.auth_sing_in, PermissionsEnum.auth_me],
+  manager: [
+    PermissionsEnum.update_personSig,
+    PermissionsEnum.create_location,
+    PermissionsEnum.remove_location,
+    PermissionsEnum.update_location,
+  ],
   receptionist: [
     PermissionsEnum.find_external_personSigs,
     PermissionsEnum.create_personSig,
@@ -107,10 +112,8 @@ export const groupsOfPermissions = {
     PermissionsEnum.update_dependent,
     PermissionsEnum.find_all_personSigs,
     PermissionsEnum.find_one_personSig,
-    PermissionsEnum.create_location,
     PermissionsEnum.find_all_locations,
     PermissionsEnum.find_one_location,
-    PermissionsEnum.update_location,
   ],
   professional: [
     PermissionsEnum.find_all_appointments,

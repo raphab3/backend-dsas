@@ -11,6 +11,7 @@ import { ScheduleController } from './infra/controllers/schedule.controller';
 import { SpecialtyModule } from '@modules/specialties/Specialty.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UpdateScheduleService } from './services/update.schedule.service';
+import { LocationModule } from '@modules/locations/location.module';
 
 const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Schedule]);
 
@@ -29,6 +30,7 @@ const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Schedule]);
     ProfessionalModule,
     SpecialtyModule,
     AuditModule,
+    LocationModule,
   ],
   exports: [ScheduleRepository],
 })

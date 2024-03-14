@@ -17,12 +17,15 @@ import {
   Req,
   UseInterceptors,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '@shared/guards/Jwt-auth.guard';
 import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
 import { AuditLog } from '@modules/audits/decorators';
 import { Permission } from '@shared/decorators/Permission';
 import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum';
+import { IQuerySchedule } from '@modules/schedules/interfaces/IQuerySchedule';
+import { Locations } from '@shared/decorators/Location';
 
 @ApiTags('schedules')
 @Controller('schedules')
@@ -49,14 +52,23 @@ export class ScheduleController {
   @Get()
   @ApiOperation({ summary: 'Find all Schedule' })
   @Permission(PermissionsEnum.find_all_appointments)
-  findAll(@Req() req: any) {
-    const query = req.query;
+  @Locations()
+  findAll(@Req() req: any, @Query() query: IQuerySchedule) {
+    console.log('req', req.user.userId);
+    const userLocations = req.userLocations;
+    console.log('userLocations', userLocations);
+
+    if (!query.locations) {
+      query.locations = userLocations;
+    }
+
     return this.findAllScheduleService.findAll(query);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Find one Schedule' })
   @Permission(PermissionsEnum.find_one_appointment)
+  @Locations()
   findOne(@Param('id') id: string) {
     return this.findOneScheduleService.findOne(id);
   }

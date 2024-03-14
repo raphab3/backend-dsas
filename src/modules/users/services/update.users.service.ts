@@ -45,6 +45,9 @@ export class UpdateUsersService {
       userFound.roles = await this.rolesRepository.findByIds(
         newRoles.map((role) => role.id),
       );
+    } else {
+      console.log('aqui');
+      userFound.roles = [];
     }
 
     const updatedUser = await this.usersRepository.update(userFound);

@@ -1,9 +1,11 @@
 import { LocationCityEnum } from '@modules/locations/interfaces/ILocation';
+import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
 import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   Unique,
@@ -34,6 +36,9 @@ export class Location {
 
   @OneToMany(() => Schedule, (schedule) => schedule.location)
   schedules: Schedule[];
+
+  @ManyToMany(() => PersonSig, (personSig) => personSig.locations)
+  person_sigs: PersonSig[];
 
   @CreateDateColumn()
   created_at: Date;

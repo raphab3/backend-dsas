@@ -1,11 +1,12 @@
 import ILocationRepository from './ILocationRepository';
 import { ICreateLocation } from '@modules/locations/interfaces/ILocation';
-import { ILike, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
 import { Location } from '../entities/location.entity';
 import { paginate } from '@shared/utils/Pagination';
+import { IQueryLocations } from '@modules/locations/interfaces/IQueryLocations';
 
 @Injectable()
 class LocationRepository implements ILocationRepository {
@@ -24,31 +25,45 @@ class LocationRepository implements ILocationRepository {
     return location;
   }
 
-  public async list(query: any): Promise<IPaginatedResult<any>> {
+  public async list(query: IQueryLocations): Promise<IPaginatedResult<any>> {
     let page = 1;
     let perPage = 10;
 
-    const usersCreateQueryBuilder = this.ormRepository
-      .createQueryBuilder('users')
-      .orderBy('users.created_at', 'DESC');
-
-    const where: Partial<any> = {};
+    const locationsCreateQueryBuilder = this.ormRepository
+      .createQueryBuilder('locations')
+      .leftJoinAndSelect('locations.person_sigs', 'person_sigs')
+      .leftJoinAndSelect('person_sigs.user', 'user')
+      .orderBy('locations.created_at', 'DESC');
 
     if (query.id) {
-      where.id = query.id;
+      locationsCreateQueryBuilder.where({
+        id: query.id,
+      });
     }
 
     if (query.name) {
-      where.name = ILike(`%${query.name}%`);
+      locationsCreateQueryBuilder.andWhere('locations.name ILike :name', {
+        name: `%${query.name}%`,
+      });
+    }
+
+    if (query.person_sig_id) {
+      locationsCreateQueryBuilder.andWhere('person_sigs.id = :person_sig_id', {
+        person_sig_id: query.person_sig_id,
+      });
+    }
+
+    if (query.userId) {
+      locationsCreateQueryBuilder.andWhere('user.id = :userId', {
+        userId: query.userId,
+      });
     }
 
     if (query.page) page = query.page;
     if (query.perPage) perPage = query.perPage;
 
-    usersCreateQueryBuilder.where(where);
-
     const result: IPaginatedResult<any> = await paginate(
-      usersCreateQueryBuilder,
+      locationsCreateQueryBuilder,
       {
         page,
         perPage,

@@ -35,9 +35,11 @@ class PersonSigRepository implements IPersonSigRepository {
     let page = 1;
     let perPage = 10;
 
-    const usersCreateQueryBuilder = this.ormRepository
-      .createQueryBuilder('users')
-      .orderBy('users.created_at', 'DESC');
+    const personSigCreateQueryBuilder = this.ormRepository
+      .createQueryBuilder('person_sig')
+      .leftJoinAndSelect('person_sig.locations', 'locations')
+      // .leftJoinAndSelect('person_sig.user', 'user')
+      .orderBy('person_sig.created_at', 'DESC');
 
     const where: Partial<any> = {};
 
@@ -56,10 +58,10 @@ class PersonSigRepository implements IPersonSigRepository {
     if (query.page) page = query.page;
     if (query.perPage) perPage = query.perPage;
 
-    usersCreateQueryBuilder.where(where);
+    personSigCreateQueryBuilder.where(where);
 
     const result: IPaginatedResult<any> = await paginate(
-      usersCreateQueryBuilder,
+      personSigCreateQueryBuilder,
       {
         page,
         perPage,
@@ -95,14 +97,24 @@ class PersonSigRepository implements IPersonSigRepository {
     id: string,
     data: UpdatePersonSigDto,
   ): Promise<PersonSig> {
-    const builder = this.ormRepository.createQueryBuilder();
-    const personSig = await builder
-      .update(PersonSig)
-      .set(data)
-      .where('id = :id', { id })
-      .returning('*')
-      .execute();
-    return personSig.raw[0];
+    const builder = this.ormRepository
+      .createQueryBuilder('person_sig')
+      .leftJoinAndSelect('person_sig.locations', 'locations')
+      .where('person_sig.id = :id', { id })
+      .getOne();
+
+    const personSig = await builder;
+    if (!personSig) {
+      throw new Error('PersonSig not found');
+    }
+
+    Object.assign(personSig, data);
+
+    console.log('personSig: ', personSig);
+
+    await this.ormRepository.save(personSig);
+
+    return personSig;
   }
 }
 

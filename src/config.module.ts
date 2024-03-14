@@ -38,6 +38,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '@modules/users/typeorm/entities/user.entity';
 import { UsersModule } from '@modules/users/users.module';
 import { EntityExceptionFilter } from '@shared/interceptors/EntityPropertyNotFoundError';
+import { LocationsGuard } from '@shared/guards/Location.guard';
 
 export const entities = [
   User,
@@ -134,6 +135,10 @@ export const PROVIDERS = [
   {
     provide: APP_GUARD,
     useClass: PermissionsGuard,
+  },
+  {
+    provide: APP_GUARD,
+    useClass: LocationsGuard,
   },
 ];
 

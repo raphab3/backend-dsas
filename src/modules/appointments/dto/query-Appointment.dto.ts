@@ -22,4 +22,11 @@ export class QueryAppointmentDto extends IQuery {
     required: false,
   })
   location_id?: string;
+
+  @ApiProperty({
+    description: 'The locations of the appomentment',
+    type: 'array',
+    required: false,
+  })
+  locations?: string[];
 }

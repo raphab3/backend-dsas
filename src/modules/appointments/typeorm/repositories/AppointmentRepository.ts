@@ -2,7 +2,7 @@ import IAppointmentRepository from './IAppointmentRepository';
 import { Appointment } from '../entities/Appointment.entity';
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { UpdateAppointmentDto } from '@modules/appointments/dto/update-Appointment.dto';
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
 import { paginate } from '@shared/utils/Pagination';
@@ -52,42 +52,54 @@ class AppointmentRepository implements IAppointmentRepository {
       .leftJoinAndSelect('appointments.patient', 'patient')
       .leftJoinAndSelect('patient.dependent', 'dependent')
       .leftJoinAndSelect('patient.person_sig', 'person_sig')
+      .leftJoinAndSelect('schedule.location', 'location')
       .orderBy('appointments.created_at', 'DESC');
 
-    const where: Partial<any> = {};
-
     if (query.id) {
-      where.id = query.id;
+      appointmentsCreateQueryBuilder.where('appointments.id = :id', {
+        id: query.id,
+      });
     }
 
     // search by available_date using typeorm for date format
     if (query.available_date) {
       const date = query.available_date.split('T')[0];
-      where.schedule = {
-        available_date: date,
-      };
+
+      appointmentsCreateQueryBuilder.where(
+        'schedule.available_date = :available_date',
+        {
+          available_date: date,
+        },
+      );
     }
 
     if (query.matricula) {
-      where.patient = {
-        person_sig: {
-          matricula: ILike(`%${query.matricula}%`),
+      appointmentsCreateQueryBuilder.where(
+        'person_sig.matricula ILIKE :matricula',
+        {
+          matricula: `%${query.matricula}%`,
         },
-      };
+      );
+    }
+
+    if (query.locations) {
+      try {
+        appointmentsCreateQueryBuilder.where('location.id IN (:...locations)', {
+          locations: query.locations,
+        });
+      } catch (error) {
+        console.log('error', error);
+      }
     }
 
     if (query.location_id) {
-      where.schedule = {
-        location: {
-          id: query.location_id,
-        },
-      };
+      appointmentsCreateQueryBuilder.where('location.id = :id', {
+        id: query.location_id,
+      });
     }
 
     if (query.page) page = query.page;
     if (query.perPage) perPage = query.perPage;
-
-    appointmentsCreateQueryBuilder.where(where);
 
     const result: IPaginatedResult<any> = await paginate(
       appointmentsCreateQueryBuilder,

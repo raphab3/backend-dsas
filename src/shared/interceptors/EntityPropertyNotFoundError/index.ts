@@ -5,8 +5,8 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { FastifyReply } from 'fastify';
 import { TypeORMError } from 'typeorm';
+import { FastifyReply } from 'fastify';
 
 @Catch(TypeORMError, HttpException)
 export class EntityExceptionFilter implements ExceptionFilter {
@@ -37,7 +37,7 @@ export class EntityExceptionFilter implements ExceptionFilter {
       }
     }
 
-    response
+    (response as FastifyReply)
       .code(status)
       .header('Content-Type', 'application/json; charset=utf-8')
       .send({

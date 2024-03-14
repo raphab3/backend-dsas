@@ -7,4 +7,5 @@ export interface IQuerySchedule extends IQuery {
   location_id?: string;
   specialty_id?: string;
   professional_matricula?: FindOperator<string> | string;
+  locations?: string[];
 }

@@ -82,7 +82,13 @@ class UsersRepository implements IUsersRepository {
     try {
       const user = await this.ormRepository.findOne({
         where: { id },
-        relations: ['roles', 'roles.permissions', 'individual_permissions'],
+        relations: [
+          'roles',
+          'roles.permissions',
+          'individual_permissions',
+          'person_sig',
+          'person_sig.locations',
+        ],
       });
 
       return user;
@@ -92,7 +98,20 @@ class UsersRepository implements IUsersRepository {
   }
 
   public async update(user: IUpdateUser): Promise<User> {
-    return this.ormRepository.save(user);
+    const userBuilder = await this.ormRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.roles', 'roles')
+      .where('user.id = :id', { id: user.id })
+      .getOne();
+
+    if (!userBuilder) {
+      throw new Error('user not found');
+    }
+
+    Object.assign(userBuilder, user);
+    await this.ormRepository.save(userBuilder);
+
+    return userBuilder;
   }
 
   public async getUserWithRolesAndPermissions(id: string): Promise<IUser> {

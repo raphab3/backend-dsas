@@ -1,7 +1,7 @@
 import IScheduleRepository from './IScheduleRepository';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Schedule } from '../entities/schedule.entity';
 import { IQuerySchedule } from '@modules/schedules/interfaces/IQuerySchedule';
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
@@ -35,50 +35,41 @@ class ScheduleRepository implements IScheduleRepository {
         .leftJoinAndSelect('schedules.location', 'location')
         .orderBy('schedules.created_at', 'DESC');
 
-      const where: Partial<
-        IQuerySchedule & {
-          professional: {
-            person_sig: {
-              matricula: any;
-            };
-          };
-          location: {
-            id: any;
-          };
-          specialty: {
-            id: any;
-          };
-        }
-      > = {};
-
       if (query.id) {
-        where.id = query.id;
+        scheduleCreateQueryBuilder.where({
+          id: query.id,
+        });
       }
 
       if (query.professional_matricula) {
-        where.professional = {
-          person_sig: {
-            matricula: ILike(`%${query.professional_matricula}%`),
+        scheduleCreateQueryBuilder.andWhere(
+          'professional_person_sig.matricula ILike :matricula',
+          {
+            matricula: `%${query.professional_matricula}%`,
           },
-        };
+        );
       }
 
       if (query.specialty_id) {
-        where.specialty = {
-          id: query.specialty_id,
-        };
+        scheduleCreateQueryBuilder.where('specialty.id = :specialty_id', {
+          specialty_id: query.specialty_id,
+        });
       }
 
       if (query.location_id) {
-        where.location = {
-          id: query.location_id,
-        };
+        scheduleCreateQueryBuilder.where('location.id = :location_id', {
+          location_id: query.location_id,
+        });
+      }
+
+      if (query.locations) {
+        scheduleCreateQueryBuilder.andWhere('location.id IN (:...locations)', {
+          locations: query.locations,
+        });
       }
 
       if (query.page) page = query.page;
       if (query.perPage) perPage = query.perPage;
-
-      scheduleCreateQueryBuilder.where(where);
 
       const result: IPaginatedResult<Schedule> = await paginate(
         scheduleCreateQueryBuilder,

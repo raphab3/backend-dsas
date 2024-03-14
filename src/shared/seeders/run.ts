@@ -5,6 +5,7 @@ import { LocationSeedService } from './services/Location.seed.service';
 import { NestFactory } from '@nestjs/core';
 import { SyncPermissionsInRolesService } from './services/SyncPermissionsInRoles.service';
 import { GenerateRolesService } from './services/GenerateRoles.service';
+import { DistributionsLocationsForAllPersonsSigService } from './services/distributionsLocationsForAllPersonsSig.service';
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
@@ -55,6 +56,21 @@ async function bootstrap() {
       console.log('Executando LocationSeedService...');
       const seederLocation = app.get(LocationSeedService);
       await seederLocation.execute();
+      break;
+
+    case '4':
+      /*
+       * Executa o serviço de seed de distribuição de localização para todas as pessoas
+       * Usa o serviço DistributionsLocationsForAllPersonsSigService
+       * Usado para popular dados de localização para todas as pessoas no banco de dados
+       * */
+      console.log(
+        'Executando DistributionsLocationsForAllPersonsSigService...',
+      );
+      const seederDistributionsLocationsForAllPersonsSigService = app.get(
+        DistributionsLocationsForAllPersonsSigService,
+      );
+      await seederDistributionsLocationsForAllPersonsSigService.execute();
       break;
 
     default:
