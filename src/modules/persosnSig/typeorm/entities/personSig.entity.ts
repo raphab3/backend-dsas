@@ -1,11 +1,13 @@
 import { Dependent } from '@modules/dependents/typeorm/entities/dependent.entity';
-import { IPersonSig } from '@modules/persosnSig/interfaces/IPersonSig';
+import { Location } from '@modules/locations/typeorm/entities/location.entity';
+import { IPersonSig, Origin } from '@modules/persosnSig/interfaces/IPersonSig';
 import { User } from '@modules/users/typeorm/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
   ManyToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -55,12 +57,6 @@ export class PersonSig implements IPersonSig {
 
   @Column({ type: 'varchar', nullable: true })
   cpf: string;
-
-  @Column({ type: 'varchar', nullable: true })
-  carteira_motorista: number;
-
-  @Column({ type: 'varchar', nullable: true })
-  vencimento_motorista: string | Date;
 
   @Column({ type: 'varchar', nullable: true })
   sexo: string;
@@ -113,6 +109,9 @@ export class PersonSig implements IPersonSig {
   @Column({ type: 'varchar', nullable: true })
   orgao_exp: string;
 
+  @Column({ type: 'enum', enum: Origin, default: Origin.PMPB, nullable: true })
+  origem: Origin;
+
   @ManyToMany(() => Dependent, (dependent) => dependent.person_sigs)
   dependents: Dependent[];
 
@@ -122,6 +121,22 @@ export class PersonSig implements IPersonSig {
   })
   @JoinColumn()
   user: User;
+
+  @ManyToMany(() => Location, (location) => location.person_sigs, {
+    onDelete: 'CASCADE',
+  })
+  @JoinTable({
+    name: 'person_sig_locations',
+    joinColumn: {
+      name: 'person_sig_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'location_id',
+      referencedColumnName: 'id',
+    },
+  })
+  locations: Location[];
 
   @CreateDateColumn()
   created_at: Date;

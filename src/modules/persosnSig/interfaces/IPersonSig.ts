@@ -13,8 +13,6 @@ export interface IPersonSig {
   matricula: string;
   regime: string;
   cpf: string;
-  carteira_motorista: number;
-  vencimento_motorista: Date | string;
   sexo: string;
   email: string;
   pai: string;
@@ -32,4 +30,12 @@ export interface IPersonSig {
   cep: number;
   rg: number;
   orgao_exp: string;
+  origem: Origin;
+}
+
+export enum Origin {
+  PMPB = 'POLICIAL MILITAR ESTADUAL DA PARAÍBA (PMPB)',
+  CBMPB = 'BOMBEIRO MILITAR ESTADUAL DA PARAÍBA (CBMPB)',
+  FUNCIONARIO_CIVIL = 'FUNCIONARIO CIVIL PMPB',
+  CIVIL = 'CIVIL',
 }

@@ -7,14 +7,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Permission } from '@modules/permissions/typeorm/entities/permission.entity';
 import { SyncPermissionsService } from './services/SyncPermissions.service';
 import { GenerateRolesService } from './services/GenerateRoles.service';
+import { DistributionsLocationsForAllPersonsSigService } from './services/distributionsLocationsForAllPersonsSig.service';
+import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Location, Role, Permission])],
+  imports: [TypeOrmModule.forFeature([Location, Role, Permission, PersonSig])],
   providers: [
     LocationSeedService,
     SyncPermissionsInRolesService,
     SyncPermissionsService,
     GenerateRolesService,
+    DistributionsLocationsForAllPersonsSigService,
   ],
 })
 export class SeedModule {}
