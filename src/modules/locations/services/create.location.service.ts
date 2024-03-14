@@ -8,8 +8,8 @@ export class CreateLocationService {
 
   async execute(createLocationDto: ICreateLocation) {
     await this.locationRepository.create({
-      name: createLocationDto.name.trim().toLowerCase(),
-      description: createLocationDto.description.trim().toLowerCase(),
+      name: createLocationDto.name.trim().toUpperCase(),
+      description: createLocationDto.description.trim(),
       city: createLocationDto.city,
     });
   }
