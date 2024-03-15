@@ -27,6 +27,8 @@ import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum
 import { AddedPermissionUserDto } from '@modules/users/dto/added-permission-user.dto';
 import { AddPermissionUserService } from '@modules/users/services/addPermissionUser.service';
 import { EntityExceptionFilter } from '@shared/interceptors/EntityPropertyNotFoundError';
+import { UpdatePasswordUsersService } from '@modules/users/services/updatePassword.users.service';
+import { UpdatePasswordUser } from '@modules/users/dto/updatePasswordUser.dto';
 
 @Catch(HttpException)
 @ApiTags('users')
@@ -42,6 +44,7 @@ export class UsersController {
     private readonly updateUsersService: UpdateUsersService,
     private readonly removeUsersService: RemoveUsersService,
     private readonly addPermissionUserService: AddPermissionUserService,
+    private readonly updatePasswordUsersService: UpdatePasswordUsersService,
   ) {}
 
   @AuditLog('CRIAR USUÁRIO')
@@ -73,6 +76,25 @@ export class UsersController {
   @Permission(PermissionsEnum.update_user)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.updateUsersService.execute(id, updateUserDto);
+  }
+
+  @AuditLog('UPDATE MY PASSWORD USUÁRIO')
+  @Patch(':id/password')
+  @ApiOperation({ summary: 'Update my password' })
+  updatePassword(
+    @Param('id') id: string,
+    @Req() req: any,
+    @Body() updateUserDto: UpdatePasswordUser,
+  ) {
+    const userIdByRequest = req.user.userId;
+    if (userIdByRequest !== id) {
+      throw new HttpException(
+        'Usuário não pode alterar senha de outro usuário',
+        400,
+      );
+    }
+
+    return this.updatePasswordUsersService.execute(id, updateUserDto);
   }
 
   @AuditLog('REMOVER USUÁRIO')

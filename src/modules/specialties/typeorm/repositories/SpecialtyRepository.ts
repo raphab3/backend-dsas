@@ -71,9 +71,10 @@ class SpecialtyRepository implements ISpecialtyRepository {
     data: CreateSpecialtyDto,
   ): Promise<Specialty> {
     const builder = this.ormRepository.createQueryBuilder();
+    const specialtyData = this.ormRepository.create(data);
     const specialty = await builder
       .update(Specialty)
-      .set(data)
+      .set(specialtyData)
       .where('id = :id', { id })
       .returning('*')
       .execute();

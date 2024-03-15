@@ -5,11 +5,12 @@ import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { Role } from '@modules/roles/typeorm/entities/role.entity';
 import { UpdateUserDto } from '../dto/update-user.dto';
 
-export interface CreateUserOutput {
+export interface UpdateUserOutput {
   id: string;
-  name: string;
-  email: string;
-  roles: Role[];
+  name?: string;
+  email?: string;
+  password?: string;
+  roles?: Role[];
 }
 
 @Injectable()
@@ -22,8 +23,8 @@ export class UpdateUsersService {
   ) {}
   async execute(
     id: string,
-    updateUser: UpdateUserDto,
-  ): Promise<CreateUserOutput> {
+    updateUser: Partial<UpdateUserDto>,
+  ): Promise<UpdateUserOutput> {
     const userFound = await this.usersRepository.findOne(id);
     if (!userFound) {
       throw new HttpException('Usuário não encontrado', 404);
@@ -32,13 +33,23 @@ export class UpdateUsersService {
     userFound.email = updateUser.email;
     userFound.name = updateUser.name;
 
-    if (updateUser.password) {
-      const { hash, salt } = await this.hashProvider.generateHash(
-        updateUser.password,
-      );
-      userFound.password = hash;
-      userFound.salt = salt;
-    }
+    // if (updateUser.password) {
+    //   const passwordMatched = await this.hashProvider.compareHash(
+    //     updateUser.password,
+    //     userFound.password,
+    //     userFound.salt,
+    //   );
+
+    //   if (passwordMatched) {
+    //     throw new HttpException('Nova senha não pode ser igual a antiga', 400);
+    //   }
+
+    //   const { hash, salt } = await this.hashProvider.generateHash(
+    //     updateUser.password,
+    //   );
+    //   userFound.password = hash;
+    //   userFound.salt = salt;
+    // }
 
     if (updateUser.roles && updateUser.roles.length > 0) {
       const newRoles = await this.validateRoles(updateUser.roles);
@@ -46,7 +57,6 @@ export class UpdateUsersService {
         newRoles.map((role) => role.id),
       );
     } else {
-      console.log('aqui');
       userFound.roles = [];
     }
 

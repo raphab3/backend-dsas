@@ -6,12 +6,14 @@ import { NestFactory } from '@nestjs/core';
 import { SyncPermissionsInRolesService } from './services/SyncPermissionsInRoles.service';
 import { GenerateRolesService } from './services/GenerateRoles.service';
 import { DistributionsLocationsForAllPersonsSigService } from './services/distributionsLocationsForAllPersonsSig.service';
+import { CitiesGeneratesService } from './services/CitiesGenerates.service';
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
   const args = process.argv.slice(2); // Remove os dois primeiros argumentos (node e path do script)
   const seedOption = args[0]; // O primeiro argumento após o comando
   console.log('seedOption', seedOption);
+  const uf = args[1]; // O segundo argumento após o comando
 
   switch (seedOption) {
     case '0':
@@ -73,6 +75,22 @@ async function bootstrap() {
       await seederDistributionsLocationsForAllPersonsSigService.execute();
       break;
 
+    case '5':
+      /*
+       * Executa o serviço de seed de distribuição de localização para todas as pessoas
+       * Usa o serviço DistributionsLocationsForAllPersonsSigService
+       * Usado para popular dados de localização para todas as pessoas no banco de dados
+       * */
+
+      if (!uf) {
+        console.log('Informe a UF para gerar as cidades');
+        process.exit(1);
+      }
+
+      console.log('Executando CitiesGeneratesService...');
+      const citiesGeneratesService = app.get(CitiesGeneratesService);
+      await citiesGeneratesService.execute({ uf });
+      break;
     default:
       console.log('Escolha uma opção válida para executar a seed.');
       break;

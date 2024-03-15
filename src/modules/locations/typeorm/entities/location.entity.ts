@@ -31,6 +31,7 @@ export class Location {
   @Column({
     type: 'enum',
     enum: LocationCityEnum,
+    default: LocationCityEnum.JOAO_PESSOA,
   })
   city: LocationCityEnum;
 

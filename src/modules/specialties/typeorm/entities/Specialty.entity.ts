@@ -1,6 +1,8 @@
 import { Professional } from '@modules/professionals/typeorm/entities/professional.entity';
 import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
 import {
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
@@ -31,4 +33,11 @@ export class Specialty {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  ensureNameIsUppercase() {
+    console.log('ensureNameIsUppercase');
+    this.name = this.name.toUpperCase();
+  }
 }

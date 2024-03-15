@@ -22,22 +22,33 @@ export class EntityExceptionFilter implements ExceptionFilter {
     let message =
       exception instanceof HttpException
         ? exception.getResponse()
-        : 'Internal server error';
+        : 'Erro interno do servidor';
 
     if (exception instanceof TypeORMError) {
       status = HttpStatus.BAD_REQUEST;
-      message = exception.message;
 
       if (
         exception.message.includes(
           'duplicate key value violates unique constraint',
         )
       ) {
-        message = 'Esse registro já existe';
+        message =
+          'Esse registro já existe. Por favor, verifique os dados e tente novamente.';
+      } else if (
+        exception.message.includes('violates foreign key constraint')
+      ) {
+        message =
+          'Operação não permitida devido a restrições de relação entre dados. Por favor, verifique os dados e tente novamente.';
+      } else if (exception.message.includes('null value in column')) {
+        message =
+          'Um ou mais campos obrigatórios não foram preenchidos. Por favor, verifique os dados e tente novamente.';
+      } else {
+        message =
+          'Erro ao processar a solicitação. Por favor, verifique os dados e tente novamente.';
       }
     }
 
-    (response as FastifyReply)
+    response
       .code(status)
       .header('Content-Type', 'application/json; charset=utf-8')
       .send({

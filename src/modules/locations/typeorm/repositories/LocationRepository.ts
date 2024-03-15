@@ -47,6 +47,21 @@ class LocationRepository implements ILocationRepository {
       });
     }
 
+    if (query.description) {
+      locationsCreateQueryBuilder.andWhere(
+        'locations.description ILike :description',
+        {
+          description: `%${query.description}%`,
+        },
+      );
+    }
+
+    if (query.city) {
+      locationsCreateQueryBuilder.andWhere('locations.city = :city', {
+        city: query.city,
+      });
+    }
+
     if (query.person_sig_id) {
       locationsCreateQueryBuilder.andWhere('person_sigs.id = :person_sig_id', {
         person_sig_id: query.person_sig_id,

@@ -8,7 +8,7 @@ export class CreateSpecialtieservice {
 
   async execute(createSpecialtyDto: CreateSpecialtyDto) {
     await this.specialtyRepository.create({
-      name: createSpecialtyDto.name.toUpperCase(),
+      name: createSpecialtyDto.name,
     });
   }
 }

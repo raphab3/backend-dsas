@@ -24,7 +24,6 @@ import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity
 import { PersonSigModule } from '@modules/persosnSig/personSig.module';
 import { Professional } from '@modules/professionals/typeorm/entities/professional.entity';
 import { ProfessionalModule } from '@modules/professionals/professional.module';
-import { QueryFailedFilter } from '@shared/QueryFailedFilter';
 import { Role } from '@modules/roles/typeorm/entities/role.entity';
 import { RoleModule } from '@modules/roles/role.module';
 import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
@@ -39,6 +38,7 @@ import { User } from '@modules/users/typeorm/entities/user.entity';
 import { UsersModule } from '@modules/users/users.module';
 import { EntityExceptionFilter } from '@shared/interceptors/EntityPropertyNotFoundError';
 import { LocationsGuard } from '@shared/guards/Location.guard';
+import { City } from '@modules/locations/typeorm/entities/city.entity';
 
 export const entities = [
   User,
@@ -55,6 +55,7 @@ export const entities = [
   Permission,
   Schedule,
   Appointment,
+  City,
 ];
 
 export const databaseConfig: DataSourceOptions = {
@@ -115,10 +116,6 @@ export const PROVIDERS = [
   {
     provide: APP_GUARD,
     useClass: ThrottlerGuard,
-  },
-  {
-    provide: APP_FILTER,
-    useClass: QueryFailedFilter,
   },
   {
     provide: APP_FILTER,
