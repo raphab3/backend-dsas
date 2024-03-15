@@ -48,6 +48,8 @@ export class EntityExceptionFilter implements ExceptionFilter {
       }
     }
 
+    console.error(exception);
+
     response
       .code(status)
       .header('Content-Type', 'application/json; charset=utf-8')

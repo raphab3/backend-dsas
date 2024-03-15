@@ -1,11 +1,12 @@
 import ISpecialtyRepository from './ISpecialtyRepository';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Specialty } from '../entities/Specialty.entity';
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
 import { paginate } from '@shared/utils/Pagination';
 import { CreateSpecialtyDto } from '@modules/specialties/dto/create-Specialty.dto';
+import { IQuerySpecialty } from '@modules/specialties/interfaces/IQuerySpecialty';
 
 @Injectable()
 class SpecialtyRepository implements ISpecialtyRepository {
@@ -20,31 +21,44 @@ class SpecialtyRepository implements ISpecialtyRepository {
     return Specialty;
   }
 
-  public async list(query: any): Promise<IPaginatedResult<any>> {
+  public async list(query: IQuerySpecialty): Promise<IPaginatedResult<any>> {
     let page = 1;
     let perPage = 10;
 
-    const usersCreateQueryBuilder = this.ormRepository
-      .createQueryBuilder('users')
-      .orderBy('users.created_at', 'DESC');
-
-    const where: Partial<any> = {};
+    const specialtyCreateQueryBuilder = this.ormRepository
+      .createQueryBuilder('specialty')
+      .orderBy('specialty.created_at', 'DESC');
 
     if (query.id) {
-      where.id = query.id;
+      specialtyCreateQueryBuilder.where('specialty.id = :id', { id: query.id });
     }
 
     if (query.name) {
-      where.name = ILike(`%${query.name}%`);
+      const name = query.name.toLowerCase();
+      console.log(query.name);
+      specialtyCreateQueryBuilder.where('LOWER(specialty.name) LIKE :name', {
+        name: `%${name}%`,
+      });
+    }
+
+    if (query.formation) {
+      try {
+        specialtyCreateQueryBuilder.where(
+          '(specialty.formation) = :formation',
+          {
+            formation: query.formation,
+          },
+        );
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     if (query.page) page = query.page;
     if (query.perPage) perPage = query.perPage;
 
-    usersCreateQueryBuilder.where(where);
-
     const result: IPaginatedResult<any> = await paginate(
-      usersCreateQueryBuilder,
+      specialtyCreateQueryBuilder,
       {
         page,
         perPage,

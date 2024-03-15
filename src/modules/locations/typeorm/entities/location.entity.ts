@@ -2,6 +2,8 @@ import { LocationCityEnum } from '@modules/locations/interfaces/ILocation';
 import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
 import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
 import {
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
@@ -46,4 +48,10 @@ export class Location {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async toUpperCase() {
+    this.name = this.name.toUpperCase();
+  }
 }

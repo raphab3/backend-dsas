@@ -1,5 +1,6 @@
 import { Professional } from '@modules/professionals/typeorm/entities/professional.entity';
 import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
+import { FormationEnum } from '@modules/specialties/interfaces/ISpecialty';
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -21,6 +22,13 @@ export class Specialty {
     type: 'varchar',
   })
   name: string;
+
+  @Column({
+    type: 'enum',
+    enum: FormationEnum,
+    nullable: true,
+  })
+  formation: FormationEnum;
 
   @OneToMany(() => Schedule, (schedule) => schedule.specialty)
   schedules: Schedule[];

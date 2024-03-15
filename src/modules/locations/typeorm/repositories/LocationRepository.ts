@@ -102,9 +102,10 @@ class LocationRepository implements ILocationRepository {
 
   public async update(id: string, data: ICreateLocation): Promise<Location> {
     const builder = this.ormRepository.createQueryBuilder();
+    const createdLocation = this.ormRepository.create(data);
     const location = await builder
       .update(Location)
-      .set(data)
+      .set(createdLocation)
       .where('id = :id', { id })
       .returning('*')
       .execute();

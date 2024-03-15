@@ -7,8 +7,10 @@ export class CreateSpecialtieservice {
   constructor(private readonly specialtyRepository: SpecialtyRepository) {}
 
   async execute(createSpecialtyDto: CreateSpecialtyDto) {
+    console.log('createSpecialtyDto', createSpecialtyDto);
     await this.specialtyRepository.create({
       name: createSpecialtyDto.name,
+      formation: createSpecialtyDto.formation,
     });
   }
 }

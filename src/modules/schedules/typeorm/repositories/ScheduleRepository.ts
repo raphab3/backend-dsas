@@ -104,10 +104,11 @@ class ScheduleRepository implements IScheduleRepository {
   }
 
   public async update(id: string, data: IUpdateSchedule): Promise<Schedule> {
-    const builder = this.ormRepository.createQueryBuilder();
+    const builder = this.ormRepository.createQueryBuilder('schedules');
+    const createSchedule = this.ormRepository.create(data);
     const schedule = await builder
       .update(Schedule)
-      .set(data)
+      .set(createSchedule)
       .where('id = :id', { id })
       .returning('*')
       .execute();

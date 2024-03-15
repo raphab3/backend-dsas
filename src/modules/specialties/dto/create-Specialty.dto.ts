@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { FormationEnum } from '../interfaces/ISpecialty';
 
 export class CreateSpecialtyDto {
   @ApiProperty({
@@ -7,4 +8,11 @@ export class CreateSpecialtyDto {
     example: 'John Doe',
   })
   name?: string;
+
+  @ApiProperty({
+    description: 'The formation of the Specialty',
+    type: 'enum',
+    example: 'MEDICINA',
+  })
+  formation?: FormationEnum;
 }

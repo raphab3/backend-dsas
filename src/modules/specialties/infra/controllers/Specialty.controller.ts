@@ -14,9 +14,9 @@ import {
   Patch,
   Param,
   Delete,
-  Req,
   UseGuards,
   UseInterceptors,
+  Query,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '@shared/guards/Jwt-auth.guard';
 import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
@@ -49,8 +49,7 @@ export class SpecialtyController {
   @Get()
   @ApiOperation({ summary: 'Find all Specialty' })
   @Permission(PermissionsEnum.find_all_specialties)
-  findAll(@Req() req: any) {
-    const query = req.query;
+  findAll(@Query() query: any) {
     return this.findAllSpecialtieservice.findAll(query);
   }
 
