@@ -80,7 +80,6 @@ export const groupsOfPermissions = {
   admin: [...PermissionsEnumList],
   user: [PermissionsEnum.auth_sing_in, PermissionsEnum.auth_me],
   manager: [
-    PermissionsEnum.update_personSig,
     PermissionsEnum.create_location,
     PermissionsEnum.remove_location,
     PermissionsEnum.update_location,
@@ -102,8 +101,6 @@ export const groupsOfPermissions = {
     PermissionsEnum.update_professional,
     PermissionsEnum.find_all_professionals,
     PermissionsEnum.find_one_professional,
-    PermissionsEnum.create_specialty,
-    PermissionsEnum.update_specialty,
     PermissionsEnum.find_all_specialties,
     PermissionsEnum.find_one_specialty,
     PermissionsEnum.create_dependent,

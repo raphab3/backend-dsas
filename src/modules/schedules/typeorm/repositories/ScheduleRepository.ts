@@ -96,6 +96,7 @@ class ScheduleRepository implements IScheduleRepository {
       where: {
         id,
       },
+      relations: ['appointments'],
     });
   }
 
