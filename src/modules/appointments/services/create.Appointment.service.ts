@@ -67,7 +67,7 @@ export class CreateAppointmentService {
     const schedule = await this.scheduleRepository.findOne(scheduleId);
     const currentDate = new Date();
     const scheduleDate = new Date(
-      `${schedule.available_date}T${schedule.start_time}`,
+      `${schedule.available_date}T${schedule.end_time}`,
     );
 
     if (!schedule || scheduleDate < currentDate) {
