@@ -15,6 +15,7 @@ import { UpdatePasswordUsersService } from './services/updatePassword.users.serv
 import { UpdateUsersService } from './services/update.users.service';
 import { User } from './typeorm/entities/user.entity';
 import { UsersController } from './infra/controllers/users.controller';
+import { ResetPasswordUsersService } from './services/resetPassord.users.service';
 
 const TYPE_ORM_USERS = TypeOrmModule.forFeature([User]);
 
@@ -31,6 +32,7 @@ const TYPE_ORM_USERS = TypeOrmModule.forFeature([User]);
     FindByEmailUsersService,
     AddPermissionUserService,
     UpdatePasswordUsersService,
+    ResetPasswordUsersService,
     {
       provide: 'HashProvider',
       useExisting: CryptoHashProvider,

@@ -14,6 +14,7 @@ export enum PermissionsEnum {
   find_one_user = 'find_one_user',
   update_user = 'update_user',
   remove_user = 'remove_user',
+  reset_user_password = 'reset_user_password',
   create_permission = 'create_permission',
   find_all_permissions = 'find_all_permissions',
   find_one_permission = 'find_one_permission',

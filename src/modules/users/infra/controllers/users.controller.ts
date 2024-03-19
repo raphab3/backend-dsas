@@ -29,6 +29,7 @@ import { AddPermissionUserService } from '@modules/users/services/addPermissionU
 import { EntityExceptionFilter } from '@shared/interceptors/EntityPropertyNotFoundError';
 import { UpdatePasswordUsersService } from '@modules/users/services/updatePassword.users.service';
 import { UpdatePasswordUser } from '@modules/users/dto/updatePasswordUser.dto';
+import { ResetPasswordUsersService } from '@modules/users/services/resetPassord.users.service';
 
 @Catch(HttpException)
 @ApiTags('users')
@@ -45,6 +46,7 @@ export class UsersController {
     private readonly removeUsersService: RemoveUsersService,
     private readonly addPermissionUserService: AddPermissionUserService,
     private readonly updatePasswordUsersService: UpdatePasswordUsersService,
+    private readonly resetPasswordUsersService: ResetPasswordUsersService,
   ) {}
 
   @AuditLog('CRIAR USUÁRIO')
@@ -118,5 +120,13 @@ export class UsersController {
     });
 
     return user;
+  }
+
+  @Patch(':id/reset-password')
+  @ApiOperation({ summary: 'Reset password user' })
+  @Permission(PermissionsEnum.reset_user_password)
+  async resetPassword(@Param('id') id: string): Promise<void> {
+    console.log('id', id);
+    await this.resetPasswordUsersService.execute(id);
   }
 }

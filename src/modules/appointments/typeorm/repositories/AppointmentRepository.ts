@@ -53,7 +53,7 @@ class AppointmentRepository implements IAppointmentRepository {
       .leftJoinAndSelect('patient.dependent', 'dependent')
       .leftJoinAndSelect('patient.person_sig', 'person_sig')
       .leftJoinAndSelect('schedule.location', 'location')
-      .orderBy('appointments.created_at', 'DESC');
+      .orderBy('schedule.available_date', 'ASC');
 
     if (query.id) {
       appointmentsCreateQueryBuilder.where('appointments.id = :id', {
@@ -61,11 +61,10 @@ class AppointmentRepository implements IAppointmentRepository {
       });
     }
 
-    // search by available_date using typeorm for date format
     if (query.available_date) {
       const date = query.available_date.split('T')[0];
 
-      appointmentsCreateQueryBuilder.where(
+      appointmentsCreateQueryBuilder.andWhere(
         'schedule.available_date = :available_date',
         {
           available_date: date,
@@ -74,7 +73,7 @@ class AppointmentRepository implements IAppointmentRepository {
     }
 
     if (query.matricula) {
-      appointmentsCreateQueryBuilder.where(
+      appointmentsCreateQueryBuilder.andWhere(
         'person_sig.matricula ILIKE :matricula',
         {
           matricula: `%${query.matricula}%`,
@@ -84,16 +83,28 @@ class AppointmentRepository implements IAppointmentRepository {
 
     if (query.locations) {
       try {
-        appointmentsCreateQueryBuilder.where('location.id IN (:...locations)', {
-          locations: query.locations,
-        });
+        appointmentsCreateQueryBuilder.andWhere(
+          'location.id IN (:...locations)',
+          {
+            locations: query.locations,
+          },
+        );
       } catch (error) {
         console.log('error', error);
       }
     }
 
+    if (query.professional_name) {
+      appointmentsCreateQueryBuilder.andWhere(
+        'schedule.description ILIKE :description',
+        {
+          description: `%${query.professional_name}%`,
+        },
+      );
+    }
+
     if (query.location_id) {
-      appointmentsCreateQueryBuilder.where('location.id = :id', {
+      appointmentsCreateQueryBuilder.andWhere('location.id = :id', {
         id: query.location_id,
       });
     }

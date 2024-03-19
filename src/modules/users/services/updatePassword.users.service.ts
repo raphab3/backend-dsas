@@ -3,12 +3,6 @@ import UsersRepository from '../typeorm/repositories/UsersRepository';
 import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { UpdateUserDto } from '../dto/update-user.dto';
 
-export interface UpdateUserOutput {
-  id: string;
-  oldPassword?: string;
-  password?: string;
-}
-
 @Injectable()
 export class UpdatePasswordUsersService {
   constructor(

@@ -33,30 +33,31 @@ export class UpdateUsersService {
     userFound.email = updateUser.email;
     userFound.name = updateUser.name;
 
-    // if (updateUser.password) {
-    //   const passwordMatched = await this.hashProvider.compareHash(
-    //     updateUser.password,
-    //     userFound.password,
-    //     userFound.salt,
-    //   );
+    if (updateUser.password) {
+      const passwordMatched = await this.hashProvider.compareHash(
+        updateUser.password,
+        userFound.password,
+        userFound.salt,
+      );
 
-    //   if (passwordMatched) {
-    //     throw new HttpException('Nova senha não pode ser igual a antiga', 400);
-    //   }
+      if (passwordMatched) {
+        throw new HttpException('Nova senha não pode ser igual a antiga', 400);
+      }
 
-    //   const { hash, salt } = await this.hashProvider.generateHash(
-    //     updateUser.password,
-    //   );
-    //   userFound.password = hash;
-    //   userFound.salt = salt;
-    // }
+      const { hash, salt } = await this.hashProvider.generateHash(
+        updateUser.password,
+      );
+      userFound.password = hash;
+      userFound.salt = salt;
+    }
 
     if (updateUser.roles && updateUser.roles.length > 0) {
       const newRoles = await this.validateRoles(updateUser.roles);
       userFound.roles = await this.rolesRepository.findByIds(
         newRoles.map((role) => role.id),
       );
-    } else {
+    }
+    if (updateUser.roles && updateUser.roles.length === 0) {
       userFound.roles = [];
     }
 

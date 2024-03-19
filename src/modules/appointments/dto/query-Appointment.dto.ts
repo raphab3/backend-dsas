@@ -29,4 +29,11 @@ export class QueryAppointmentDto extends IQuery {
     required: false,
   })
   locations?: string[];
+
+  @ApiProperty({
+    description: 'The professional name of the appomentment',
+    type: 'string',
+    required: false,
+  })
+  professional_name: string;
 }

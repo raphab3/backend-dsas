@@ -51,13 +51,13 @@ class ScheduleRepository implements IScheduleRepository {
       }
 
       if (query.specialty_id) {
-        scheduleCreateQueryBuilder.where('specialty.id = :specialty_id', {
+        scheduleCreateQueryBuilder.andWhere('specialty.id = :specialty_id', {
           specialty_id: query.specialty_id,
         });
       }
 
       if (query.location_id) {
-        scheduleCreateQueryBuilder.where('location.id = :location_id', {
+        scheduleCreateQueryBuilder.andWhere('location.id = :location_id', {
           location_id: query.location_id,
         });
       }
@@ -66,6 +66,15 @@ class ScheduleRepository implements IScheduleRepository {
         scheduleCreateQueryBuilder.andWhere('location.id IN (:...locations)', {
           locations: query.locations,
         });
+      }
+
+      if (query.professional_name) {
+        scheduleCreateQueryBuilder.andWhere(
+          'professional_person_sig.nome ILike :nome',
+          {
+            nome: `%${query.professional_name}%`,
+          },
+        );
       }
 
       if (query.page) page = query.page;
