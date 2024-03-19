@@ -1,5 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IQuery } from '@shared/interfaces/IQuery';
+import {
+  StatusAppointmentType,
+  statusAppointmentOfTypeEnum,
+} from '../interfaces/IAppointment';
 
 export class QueryAppointmentDto extends IQuery {
   @ApiProperty({
@@ -35,5 +39,12 @@ export class QueryAppointmentDto extends IQuery {
     type: 'string',
     required: false,
   })
-  professional_name: string;
+  professional_name?: string;
+
+  @ApiProperty({
+    description: 'The status of the appomentment',
+    type: statusAppointmentOfTypeEnum,
+    required: false,
+  })
+  status?: StatusAppointmentType;
 }

@@ -109,6 +109,12 @@ class AppointmentRepository implements IAppointmentRepository {
       });
     }
 
+    if (query.status) {
+      appointmentsCreateQueryBuilder.andWhere('appointments.status = :status', {
+        status: query.status,
+      });
+    }
+
     if (query.page) page = query.page;
     if (query.perPage) perPage = query.perPage;
 
