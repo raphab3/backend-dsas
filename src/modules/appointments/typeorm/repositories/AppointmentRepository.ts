@@ -53,7 +53,8 @@ class AppointmentRepository implements IAppointmentRepository {
       .leftJoinAndSelect('patient.dependent', 'dependent')
       .leftJoinAndSelect('patient.person_sig', 'person_sig')
       .leftJoinAndSelect('schedule.location', 'location')
-      .orderBy('schedule.available_date', 'ASC');
+      .orderBy('schedule.available_date', 'ASC')
+      .addOrderBy('schedule.start_time', 'ASC');
 
     if (query.id) {
       appointmentsCreateQueryBuilder.where('appointments.id = :id', {
@@ -62,8 +63,7 @@ class AppointmentRepository implements IAppointmentRepository {
     }
 
     if (query.available_date) {
-      const date = query.available_date.split('T')[0];
-
+      const date = new Date(query.available_date).toISOString().split('T')[0];
       appointmentsCreateQueryBuilder.andWhere(
         'schedule.available_date = :available_date',
         {
