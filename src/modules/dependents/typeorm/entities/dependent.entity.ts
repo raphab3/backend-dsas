@@ -6,6 +6,8 @@ import {
 import { Patient } from '@modules/patients/typeorm/entities/patient.entity';
 import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
 import {
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
@@ -63,4 +65,10 @@ export class Dependent implements IDependent {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async toUpperCase() {
+    this.name = this.name.toUpperCase();
+  }
 }
