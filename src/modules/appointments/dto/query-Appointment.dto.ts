@@ -47,4 +47,11 @@ export class QueryAppointmentDto extends IQuery {
     required: false,
   })
   status?: StatusAppointmentType;
+
+  @ApiProperty({
+    description: 'The date of the appomentment',
+    type: 'boolean',
+    required: false,
+  })
+  dateInPastFiltered?: boolean;
 }
