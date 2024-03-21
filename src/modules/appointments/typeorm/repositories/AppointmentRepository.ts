@@ -116,13 +116,12 @@ class AppointmentRepository implements IAppointmentRepository {
     }
 
     if (query.dateInPastFiltered) {
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      const formattedYesterday = yesterday.toISOString().split('T')[0];
+      const today = new Date();
+      const formattedToday = today.toISOString().split('T')[0];
       appointmentsCreateQueryBuilder.andWhere(
-        'schedule.available_date > :date',
+        'schedule.available_date <= :available_date',
         {
-          date: formattedYesterday,
+          available_date: formattedToday,
         },
       );
     }
