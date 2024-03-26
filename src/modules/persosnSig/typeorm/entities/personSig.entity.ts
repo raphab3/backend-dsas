@@ -3,6 +3,7 @@ import { Location } from '@modules/locations/typeorm/entities/location.entity';
 import { IPersonSig, Origin } from '@modules/persosnSig/interfaces/IPersonSig';
 import { User } from '@modules/users/typeorm/entities/user.entity';
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
@@ -143,4 +144,12 @@ export class PersonSig implements IPersonSig {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @BeforeInsert()
+  async beforeInsert() {
+    this.nome = this.nome.toUpperCase();
+    this.nome_guerra = this.nome_guerra.toUpperCase();
+    this.sexo = this.sexo.toUpperCase();
+    this.email = this.email.toLowerCase();
+  }
 }
