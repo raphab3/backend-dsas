@@ -64,7 +64,7 @@ export class CreatePersonSigService {
 
     const userExists = await this.usersRepository.findByEmail(data.email);
 
-    if (userExists) {
+    if (userExists && !isExternal) {
       return new HttpException('Email já cadastrado', 409);
     }
 
