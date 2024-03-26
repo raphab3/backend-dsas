@@ -2,7 +2,7 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import PersonSigRepository from '../typeorm/repositories/PersonSigRepository';
 import { FindExternalSigpmpbService } from './findExternal.sigpmpb.service';
-import { IPersonSig, Origin } from '../interfaces/IPersonSig';
+import { IPersonSig, Origin, OriginType } from '../interfaces/IPersonSig';
 import { CreateUsersService } from '@modules/users/services/create.users.service';
 import { gerarProximaMatricula } from '@shared/utils/matriculaTools';
 import { InjectDataSource } from '@nestjs/typeorm';
@@ -17,7 +17,7 @@ interface IRequest {
   cpf?: string;
   sexo?: string;
   nome_guerra?: string;
-  origem?: string;
+  origem?: OriginType;
 }
 
 @Injectable()
@@ -112,7 +112,7 @@ export class CreatePersonSigService {
     const matricula =
       data.matricula ||
       gerarProximaMatricula(
-        (await this.personSigRepository.findLastMatriculaByOrigin(data?.origem))
+        (await this.personSigRepository.findLastMatriculaByOrigin(data.origem))
           ?.matricula,
       );
 

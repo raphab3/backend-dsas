@@ -30,7 +30,7 @@ export interface IPersonSig {
   cep: number;
   rg: number;
   orgao_exp: string;
-  origem: string;
+  origem: OriginType;
 }
 
 // export enum Origin {

@@ -1,6 +1,10 @@
 import { Dependent } from '@modules/dependents/typeorm/entities/dependent.entity';
 import { Location } from '@modules/locations/typeorm/entities/location.entity';
-import { IPersonSig } from '@modules/persosnSig/interfaces/IPersonSig';
+import {
+  IPersonSig,
+  Origin,
+  OriginType,
+} from '@modules/persosnSig/interfaces/IPersonSig';
 import { User } from '@modules/users/typeorm/entities/user.entity';
 import {
   BeforeInsert,
@@ -110,11 +114,8 @@ export class PersonSig implements IPersonSig {
   @Column({ type: 'varchar', nullable: true })
   orgao_exp: string;
 
-  @Column({ type: 'varchar', nullable: true })
-  origem: string;
-
-  // @Column({ type: 'enum', enum: Origin, default: Origin.PMPB, nullable: true })
-  // origem: OriginType;
+  @Column({ type: 'enum', enum: Origin, default: Origin.PMPB, nullable: true })
+  origem: OriginType;
 
   @ManyToMany(() => Dependent, (dependent) => dependent.person_sigs)
   dependents: Dependent[];
