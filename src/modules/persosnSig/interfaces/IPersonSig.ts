@@ -42,7 +42,6 @@ export interface IPersonSig {
 
 export type OriginType = 'PMPB' | 'CBMPB' | 'FUNCIONARIO_CIVIL' | 'CIVIL';
 
-// Objeto que mapeia os rótulos para os valores do banco de dados
 export const Origin = {
   PMPB: 'PMPB',
   CBMPB: 'CBMPB',

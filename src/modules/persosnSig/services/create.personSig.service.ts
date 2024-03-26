@@ -7,6 +7,7 @@ import { CreateUsersService } from '@modules/users/services/create.users.service
 import { gerarProximaMatricula } from '@shared/utils/matriculaTools';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
+import UsersRepository from '@modules/users/typeorm/repositories/UsersRepository';
 
 interface IRequest {
   matricula?: string;
@@ -26,12 +27,19 @@ export class CreatePersonSigService {
     private readonly personSigRepository: PersonSigRepository,
     private readonly findExternalSigpmpbService: FindExternalSigpmpbService,
     private readonly createUsersService: CreateUsersService,
+    private readonly usersRepository: UsersRepository,
     @InjectDataSource() private readonly dataSource: DataSource,
   ) {}
 
   async execute(data: IRequest): Promise<IPersonSig | HttpException> {
     if (!data.origem) {
       return new HttpException('A origem do servidor é obrigatório', 400);
+    }
+
+    const userExists = await this.usersRepository.findByEmail(data.email);
+
+    if (userExists) {
+      return new HttpException('Email já cadastrado', 409);
     }
 
     return await this.handleOriginType(data);
