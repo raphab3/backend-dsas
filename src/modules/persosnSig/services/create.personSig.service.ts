@@ -36,12 +36,6 @@ export class CreatePersonSigService {
       return new HttpException('A origem do servidor é obrigatório', 400);
     }
 
-    const userExists = await this.usersRepository.findByEmail(data.email);
-
-    if (userExists) {
-      return new HttpException('Email já cadastrado', 409);
-    }
-
     return await this.handleOriginType(data);
   }
 
@@ -67,6 +61,12 @@ export class CreatePersonSigService {
 
     await queryRunner.connect();
     await queryRunner.startTransaction();
+
+    const userExists = await this.usersRepository.findByEmail(data.email);
+
+    if (userExists) {
+      return new HttpException('Email já cadastrado', 409);
+    }
 
     try {
       if (isExternal && !data.matricula) {
