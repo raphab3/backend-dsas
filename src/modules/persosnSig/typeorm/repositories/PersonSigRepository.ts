@@ -7,7 +7,7 @@ import { IPaginatedResult } from '@shared/interfaces/IPaginations';
 import { paginate } from '@shared/utils/Pagination';
 import { PersonSig } from '../entities/personSig.entity';
 import { UpdatePersonSigDto } from '@modules/persosnSig/dto/update-personSig.dto';
-import { IPersonSig } from '@modules/persosnSig/interfaces/IPersonSig';
+import { IPersonSig, Origin } from '@modules/persosnSig/interfaces/IPersonSig';
 import { IQueryPersonSig } from '@modules/persosnSig/interfaces/IQueryPersonSig';
 
 @Injectable()
@@ -38,7 +38,6 @@ class PersonSigRepository implements IPersonSigRepository {
     const personSigCreateQueryBuilder = this.ormRepository
       .createQueryBuilder('person_sig')
       .leftJoinAndSelect('person_sig.locations', 'locations')
-      // .leftJoinAndSelect('person_sig.user', 'user')
       .orderBy('person_sig.created_at', 'DESC');
 
     const where: Partial<any> = {};
@@ -87,6 +86,18 @@ class PersonSigRepository implements IPersonSigRepository {
       .leftJoinAndSelect('person_sig.dependents', 'dependents')
       .where('matricula LIKE :matricula', { matricula: `%${matricula}%` })
       .getOne();
+  }
+
+  public async findLastMatriculaByOrigin(origin: Origin): Promise<IPersonSig> {
+    const personSig = await this.ormRepository
+      .createQueryBuilder('person_sig')
+      .where('origem = :origin', { origin })
+      .andWhere('person_sig.matricula IS NOT NULL')
+      .orderBy('person_sig.matricula', 'DESC')
+      .addOrderBy('person_sig.created_at', 'DESC')
+      .getOne();
+
+    return personSig;
   }
 
   public async delete(id: string): Promise<void> {

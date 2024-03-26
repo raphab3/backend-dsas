@@ -1,8 +1,24 @@
+'use client';
 import { HttpException, Injectable } from '@nestjs/common';
 import PersonSigRepository from '../typeorm/repositories/PersonSigRepository';
 import { FindExternalSigpmpbService } from './findExternal.sigpmpb.service';
-import { IPersonSig } from '../interfaces/IPersonSig';
+import { IPersonSig, Origin } from '../interfaces/IPersonSig';
 import { CreateUsersService } from '@modules/users/services/create.users.service';
+import { gerarProximaMatricula } from '@shared/utils/matriculaTools';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
+
+interface IRequest {
+  matricula?: string;
+  nome?: string;
+  email?: string;
+  ddd?: string;
+  telefone?: string;
+  cpf?: string;
+  sexo?: string;
+  nome_guerra?: string;
+  origem?: Origin;
+}
 
 @Injectable()
 export class CreatePersonSigService {
@@ -10,46 +26,124 @@ export class CreatePersonSigService {
     private readonly personSigRepository: PersonSigRepository,
     private readonly findExternalSigpmpbService: FindExternalSigpmpbService,
     private readonly createUsersService: CreateUsersService,
+    @InjectDataSource() private readonly dataSource: DataSource,
   ) {}
 
-  async execute(matricula: string): Promise<IPersonSig | HttpException> {
-    if (!matricula) {
-      return new HttpException('Matricula is required', 400);
+  async execute(data: IRequest): Promise<IPersonSig | HttpException> {
+    if (!data.origem) {
+      return new HttpException('A origem do servidor é obrigatório', 400);
     }
 
-    const personSigExists =
-      await this.personSigRepository.matriculaExists(matricula);
+    return await this.handleOriginType(data);
+  }
 
-    if (!personSigExists) {
-      const personSig = await this.findExternalSigpmpbService
-        .execute(matricula)
-        .catch((error) => {
-          console.log('FIND_EXTERNAL_SIGPMPB_SERVICE_ERROR', error);
-          return null;
-        });
+  private async handleOriginType(
+    data: IRequest,
+  ): Promise<IPersonSig | HttpException> {
+    switch (data.origem) {
+      case Origin.PMPB:
+        return this.createOrUpdatePersonSig(data, true);
+      case Origin.FUNCIONARIO_CIVIL:
+      case Origin.CIVIL:
+        return this.createOrUpdatePersonSig(data);
+      default:
+        return new HttpException('Origem inválida', 400);
+    }
+  }
 
-      if (personSig) {
-        const personSigInSystem =
-          await this.personSigRepository.create(personSig);
-        if (personSigInSystem) {
-          const userSaved = await this.createUsersService.execute({
-            email: personSigInSystem.email,
-            name: personSigInSystem.nome,
-            password: personSigInSystem.cpf,
-            roles: ['user'],
-          });
+  private async createOrUpdatePersonSig(
+    data: IRequest,
+    isExternal: boolean = false,
+  ): Promise<IPersonSig | HttpException> {
+    const queryRunner = this.dataSource.createQueryRunner();
 
-          if (userSaved) {
-            await this.personSigRepository.update(personSigInSystem.id, {
-              user: {
-                id: userSaved.id,
-              },
-            });
-          }
-        }
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      if (isExternal && !data.matricula) {
+        return new HttpException('Matricula is required for PMPB origin', 400);
       }
-    } else {
-      return new HttpException('Matrícula já existe', 409);
+
+      let personSig: IPersonSig;
+      if (isExternal) {
+        personSig = await this.findExternalPersonSig(data.matricula);
+        if (!personSig) {
+          return new HttpException(
+            'External service error or person not found',
+            404,
+          );
+        }
+      } else {
+        personSig = await this.constructPersonSig(data);
+      }
+
+      const personSigExists = await this.personSigRepository.matriculaExists(
+        personSig.matricula,
+      );
+
+      if (personSigExists) {
+        return new HttpException('Matrícula já existe', 409);
+      }
+
+      const personSigInSystem =
+        await this.personSigRepository.create(personSig);
+      await this.createUserForPersonSig(personSigInSystem);
+
+      return personSigInSystem;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw new HttpException('Erro ao criar servidor', 500);
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  private async findExternalPersonSig(
+    matricula: string,
+  ): Promise<IPersonSig | null> {
+    return this.findExternalSigpmpbService.execute(matricula).catch((error) => {
+      console.log('FIND_EXTERNAL_SIGPMPB_SERVICE_ERROR', error);
+      return null;
+    });
+  }
+
+  private async constructPersonSig(data: IRequest): Promise<IPersonSig> {
+    const matricula =
+      data.matricula ||
+      gerarProximaMatricula(
+        (await this.personSigRepository.findLastMatriculaByOrigin(data.origem))
+          ?.matricula,
+      );
+
+    console.log('matricula', matricula);
+    return {
+      matricula,
+      nome: data.nome,
+      email: data.email,
+      ddd: data.ddd,
+      telefone: data.telefone,
+      cpf: data.cpf,
+      sexo: data.sexo,
+      nome_guerra: data.nome.split(' ')[0],
+      origem: data.origem,
+    } as IPersonSig;
+  }
+
+  private async createUserForPersonSig(personSig: IPersonSig): Promise<void> {
+    const userSaved = await this.createUsersService.execute({
+      email: personSig.email,
+      name: personSig.nome,
+      password: personSig.cpf, // Assuming password is being hashed inside the service
+      roles: ['user'],
+    });
+
+    if (userSaved) {
+      await this.personSigRepository.update(personSig.id, {
+        user: {
+          id: userSaved.id,
+        },
+      });
     }
   }
 }
