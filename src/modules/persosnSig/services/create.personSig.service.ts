@@ -17,7 +17,7 @@ interface IRequest {
   cpf?: string;
   sexo?: string;
   nome_guerra?: string;
-  origem?: Origin;
+  origem?: string;
 }
 
 @Injectable()
@@ -112,7 +112,7 @@ export class CreatePersonSigService {
     const matricula =
       data.matricula ||
       gerarProximaMatricula(
-        (await this.personSigRepository.findLastMatriculaByOrigin(data.origem))
+        (await this.personSigRepository.findLastMatriculaByOrigin(data?.origem))
           ?.matricula,
       );
 

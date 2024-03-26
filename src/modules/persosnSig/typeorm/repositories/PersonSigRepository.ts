@@ -7,7 +7,7 @@ import { IPaginatedResult } from '@shared/interfaces/IPaginations';
 import { paginate } from '@shared/utils/Pagination';
 import { PersonSig } from '../entities/personSig.entity';
 import { UpdatePersonSigDto } from '@modules/persosnSig/dto/update-personSig.dto';
-import { IPersonSig, Origin } from '@modules/persosnSig/interfaces/IPersonSig';
+import { IPersonSig } from '@modules/persosnSig/interfaces/IPersonSig';
 import { IQueryPersonSig } from '@modules/persosnSig/interfaces/IQueryPersonSig';
 
 @Injectable()
@@ -88,7 +88,7 @@ class PersonSigRepository implements IPersonSigRepository {
       .getOne();
   }
 
-  public async findLastMatriculaByOrigin(origin: Origin): Promise<IPersonSig> {
+  public async findLastMatriculaByOrigin(origin: string): Promise<IPersonSig> {
     const personSig = await this.ormRepository
       .createQueryBuilder('person_sig')
       .where('origem = :origin', { origin })

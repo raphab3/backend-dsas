@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Origin } from '../interfaces/IPersonSig';
 
 export class CreatePersonSigDto {
   @ApiProperty({
@@ -16,7 +15,7 @@ export class CreatePersonSigDto {
     example: 'CIVIL',
     required: true,
   })
-  origem: Origin;
+  origem: string;
 
   @ApiProperty({
     description: 'As lotações da pessoa',

@@ -1,7 +1,10 @@
 import { CreatePersonSigDto } from '@modules/persosnSig/dto/create-personSig.dto';
 import { PersonSig } from '../entities/personSig.entity';
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
-import { IPersonSig, Origin } from '@modules/persosnSig/interfaces/IPersonSig';
+import {
+  IPersonSig,
+  OriginType,
+} from '@modules/persosnSig/interfaces/IPersonSig';
 import { IQueryPersonSig } from '@modules/persosnSig/interfaces/IQueryPersonSig';
 
 export default interface IPersonSigRepository {
@@ -12,5 +15,5 @@ export default interface IPersonSigRepository {
   delete(id: string): Promise<void>;
   update(id: string, data: CreatePersonSigDto): Promise<PersonSig>;
   matriculaExists(matricula: string): Promise<boolean>;
-  findLastMatriculaByOrigin(origin: Origin): Promise<IPersonSig>;
+  findLastMatriculaByOrigin(origin: OriginType): Promise<IPersonSig>;
 }
