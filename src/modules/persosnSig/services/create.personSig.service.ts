@@ -8,6 +8,7 @@ import { gerarProximaMatricula } from '@shared/utils/matriculaTools';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import UsersRepository from '@modules/users/typeorm/repositories/UsersRepository';
+import { randomUUID } from 'crypto';
 
 interface IRequest {
   matricula?: string;
@@ -82,6 +83,10 @@ export class CreatePersonSigService {
             404,
           );
         }
+
+        if (personSig.email == '0' || !personSig.email) {
+          personSig.email = generateEmail();
+        }
       } else {
         personSig = await this.constructPersonSig(data);
       }
@@ -94,8 +99,10 @@ export class CreatePersonSigService {
         return new HttpException('Matrícula já existe', 409);
       }
 
-      const personSigInSystem =
-        await this.personSigRepository.create(personSig);
+      const personSigInSystem = await this.personSigRepository.create({
+        ...personSig,
+      });
+
       await this.createUserForPersonSig(personSigInSystem);
 
       return personSigInSystem;
@@ -154,4 +161,8 @@ export class CreatePersonSigService {
       });
     }
   }
+}
+
+function generateEmail() {
+  return `${randomUUID()}@mail.com`;
 }
