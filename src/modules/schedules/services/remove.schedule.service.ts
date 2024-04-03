@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import ScheduleRepository from '../typeorm/repositories/ScheduleRepository';
 
 @Injectable()
@@ -8,11 +8,14 @@ export class RemoveScheduleService {
     const schedule = await this.scheduleRepository.findOne(id);
 
     if (!schedule) {
-      throw new Error('Schedule not found');
+      throw new HttpException('Agenda não encontrada', 404);
     }
 
     if (schedule.appointments.length > 0) {
-      throw new Error('Agenda com agendamentos não pode ser removida');
+      throw new HttpException(
+        'Agenda com agendamentos não pode ser removida',
+        400,
+      );
     }
 
     return await this.scheduleRepository.delete(id);

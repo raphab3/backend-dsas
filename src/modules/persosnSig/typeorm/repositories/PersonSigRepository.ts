@@ -92,11 +92,11 @@ class PersonSigRepository implements IPersonSigRepository {
   }
 
   public async findLastMatriculaByOrigin(
-    origin: OriginType,
+    tipo_servidor: OriginType,
   ): Promise<IPersonSig> {
     const personSig = await this.ormRepository
       .createQueryBuilder('person_sig')
-      .where('origem = :origin', { origin })
+      .where('tipo_servidor = :tipo_servidor', { tipo_servidor })
       .andWhere('person_sig.matricula IS NOT NULL')
       .orderBy('person_sig.matricula', 'DESC')
       .addOrderBy('person_sig.created_at', 'DESC')

@@ -11,7 +11,7 @@ export class CreatePersonSigDto {
   matricula: string;
 
   @ApiProperty({
-    description: 'Origem da pessoa',
+    description: 'Tipo do servidor',
     type: 'enum',
     example: 'CIVIL',
     required: true,
