@@ -30,10 +30,10 @@ export class UpdateScheduleService {
       updateScheduleDto.start_time,
       updateScheduleDto.end_time,
     );
-    await this.checkForConflictingSchedules(
-      updateScheduleDto,
-      updateScheduleDto.professional_id,
-    );
+    // await this.checkForConflictingSchedules(
+    //   updateScheduleDto,
+    //   updateScheduleDto.professional_id,
+    // );
 
     const updatedSchedule = await this.prepareScheduleData(updateScheduleDto);
     return this.scheduleRepository.update(id, updatedSchedule);

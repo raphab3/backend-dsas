@@ -27,7 +27,7 @@ export class CreateScheduleService {
       createScheduleDto.start_time,
       createScheduleDto.end_time,
     );
-    await this.checkForConflictingSchedules(createScheduleDto, professional.id);
+    // await this.checkForConflictingSchedules(createScheduleDto, professional.id);
 
     const schedule = this.prepareScheduleData(createScheduleDto, professional);
     return await this.scheduleRepository.create(schedule);
