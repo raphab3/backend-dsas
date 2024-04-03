@@ -81,6 +81,9 @@ export class CreatePersonSigService {
 
       if (isExternal) {
         personSig = await this.findExternalPersonSig(data.matricula);
+        if (personSig.email == '0' || !personSig.email) {
+          personSig.email = this.generateEmail(`${personSig.matricula}`);
+        }
 
         if (!personSig) {
           return new HttpException(
@@ -178,5 +181,9 @@ export class CreatePersonSigService {
         },
       });
     }
+  }
+
+  private generateEmail(text: string): string {
+    return `${text.toLowerCase()}@pm.pb.gov.br`;
   }
 }
