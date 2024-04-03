@@ -12,4 +12,12 @@ export default interface IScheduleRepository {
   findOne(id: string): Promise<Schedule | undefined>;
   delete(id: string): Promise<void>;
   update(id: string, data: IUpdateSchedule): Promise<Schedule>;
+  findConflictingSchedules(
+    professionalId: string,
+    locationId: string,
+    startDate: Date,
+    endDate: Date,
+    startTime: string,
+    endTime: string,
+  ): Promise<Schedule[]>;
 }

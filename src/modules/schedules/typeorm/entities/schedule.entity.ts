@@ -11,9 +11,19 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 
+@Unique([
+  'code',
+  'professional',
+  'specialty',
+  'location',
+  'available_date',
+  'start_time',
+  'end_time',
+])
 @Entity('schedules')
 export class Schedule implements ISchedule {
   @PrimaryGeneratedColumn('uuid')

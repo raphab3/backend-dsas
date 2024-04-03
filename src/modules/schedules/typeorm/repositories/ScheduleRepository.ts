@@ -10,6 +10,7 @@ import {
   ICreateSchedule,
   IUpdateSchedule,
 } from '@modules/schedules/interfaces/ISchedule';
+import { format } from 'date-fns';
 
 @Injectable()
 class ScheduleRepository implements IScheduleRepository {
@@ -123,6 +124,39 @@ class ScheduleRepository implements IScheduleRepository {
       .returning('*')
       .execute();
     return schedule.raw[0];
+  }
+
+  public async findConflictingSchedules(
+    professionalId: string,
+    locationId: string,
+    startDate: Date,
+    endDate: Date,
+    startTime: string,
+    endTime: string,
+  ): Promise<Schedule[]> {
+    const formattedStartDate =
+      format(startDate, 'yyyy-MM-dd') + ' ' + startTime;
+    const formattedEndDate = format(endDate, 'yyyy-MM-dd') + ' ' + endTime;
+
+    const schedules = await this.ormRepository
+      .createQueryBuilder('schedules')
+      .leftJoinAndSelect('schedules.location', 'location')
+      .leftJoinAndSelect('schedules.professional', 'professional')
+      .where('professional.id = :professionalId', { professionalId })
+      .andWhere('location.id = :locationId', { locationId })
+      .andWhere('schedules.available_date BETWEEN :startDate AND :endDate', {
+        startDate: formattedStartDate,
+        endDate: formattedEndDate,
+      })
+      .andWhere(
+        `
+        (schedules.start_time < :endTime AND schedules.end_time > :startTime)
+      `,
+        { startTime, endTime },
+      )
+      .getMany();
+
+    return schedules;
   }
 }
 
