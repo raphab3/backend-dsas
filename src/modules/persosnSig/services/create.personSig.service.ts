@@ -1,14 +1,13 @@
 'use client';
-import { HttpException, Injectable } from '@nestjs/common';
 import PersonSigRepository from '../typeorm/repositories/PersonSigRepository';
-import { FindExternalSigpmpbService } from './findExternal.sigpmpb.service';
-import { IPersonSig, Origin, OriginType } from '../interfaces/IPersonSig';
-import { CreateUsersService } from '@modules/users/services/create.users.service';
-import { gerarProximaMatricula } from '@shared/utils/matriculaTools';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
 import UsersRepository from '@modules/users/typeorm/repositories/UsersRepository';
-import { randomUUID } from 'crypto';
+import { CreateUsersService } from '@modules/users/services/create.users.service';
+import { DataSource } from 'typeorm';
+import { FindExternalSigpmpbService } from './findExternal.sigpmpb.service';
+import { gerarProximaMatricula } from '@shared/utils/matriculaTools';
+import { HttpException, Injectable } from '@nestjs/common';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { IPersonSig, Origin, OriginType } from '../interfaces/IPersonSig';
 
 interface IRequest {
   matricula?: string;
@@ -19,7 +18,7 @@ interface IRequest {
   cpf?: string;
   sexo?: string;
   nome_guerra?: string;
-  origem?: OriginType;
+  tipo_servidor?: OriginType;
 }
 
 @Injectable()
@@ -33,8 +32,8 @@ export class CreatePersonSigService {
   ) {}
 
   async execute(data: IRequest): Promise<IPersonSig | HttpException> {
-    if (!data.origem) {
-      return new HttpException('A origem do servidor é obrigatório', 400);
+    if (!data.tipo_servidor) {
+      return new HttpException('O tipo do servidor é obrigatório', 400);
     }
 
     return await this.handleOriginType(data);
@@ -43,14 +42,15 @@ export class CreatePersonSigService {
   private async handleOriginType(
     data: IRequest,
   ): Promise<IPersonSig | HttpException> {
-    switch (data.origem) {
+    switch (data.tipo_servidor) {
       case Origin.PMPB:
+      case Origin.CBMPB:
         return this.createOrUpdatePersonSig(data, true);
       case Origin.FUNCIONARIO_CIVIL:
       case Origin.CIVIL:
         return this.createOrUpdatePersonSig(data);
       default:
-        return new HttpException('Origem inválida', 400);
+        return new HttpException('Tipo servidor inválido', 400);
     }
   }
 
@@ -71,12 +71,17 @@ export class CreatePersonSigService {
 
     try {
       if (isExternal && !data.matricula) {
-        return new HttpException('Matricula is required for PMPB origin', 400);
+        return new HttpException(
+          'Matricula is required for PMPB/CBMPB origin',
+          400,
+        );
       }
 
       let personSig: IPersonSig;
+
       if (isExternal) {
         personSig = await this.findExternalPersonSig(data.matricula);
+
         if (!personSig) {
           return new HttpException(
             'External service error or person not found',
@@ -84,8 +89,18 @@ export class CreatePersonSigService {
           );
         }
 
-        if (personSig.email == '0' || !personSig.email) {
-          personSig.email = generateEmail();
+        const tipoServidorEsperado = {
+          PMPB: 'POLICIAL MILITAR',
+          CBMPB: 'BOMBEIRO MILITAR',
+        };
+
+        if (
+          personSig.tipo_servidor !== tipoServidorEsperado[data.tipo_servidor]
+        ) {
+          throw new HttpException(
+            `Esse servidor não é ${data.tipo_servidor}`,
+            400,
+          );
         }
       } else {
         personSig = await this.constructPersonSig(data);
@@ -101,6 +116,7 @@ export class CreatePersonSigService {
 
       const personSigInSystem = await this.personSigRepository.create({
         ...personSig,
+        tipo_servidor: data.tipo_servidor,
       });
 
       await this.createUserForPersonSig(personSigInSystem);
@@ -108,7 +124,7 @@ export class CreatePersonSigService {
       return personSigInSystem;
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      throw new HttpException('Erro ao criar servidor', 500);
+      throw new HttpException(error.message, 400);
     } finally {
       await queryRunner.release();
     }
@@ -127,11 +143,13 @@ export class CreatePersonSigService {
     const matricula =
       data.matricula ||
       gerarProximaMatricula(
-        (await this.personSigRepository.findLastMatriculaByOrigin(data.origem))
-          ?.matricula,
+        (
+          await this.personSigRepository.findLastMatriculaByOrigin(
+            data.tipo_servidor,
+          )
+        )?.matricula,
       );
 
-    console.log('matricula', matricula);
     return {
       matricula,
       nome: data.nome,
@@ -141,7 +159,7 @@ export class CreatePersonSigService {
       cpf: data.cpf,
       sexo: data.sexo,
       nome_guerra: data.nome.split(' ')[0],
-      origem: data.origem,
+      tipo_servidor: data.tipo_servidor,
     } as IPersonSig;
   }
 
@@ -149,7 +167,7 @@ export class CreatePersonSigService {
     const userSaved = await this.createUsersService.execute({
       email: personSig.email,
       name: personSig.nome,
-      password: personSig.cpf, // Assuming password is being hashed inside the service
+      password: personSig.cpf,
       roles: ['user'],
     });
 
@@ -161,8 +179,4 @@ export class CreatePersonSigService {
       });
     }
   }
-}
-
-function generateEmail() {
-  return `${randomUUID()}@mail.com`;
 }

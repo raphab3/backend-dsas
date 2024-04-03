@@ -115,7 +115,7 @@ export class PersonSig implements IPersonSig {
   orgao_exp: string;
 
   @Column({ type: 'enum', enum: Origin, default: Origin.PMPB, nullable: true })
-  origem: OriginType;
+  tipo_servidor: OriginType;
 
   @ManyToMany(() => Dependent, (dependent) => dependent.person_sigs)
   dependents: Dependent[];

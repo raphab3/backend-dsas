@@ -13,17 +13,17 @@ export class FindExternalSigpmpbService {
       },
     };
 
-    try {
-      const { data } = await axios(
-        `${env.API_SIGPMPB}/servidores/${matricula}`,
-        config,
-      );
+    const { data } = await axios(
+      `${env.API_SIGPMPB}/servidores/${matricula}`,
+      config,
+    );
 
-      const { servidor } = data;
+    const { servidor } = data;
 
-      return await servidor;
-    } catch (error) {
-      new HttpException('FIND_EXTERNAL_SIGPMPB_SERVICE_ERROR', 500);
+    if (!servidor) {
+      throw new HttpException('Servidor não encontrado', 404);
     }
+
+    return await servidor;
   }
 }

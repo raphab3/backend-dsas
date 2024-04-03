@@ -30,7 +30,7 @@ export interface IPersonSig {
   cep: number;
   rg: number;
   orgao_exp: string;
-  origem: OriginType;
+  tipo_servidor: OriginType;
 }
 
 // export enum Origin {
@@ -48,3 +48,5 @@ export const Origin = {
   FUNCIONARIO_CIVIL: 'FUNCIONARIO_CIVIL',
   CIVIL: 'CIVIL',
 } as const;
+
+export type TipoServidorExternal = 'POLICIAL MILITAR' | 'BOMBEIRO MILITAR';

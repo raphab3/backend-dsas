@@ -16,7 +16,7 @@ export class CreatePersonSigDto {
     example: 'CIVIL',
     required: true,
   })
-  origem: OriginType;
+  tipo_servidor: OriginType;
 
   @ApiProperty({
     description: 'As lotações da pessoa',
