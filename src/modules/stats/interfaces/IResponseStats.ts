@@ -1,3 +1,4 @@
+import { Professional } from '@modules/professionals/typeorm/entities/professional.entity';
 export interface IResponseStats {
   schedules: {
     total: number;
@@ -17,6 +18,8 @@ export interface IResponseStats {
   appointments: {
     total: number;
     monthly: Record<string, number>;
+    totalHolders: number;
+    totalDependents: number;
     total_canceled: number;
     total_attended: number;
     total_scheduled: number;
@@ -39,5 +42,19 @@ export interface IResponseStats {
         missed: number;
       }
     >;
+  };
+  professionals: {
+    total: number;
+    byLocation: Record<
+      string,
+      { professionals: Professional[]; total: number }
+    >;
+  };
+  patients: {
+    total: number;
+  };
+  employees: {
+    total: number;
+    byType: Record<string, number>;
   };
 }

@@ -4,8 +4,17 @@ import { GetStatsService } from './services/getStats.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Appointment } from '@modules/appointments/typeorm/entities/Appointment.entity';
 import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
+import { Professional } from '@modules/professionals/typeorm/entities/professional.entity';
+import { Patient } from '@modules/patients/typeorm/entities/patient.entity';
+import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
 
-const typeOrmModule = TypeOrmModule.forFeature([Appointment, Schedule]);
+const typeOrmModule = TypeOrmModule.forFeature([
+  Appointment,
+  Schedule,
+  Professional,
+  Patient,
+  PersonSig,
+]);
 
 @Module({
   controllers: [StatsController],
