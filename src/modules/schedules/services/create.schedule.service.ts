@@ -18,16 +18,19 @@ export class CreateScheduleService {
     const professional = await this.validateProfessional(
       createScheduleDto.professional_id,
     );
+
     await this.validateSpecialtyInProfessional(
       professional,
       createScheduleDto.specialty_id,
     );
+
     this.validateLocation(createScheduleDto.location_id);
     this.checkIfStartTimeIsBeforeEndTime(
       createScheduleDto.start_time,
       createScheduleDto.end_time,
     );
-    // await this.checkForConflictingSchedules(createScheduleDto, professional.id);
+
+    await this.checkForConflictingSchedules(createScheduleDto, professional.id);
 
     const schedule = this.prepareScheduleData(createScheduleDto, professional);
     return await this.scheduleRepository.create(schedule);

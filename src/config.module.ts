@@ -40,6 +40,7 @@ import { EntityExceptionFilter } from '@shared/interceptors/EntityPropertyNotFou
 import { LocationsGuard } from '@shared/guards/Location.guard';
 import { City } from '@modules/locations/typeorm/entities/city.entity';
 import { JobModule } from './jobs/Job.module';
+import { StatsModule } from '@modules/stats/Stats.module';
 
 export const entities = [
   User,
@@ -98,6 +99,7 @@ export const MODULES = [
   PermissionModule,
   LocationModule,
   JobModule,
+  StatsModule,
 ];
 
 export const EXTRA_MODULES = [

@@ -4,7 +4,6 @@ import ScheduleRepository from '../typeorm/repositories/ScheduleRepository';
 import ProfessionalRepository from '@modules/professionals/typeorm/repositories/ProfessionalRepository';
 import { IUpdateSchedule } from '../interfaces/ISchedule';
 import SpecialtyRepository from '@modules/specialties/typeorm/repositories/SpecialtyRepository';
-import { format } from 'date-fns';
 
 @Injectable()
 export class UpdateScheduleService {
@@ -30,10 +29,6 @@ export class UpdateScheduleService {
       updateScheduleDto.start_time,
       updateScheduleDto.end_time,
     );
-    // await this.checkForConflictingSchedules(
-    //   updateScheduleDto,
-    //   updateScheduleDto.professional_id,
-    // );
 
     const updatedSchedule = await this.prepareScheduleData(updateScheduleDto);
     return this.scheduleRepository.update(id, updatedSchedule);
@@ -85,46 +80,6 @@ export class UpdateScheduleService {
     if (start >= end) {
       throw new HttpException(
         'O horário de início deve ser anterior ao horário de término',
-        400,
-      );
-    }
-  }
-
-  async checkForConflictingSchedules(
-    updateScheduleDto: UpdateScheduleDto,
-    professionalId: string,
-  ) {
-    const MIN_INTERVAL_MINUTES = 60;
-    const requestedDate = new Date(updateScheduleDto.available_date);
-    const startDate = new Date(
-      requestedDate.getTime() - MIN_INTERVAL_MINUTES * 60000,
-    );
-    const endDate = new Date(
-      requestedDate.getTime() + MIN_INTERVAL_MINUTES * 60000,
-    );
-
-    const conflictingSchedules =
-      await this.scheduleRepository.findConflictingSchedules(
-        professionalId,
-        updateScheduleDto.location_id,
-        startDate,
-        endDate,
-        updateScheduleDto.start_time,
-        updateScheduleDto.end_time,
-      );
-
-    if (conflictingSchedules.length > 0) {
-      const conflictingTimes = conflictingSchedules
-        .map(
-          (schedule) =>
-            `Data: ${format(schedule.available_date, 'dd/MM/yyyy')}, Horário: ${
-              schedule.start_time
-            } até ${schedule.end_time}`,
-        )
-        .join('; ');
-
-      throw new HttpException(
-        `Conflito encontrado com os seguintes agendamentos: ${conflictingTimes}. Por favor, escolha outro horário.`,
         400,
       );
     }

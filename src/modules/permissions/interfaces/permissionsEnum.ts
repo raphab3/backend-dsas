@@ -69,6 +69,7 @@ export enum PermissionsEnum {
   find_one_location = 'find_one_location',
   update_location = 'update_location',
   remove_location = 'remove_location',
+  find_all_stats = 'find_all_stats',
 }
 
 export const PermissionsEnumList: PermissionsEnum[] = Object.keys(
