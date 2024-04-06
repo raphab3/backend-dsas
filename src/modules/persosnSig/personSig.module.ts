@@ -1,5 +1,4 @@
 import PersonSigRepository from './typeorm/repositories/PersonSigRepository';
-import { AuditModule } from '@modules/audits/Audit.module';
 import { CreatePersonSigService } from './services/create.personSig.service';
 import { FindAllPersonSigService } from './services/findAll.personSig.service';
 import { FindByMatriculaPersonSigService } from './services/FindByMatriculaPersonSig.service';
@@ -13,6 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UpdatePersonSigService } from './services/update.personSig.service';
 
 import { UsersModule } from '@modules/users/users.module';
+import AuditModule from '@modules/audits/Audit.module';
 
 const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([PersonSig]);
 

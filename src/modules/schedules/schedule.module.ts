@@ -1,5 +1,4 @@
 import ScheduleRepository from './typeorm/repositories/ScheduleRepository';
-import { AuditModule } from '@modules/audits/Audit.module';
 import { CreateScheduleService } from './services/create.schedule.service';
 import { FindAllScheduleService } from './services/findAll.schedule.service';
 import { FindOneScheduleService } from './services/findOne.schedule.service';
@@ -12,6 +11,7 @@ import { SpecialtyModule } from '@modules/specialties/Specialty.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UpdateScheduleService } from './services/update.schedule.service';
 import { LocationModule } from '@modules/locations/location.module';
+import AuditModule from '@modules/audits/Audit.module';
 
 const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Schedule]);
 

@@ -18,7 +18,7 @@ export class CreateUsersService {
     private readonly usersRepository: UsersRepository,
     @Inject('HashProvider')
     private hashProvider: IHashProvider,
-    private rolesRepository: RoleRepository,
+    private readonly rolesRepository: RoleRepository,
   ) {}
 
   async execute(createUser: CreateUserDto): Promise<CreateUserOutput> {

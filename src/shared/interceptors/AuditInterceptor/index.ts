@@ -14,7 +14,7 @@ import { Reflector } from '@nestjs/core';
 @Injectable()
 class AuditInterceptor implements NestInterceptor {
   constructor(
-    private auditService: AuditService,
+    private readonly auditService: AuditService,
     private readonly reflector: Reflector,
   ) {}
 
@@ -42,8 +42,20 @@ class AuditInterceptor implements NestInterceptor {
           );
         };
 
+        const sensitiveFields = ['password', 'oldPassword'];
+        const filterSensitiveData = (data: any) => {
+          return Object.keys(data).reduce((acc, key) => {
+            if (!sensitiveFields.includes(key)) {
+              acc[key] = data[key];
+            } else {
+              acc[key] = '[FILTRADO]';
+            }
+            return acc;
+          }, {} as any);
+        };
+
         const action = `${method} ${url}`;
-        const details = body ? JSON.stringify(body) : null;
+        const details = body ? JSON.stringify(filterSensitiveData(body)) : null;
         const userId = user?.userId;
         const userIp = ip;
 

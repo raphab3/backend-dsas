@@ -8,7 +8,6 @@ import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { UsersModule } from '@modules/users/users.module';
 import { MeService } from './services/me.service';
-import { FindOneUsersService } from '@modules/users/services/findOne.users.service';
 
 const JWT_CONFIG = JwtModule.register({
   global: true,
@@ -21,7 +20,6 @@ const JWT_CONFIG = JwtModule.register({
   providers: [
     AuthService,
     MeService,
-    FindOneUsersService,
     CryptoHashProvider,
     {
       provide: 'HashProvider',

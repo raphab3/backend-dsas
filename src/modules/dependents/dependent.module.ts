@@ -9,7 +9,7 @@ import { PersonSigModule } from '@modules/persosnSig/personSig.module';
 import { RemoveDependentService } from './services/remove.dependent.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UpdateDependentService } from './services/update.dependent.service';
-import { AuditModule } from '@modules/audits/Audit.module';
+import AuditModule from '@modules/audits/Audit.module';
 
 const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Dependent]);
 

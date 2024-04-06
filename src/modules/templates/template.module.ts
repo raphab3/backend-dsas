@@ -1,5 +1,4 @@
 import TemplateRepository from './typeorm/repositories/TemplateRepository';
-import { AuditModule } from '@modules/audits/Audit.module';
 import { CreateTemplateService } from './services/create.template.service';
 import { FindAllTemplateService } from './services/findAll.template.service';
 import { FindOneTemplateService } from './services/findOne.template.service';
@@ -9,6 +8,7 @@ import { Template } from './typeorm/entities/template.entity';
 import { TemplateController } from './infra/controllers/template.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UpdateTemplateService } from './services/update.template.service';
+import AuditModule from '@modules/audits/Audit.module';
 
 const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Template]);
 

@@ -8,7 +8,7 @@ import { FindAllAssetService } from './services/findAll.Asset.service';
 import { FindOneAssetService } from './services/findOne.Asset.service';
 import { RemoveAssetService } from './services/remove.Asset.service';
 import { UpdateAssetService } from './services/update.Asset.service';
-import { AuditModule } from '@modules/audits/Audit.module';
+import AuditModule from '@modules/audits/Audit.module';
 
 const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Asset]);
 

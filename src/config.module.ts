@@ -5,7 +5,6 @@ import { AppointmentModule } from '@modules/appointments/appointment.module';
 import { Asset } from '@modules/assets/typeorm/entities/Asset.entity';
 import { AssetModule } from '@modules/assets/Asset.module';
 import { Audit } from '@modules/audits/typeorm/entities/Audit.entity';
-import { AuditModule } from '@modules/audits/Audit.module';
 import { AuthModule } from '@modules/auth/auth.module';
 import { DataSourceOptions } from 'typeorm';
 import { Dependent } from '@modules/dependents/typeorm/entities/dependent.entity';
@@ -41,6 +40,7 @@ import { LocationsGuard } from '@shared/guards/Location.guard';
 import { City } from '@modules/locations/typeorm/entities/city.entity';
 import { JobModule } from './jobs/Job.module';
 import { StatsModule } from '@modules/stats/Stats.module';
+import AuditModule from '@modules/audits/Audit.module';
 
 export const entities = [
   User,

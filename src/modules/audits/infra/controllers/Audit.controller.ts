@@ -1,7 +1,9 @@
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FindAllAuditService } from '@modules/audits/services/findAll.Audit.service';
-import { Controller, Get, Req } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { Permission } from '@shared/decorators/Permission';
+import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum';
+import { IQueryAudit } from '@modules/audits/dto/IQueryAudit';
 
 @ApiTags('audits')
 @Controller('audits')
@@ -9,10 +11,9 @@ import { Permission } from '@shared/decorators/Permission';
 export class AuditController {
   constructor(private readonly findAllAuditService: FindAllAuditService) {}
 
-  @Permission('list_audits')
   @Get()
-  findAll(@Req() req: any) {
-    const query = req.query;
+  @Permission(PermissionsEnum.find_all_audits)
+  findAll(@Query() query: IQueryAudit) {
     return this.findAllAuditService.findAll(query);
   }
 }

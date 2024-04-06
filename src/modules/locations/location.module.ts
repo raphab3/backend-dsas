@@ -1,5 +1,4 @@
 import LocationRepository from './typeorm/repositories/LocationRepository';
-import { AuditModule } from '@modules/audits/Audit.module';
 import { CreateLocationService } from './services/create.location.service';
 import { FindAllCitieService } from './services/findAllCities.service';
 import { FindAllLocationService } from './services/findAll.location.service';
@@ -10,6 +9,7 @@ import { Module } from '@nestjs/common';
 import { RemoveLocationService } from './services/remove.location.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UpdateLocationService } from './services/update.location.service';
+import AuditModule from '@modules/audits/Audit.module';
 
 const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Location]);
 

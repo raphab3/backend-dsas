@@ -13,7 +13,7 @@ import {
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter({ logger: true }),
+    new FastifyAdapter({ logger: true, trustProxy: true }),
   );
 
   app.useGlobalFilters(new EntityExceptionFilter());
