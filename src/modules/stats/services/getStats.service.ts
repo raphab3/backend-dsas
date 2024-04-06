@@ -212,7 +212,7 @@ export class GetStatsService {
 
   private aggregateAppointmentsByLocation(appointments: Appointment[]) {
     const aggregated = appointments.reduce((acc, appointment) => {
-      const locationName = appointment.schedule.location.name;
+      const locationName = `${appointment.schedule.location.name} - ${appointment.schedule.location.city}`;
 
       if (!acc[locationName]) {
         acc[locationName] = {
