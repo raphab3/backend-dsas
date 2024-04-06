@@ -81,7 +81,7 @@ export class AppointmentController {
   @Delete(':id')
   @ApiOperation({ summary: 'Remove Appointment' })
   @Permission(PermissionsEnum.remove_appointment)
-  remove(@Param('id') id: string) {
-    return this.removeAppointmentService.remove(id);
+  async remove(@Param('id') id: string) {
+    return await this.removeAppointmentService.remove(id);
   }
 }
