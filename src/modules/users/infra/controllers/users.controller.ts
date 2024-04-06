@@ -122,6 +122,7 @@ export class UsersController {
     return user;
   }
 
+  @AuditLog('RESETAR SENHA USUÁRIO')
   @Patch(':id/reset-password')
   @ApiOperation({ summary: 'Reset password user' })
   @Permission(PermissionsEnum.reset_user_password)

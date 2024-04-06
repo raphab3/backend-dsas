@@ -43,12 +43,13 @@ class AuditInterceptor implements NestInterceptor {
         };
 
         const sensitiveFields = ['password', 'oldPassword'];
+
         const filterSensitiveData = (data: any) => {
           return Object.keys(data).reduce((acc, key) => {
-            if (!sensitiveFields.includes(key)) {
-              acc[key] = data[key];
+            if (sensitiveFields.includes(key)) {
+              acc[key] = '*****';
             } else {
-              acc[key] = '[FILTRADO]';
+              acc[key] = data[key];
             }
             return acc;
           }, {} as any);
