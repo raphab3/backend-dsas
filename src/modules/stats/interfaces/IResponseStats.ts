@@ -40,6 +40,7 @@ export interface IResponseStats {
         canceled: number;
         scheduled: number;
         missed: number;
+        total: number;
       }
     >;
   };

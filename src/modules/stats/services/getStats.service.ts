@@ -211,7 +211,7 @@ export class GetStatsService {
   }
 
   private aggregateAppointmentsByLocation(appointments: Appointment[]) {
-    return appointments.reduce((acc, appointment) => {
+    const aggregated = appointments.reduce((acc, appointment) => {
       const locationName = appointment.schedule.location.name;
 
       if (!acc[locationName]) {
@@ -220,13 +220,26 @@ export class GetStatsService {
           canceled: 0,
           missed: 0,
           attended: 0,
+          total: 0,
         };
       }
 
       acc[locationName][appointment.status] += 1;
+      acc[locationName].total += 1;
 
       return acc;
     }, {});
+
+    const sortedArray = Object.entries(aggregated).sort((a: any, b: any) => {
+      return b[1].total - a[1].total;
+    });
+
+    const sortedObject = sortedArray.reduce((acc, [key, value]) => {
+      acc[key] = value;
+      return acc;
+    }, {});
+
+    return sortedObject; // Ou retornar sortedArray, se preferir trabalhar com arrays.
   }
 
   private calculateTotalsByStatus(appointments: Appointment[]) {
