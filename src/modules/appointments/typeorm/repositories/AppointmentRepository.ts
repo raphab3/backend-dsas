@@ -64,16 +64,16 @@ class AppointmentRepository implements IAppointmentRepository {
 
     if (query.available_date) {
       const startDate = new Date(query.available_date);
-      startDate.setHours(0, 0, 0, 0);
+      startDate.setUTCHours(0, 0, 0, 0);
 
       const endDate = new Date(query.available_date);
-      endDate.setHours(23, 59, 59, 999);
+      endDate.setUTCHours(23, 59, 59, 999);
 
       appointmentsCreateQueryBuilder.andWhere(
-        'schedule.available_date BETWEEN :start_date AND :end_date',
+        'schedule.available_date BETWEEN :start AND :end',
         {
-          start_date: startDate.toISOString(),
-          end_date: endDate.toISOString(),
+          start: startDate.toISOString().split('T')[0],
+          end: endDate.toISOString().split('T')[0],
         },
       );
     }
