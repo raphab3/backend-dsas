@@ -8,6 +8,7 @@ import { gerarProximaMatricula } from '@shared/utils/matriculaTools';
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { IPersonSig, Origin, OriginType } from '../interfaces/IPersonSig';
+import validateEmail from '@shared/utils/validateEmail';
 
 interface IRequest {
   matricula?: string;
@@ -81,7 +82,11 @@ export class CreatePersonSigService {
 
       if (isExternal) {
         personSig = await this.findExternalPersonSig(data.matricula);
-        if (personSig.email == '0' || !personSig.email) {
+        if (
+          personSig.email == '0' ||
+          !personSig.email ||
+          !validateEmail(personSig.email)
+        ) {
           personSig.email = this.generateEmail(`${personSig.matricula}`);
         }
 
