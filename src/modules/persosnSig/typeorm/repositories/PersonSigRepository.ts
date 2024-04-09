@@ -126,8 +126,6 @@ class PersonSigRepository implements IPersonSigRepository {
 
     Object.assign(personSig, data);
 
-    console.log('personSig: ', personSig);
-
     await this.ormRepository.save(personSig);
 
     return personSig;

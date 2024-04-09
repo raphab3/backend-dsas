@@ -13,8 +13,6 @@ export class UpdatePasswordUsersService {
   async execute(id: string, updateUser: Partial<UpdateUserDto>): Promise<void> {
     const userFound = await this.usersRepository.findOne(id);
 
-    console.log('userFound', userFound);
-
     if (!userFound) {
       throw new HttpException('Usuário não encontrado', 404);
     }
@@ -29,14 +27,6 @@ export class UpdatePasswordUsersService {
 
     const passwordMatched = await this.hashProvider.compareHash(
       updateUser.oldPassword,
-      userFound.password,
-      userFound.salt,
-    );
-
-    console.log(
-      'passwordMatched',
-      passwordMatched,
-      updateUser.password,
       userFound.password,
       userFound.salt,
     );

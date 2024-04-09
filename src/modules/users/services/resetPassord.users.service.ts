@@ -12,10 +12,6 @@ export class ResetPasswordUsersService {
   async execute(id: string): Promise<void> {
     const userFound = await this.usersRepository.findOne(id);
 
-    console.log('userFound', userFound);
-
-    console.log('userFound', userFound);
-
     if (!userFound) {
       throw new HttpException('Usuário não encontrado', 404);
     }

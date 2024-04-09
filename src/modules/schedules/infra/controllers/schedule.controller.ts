@@ -54,9 +54,7 @@ export class ScheduleController {
   @Permission(PermissionsEnum.find_all_appointments)
   @Locations()
   findAll(@Req() req: any, @Query() query: IQuerySchedule) {
-    console.log('req', req.user.userId);
     const userLocations = req.userLocations;
-    console.log('userLocations', userLocations);
 
     if (!query.locations) {
       query.locations = userLocations;

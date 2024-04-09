@@ -19,7 +19,6 @@ class DependentRepository implements IDependentRepository {
   public async create(data: ICreateDependent): Promise<Dependent> {
     const dependent = this.ormRepository.create(data);
 
-    console.log('create: ', dependent);
     await this.ormRepository.save(dependent);
     return dependent;
   }

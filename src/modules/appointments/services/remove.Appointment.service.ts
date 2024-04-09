@@ -7,8 +7,6 @@ export class RemoveAppointmentService {
   async remove(id: string): Promise<void> {
     const appointment = await this.appointmentRepository.findOne(id);
 
-    console.log(appointment);
-
     if (!appointment) {
       throw new HttpException('Consulta não encontrada', 404);
     }

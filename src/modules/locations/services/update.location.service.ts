@@ -6,7 +6,6 @@ import { ICreateLocation } from '../interfaces/ILocation';
 export class UpdateLocationService {
   constructor(private readonly locationRepository: LocationRepository) {}
   update(id: string, updateLocation: ICreateLocation) {
-    console.log('updateLocation', updateLocation);
     return this.locationRepository.update(id, updateLocation);
   }
 }

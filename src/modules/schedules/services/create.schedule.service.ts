@@ -109,8 +109,6 @@ export class CreateScheduleService {
         createScheduleDto.end_time,
       );
 
-    console.log('conflictingSchedules: ', conflictingSchedules);
-
     if (conflictingSchedules.length > 0) {
       throw new HttpException(
         'Existe(m) agenda(s) para este profissional e local em um horário muito próximo.',

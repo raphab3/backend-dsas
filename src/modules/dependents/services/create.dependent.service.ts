@@ -37,8 +37,6 @@ export class CreateDependentService {
       ],
     };
 
-    console.log('newDependent: ', newDependent);
-
     await this.dependentRepository.create(newDependent);
   }
 }

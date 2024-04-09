@@ -45,7 +45,6 @@ export class Specialty {
   @BeforeInsert()
   @BeforeUpdate()
   ensureNameIsUppercase() {
-    console.log('ensureNameIsUppercase');
     this.name = this.name.toUpperCase();
   }
 }

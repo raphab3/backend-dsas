@@ -127,7 +127,6 @@ export class UsersController {
   @ApiOperation({ summary: 'Reset password user' })
   @Permission(PermissionsEnum.reset_user_password)
   async resetPassword(@Param('id') id: string): Promise<void> {
-    console.log('id', id);
     await this.resetPasswordUsersService.execute(id);
   }
 }

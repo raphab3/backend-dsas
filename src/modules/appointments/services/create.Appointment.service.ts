@@ -45,8 +45,6 @@ export class CreateAppointmentService {
       createAppointmentDto.dependent_id,
     );
 
-    console.log('patient', patient);
-
     // Criação do agendamento
     const savedAppointment = await this.createAppointment(
       schedule.id,

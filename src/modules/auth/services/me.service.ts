@@ -17,8 +17,6 @@ export class MeService {
       throw new Error('User not found');
     }
 
-    console.log('user: ', user);
-
     return {
       id: user.id,
       email: user.email,

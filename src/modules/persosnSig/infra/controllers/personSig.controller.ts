@@ -52,7 +52,6 @@ export class PersonSigController {
   @HttpCode(201)
   @Permission(PermissionsEnum.create_personSig)
   create(@Body() createPersonSigDto: CreatePersonSigDto) {
-    console.log('createPersonSigDto', createPersonSigDto);
     return this.createPersonSigService.execute({
       ...createPersonSigDto,
     });
