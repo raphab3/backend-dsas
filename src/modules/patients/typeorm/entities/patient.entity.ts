@@ -22,7 +22,7 @@ export class Patient {
   @JoinColumn()
   person_sig: PersonSig;
 
-  @ManyToOne(() => Dependent, { nullable: true })
+  @ManyToOne(() => Dependent, { nullable: true, onDelete: 'CASCADE' })
   @JoinColumn()
   dependent: Dependent;
 

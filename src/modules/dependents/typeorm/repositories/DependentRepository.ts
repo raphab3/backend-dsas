@@ -78,6 +78,8 @@ class DependentRepository implements IDependentRepository {
     return this.ormRepository
       .createQueryBuilder('dependents')
       .leftJoinAndSelect('dependents.person_sigs', 'person_sigs')
+      .leftJoinAndSelect('dependents.patients', 'patients')
+      .leftJoinAndSelect('patients.appointments', 'appointments')
       .where('dependents.id = :id', { id })
       .getOne();
   }
