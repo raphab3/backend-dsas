@@ -11,9 +11,7 @@ export class RemoveDependentService {
       throw new HttpException('Dependente não encontrado', 404);
     }
 
-    console.log('dependent: ', dependent);
-
-    if (dependent.patients[0].appointments.length > 0) {
+    if (dependent.patients[0]?.appointments.length > 0) {
       throw new HttpException('Dependente possui atendimentos', 400);
     }
 
