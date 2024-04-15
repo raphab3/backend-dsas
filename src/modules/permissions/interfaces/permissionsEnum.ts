@@ -82,6 +82,8 @@ export const groupsOfPermissions = {
   admin: [...PermissionsEnumList],
   user: [PermissionsEnum.auth_sing_in, PermissionsEnum.auth_me],
   manager: [
+    PermissionsEnum.remove_dependent,
+    PermissionsEnum.remove_patient,
     PermissionsEnum.create_location,
     PermissionsEnum.remove_location,
     PermissionsEnum.update_location,
