@@ -91,21 +91,32 @@ export class Schedule extends BaseEntity implements ISchedule {
   updated_at: Date;
 
   async incrementPatientsAttended() {
-    if (
-      typeof this.patients_attended !== 'number' ||
-      isNaN(this.patients_attended)
-    ) {
-      this.patients_attended = 0;
+    console.log('Incrementing patients attended');
+    const schedule = await Schedule.findOne({
+      where: { id: this.id },
+    });
+
+    if (!schedule) {
+      throw new Error('Schedule not found');
     }
 
-    this.patients_attended += 1;
-    await this.save();
+    schedule.patients_attended += 1;
+    await schedule.save();
   }
 
   async decrementPatientsAttended() {
-    if (this.patients_attended > 0) {
-      this.patients_attended -= 1;
-      await this.save();
+    console.log('Decrementing patients attended');
+    const schedule = await Schedule.findOne({
+      where: { id: this.id },
+    });
+
+    if (!schedule) {
+      throw new Error('Schedule not found');
+    }
+
+    if (schedule.patients_attended > 0) {
+      schedule.patients_attended -= 1;
+      await schedule.save();
     }
   }
 }

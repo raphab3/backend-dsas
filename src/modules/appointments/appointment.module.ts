@@ -13,8 +13,9 @@ import { PersonSigModule } from '@modules/persosnSig/personSig.module';
 import { PatientModule } from '@modules/patients/patient.module';
 import { DependentModule } from '@modules/dependents/dependent.module';
 import AuditModule from '@modules/audits/Audit.module';
+import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
 
-const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Appointment]);
+const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Appointment, Schedule]);
 
 @Module({
   controllers: [AppointmentController],

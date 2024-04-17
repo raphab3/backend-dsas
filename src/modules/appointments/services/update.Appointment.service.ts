@@ -1,10 +1,18 @@
-import { HttpException, Injectable } from '@nestjs/common';
-import { UpdateAppointmentDto } from '../dto/update-Appointment.dto';
 import AppointmentRepository from '../typeorm/repositories/AppointmentRepository';
+import { HttpException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
+import { StatusAppointmentEnum } from '../interfaces/IAppointment';
+import { UpdateAppointmentDto } from '../dto/update-Appointment.dto';
 
 @Injectable()
 export class UpdateAppointmentService {
-  constructor(private readonly appointmentRepository: AppointmentRepository) {}
+  constructor(
+    private readonly appointmentRepository: AppointmentRepository,
+    @InjectRepository(Schedule)
+    private readonly scheduleRepository: Repository<Schedule>,
+  ) {}
   async update(id: string, updateAppointmentDto: UpdateAppointmentDto) {
     if (!id) {
       throw new HttpException('Id do agendamento não informado', 400);
@@ -23,6 +31,41 @@ export class UpdateAppointmentService {
       patient_id: appointment.patient.id,
     };
 
-    return await this.appointmentRepository.update(id, dataUpdate);
+    const appointmentUpdated = await this.appointmentRepository.update(
+      id,
+      dataUpdate,
+    );
+
+    await this.syncSchedulePatients(appointment.schedule.id);
+
+    return appointmentUpdated;
+  }
+
+  private async syncSchedulePatients(schedule_id: string): Promise<void> {
+    const schedule = await this.scheduleRepository.findOne({
+      where: { id: schedule_id },
+      relations: ['appointments'],
+    });
+
+    if (!schedule) {
+      console.error('Schedule not found.');
+      return;
+    }
+
+    const realPatientsAttended = schedule.appointments.filter(
+      (app) =>
+        app.status === StatusAppointmentEnum.SCHEDULED ||
+        app.status === StatusAppointmentEnum.ATTENDED,
+    ).length;
+
+    console.log('Real patients attended:', realPatientsAttended);
+
+    if (schedule.patients_attended !== realPatientsAttended) {
+      console.log(
+        `Updating patients attended count from ${schedule.patients_attended} to ${realPatientsAttended}`,
+      );
+      schedule.patients_attended = realPatientsAttended;
+      await schedule.save();
+    }
   }
 }
