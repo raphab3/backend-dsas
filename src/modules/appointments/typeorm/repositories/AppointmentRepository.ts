@@ -8,6 +8,8 @@ import { IPaginatedResult } from '@shared/interfaces/IPaginations';
 import { paginate } from '@shared/utils/Pagination';
 import { ICreateAppointment } from '@modules/appointments/interfaces/ICreateAppintment';
 import { QueryAppointmentDto } from '@modules/appointments/dto/query-Appointment.dto';
+import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
+import { Patient } from '@modules/patients/typeorm/entities/patient.entity';
 
 @Injectable()
 class AppointmentRepository implements IAppointmentRepository {
@@ -30,13 +32,17 @@ class AppointmentRepository implements IAppointmentRepository {
       await this.ormRepository.save(appointment);
       return appointment;
     } catch (error) {
+      console.log('error', error);
       if (error.code === '23505') {
         throw new HttpException(
           'Erro ao criar agendamento, já existe um agendamento para este paciente e horário',
           409,
         );
       }
-      new HttpException('Erro ao criar agendamento, tente novamente', 500);
+      throw new HttpException(
+        'Erro ao criar agendamento, tente novamente',
+        500,
+      );
     }
   }
 
@@ -85,6 +91,12 @@ class AppointmentRepository implements IAppointmentRepository {
           matricula: `%${query.matricula}%`,
         },
       );
+    }
+
+    if (query.schedule_id) {
+      appointmentsCreateQueryBuilder.andWhere('schedule.id = :schedule_id', {
+        schedule_id: query.schedule_id,
+      });
     }
 
     if (query.patient_name) {
@@ -190,26 +202,34 @@ class AppointmentRepository implements IAppointmentRepository {
     await this.ormRepository.delete(id);
   }
 
+  public async remove(appointment: Appointment): Promise<void> {
+    await this.ormRepository.remove(appointment);
+  }
+
   public async update(
     id: string,
     data: UpdateAppointmentDto & { schedule_id: string; patient_id: string },
   ): Promise<Appointment> {
-    const builder = this.ormRepository.createQueryBuilder();
-    const appointment = await builder
-      .update(Appointment)
-      .set({
-        schedule: {
-          id: data.schedule_id,
-        },
-        patient: {
-          id: data.patient_id,
-        },
-        status: data.status,
-      })
-      .where('id = :id', { id })
-      .returning('*')
-      .execute();
-    return appointment.raw[0];
+    const appointment = await this.ormRepository.findOne({
+      where: { id },
+    });
+    if (!appointment) {
+      throw new Error('Appointment not found');
+    }
+
+    // Aqui, você atribui diretamente os valores atualizados para a entidade
+    if (data.schedule_id) {
+      appointment.schedule = { id: data.schedule_id } as Schedule;
+    }
+    if (data.patient_id) {
+      appointment.patient = { id: data.patient_id } as Patient; // o mesmo aqui
+    }
+    appointment.status = data.status; // atualiza o status
+
+    // O método save() agora dispara os eventos @BeforeUpdate, @AfterUpdate, etc.
+    await this.ormRepository.save(appointment);
+
+    return appointment;
   }
 }
 

@@ -2,7 +2,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { UpdateScheduleDto } from '../dto/update-schedule.dto';
 import ScheduleRepository from '../typeorm/repositories/ScheduleRepository';
 import ProfessionalRepository from '@modules/professionals/typeorm/repositories/ProfessionalRepository';
-import { IUpdateSchedule } from '../interfaces/ISchedule';
+import { ISchedule, IUpdateSchedule } from '../interfaces/ISchedule';
 import SpecialtyRepository from '@modules/specialties/typeorm/repositories/SpecialtyRepository';
 
 @Injectable()
@@ -18,6 +18,7 @@ export class UpdateScheduleService {
       throw new HttpException('Agenda não encontrada', 404);
     }
 
+    this.validateMaxPatients(scheduleExists, updateScheduleDto.max_patients);
     await this.validateProfessional(updateScheduleDto.professional_id);
     await this.validateSpecialty(updateScheduleDto.specialty_id);
     await this.validateSpecialtyInProfessional(
@@ -112,5 +113,20 @@ export class UpdateScheduleService {
       end_time: updateScheduleDto.end_time,
       max_patients: updateScheduleDto.max_patients,
     };
+  }
+
+  /**
+   * Valida o novo valor de max_patients antes de aplicar a atualização ao schedule.
+   * @param schedule A entidade Schedule que será atualizada.
+   * @param newMaxPatients O novo valor proposto para max_patients.
+   * @throws Error se o novo valor for menor que o número de pacientes já atendidos.
+   */
+  validateMaxPatients(schedule: ISchedule, newMaxPatients: number): void {
+    if (newMaxPatients < schedule.patients_attended) {
+      throw new HttpException(
+        `O valor máximo de pacientes não pode ser menor que o total de vagas preenchidas, que atualmente é ${schedule.patients_attended}.`,
+        400,
+      );
+    }
   }
 }

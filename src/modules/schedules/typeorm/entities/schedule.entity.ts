@@ -4,6 +4,7 @@ import { Professional } from '@modules/professionals/typeorm/entities/profession
 import { ISchedule } from '@modules/schedules/interfaces/ISchedule';
 import { Specialty } from '@modules/specialties/typeorm/entities/Specialty.entity';
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -25,7 +26,7 @@ import {
   'end_time',
 ])
 @Entity('schedules')
-export class Schedule implements ISchedule {
+export class Schedule extends BaseEntity implements ISchedule {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -88,4 +89,23 @@ export class Schedule implements ISchedule {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  async incrementPatientsAttended() {
+    if (
+      typeof this.patients_attended !== 'number' ||
+      isNaN(this.patients_attended)
+    ) {
+      this.patients_attended = 0;
+    }
+
+    this.patients_attended += 1;
+    await this.save();
+  }
+
+  async decrementPatientsAttended() {
+    if (this.patients_attended > 0) {
+      this.patients_attended -= 1;
+      await this.save();
+    }
+  }
 }

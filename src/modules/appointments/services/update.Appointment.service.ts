@@ -23,6 +23,6 @@ export class UpdateAppointmentService {
       patient_id: appointment.patient.id,
     };
 
-    return this.appointmentRepository.update(id, dataUpdate);
+    return await this.appointmentRepository.update(id, dataUpdate);
   }
 }

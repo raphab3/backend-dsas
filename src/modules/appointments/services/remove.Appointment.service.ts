@@ -18,6 +18,6 @@ export class RemoveAppointmentService {
       );
     }
 
-    await this.appointmentRepository.delete(id);
+    await this.appointmentRepository.remove(appointment);
   }
 }

@@ -51,9 +51,6 @@ export class CreateAppointmentService {
       patient.id,
     );
 
-    // Atualização da agenda
-    await this.updateSchedule(schedule.id, schedule.patients_attended + 1);
-
     return savedAppointment;
   }
 
@@ -119,7 +116,6 @@ export class CreateAppointmentService {
       if (!patient) {
         patient = await this.patientRepository.create({
           person_sig_id: personSig.id,
-          // Não passa dependent_id, indicando que é um titular
         });
       }
     }
@@ -138,12 +134,6 @@ export class CreateAppointmentService {
     return this.appointmentRepository.create({
       schedule_id: scheduleId,
       patient_id: patientId,
-    });
-  }
-
-  private async updateSchedule(scheduleId: string, patientsAttended: number) {
-    return this.scheduleRepository.update(scheduleId, {
-      patients_attended: patientsAttended,
     });
   }
 }

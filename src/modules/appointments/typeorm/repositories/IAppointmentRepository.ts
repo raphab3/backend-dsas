@@ -9,6 +9,7 @@ export default interface IAppointmentRepository {
   list(query: QueryAppointmentDto): Promise<IPaginatedResult<Appointment>>;
   findOne(id: string): Promise<Appointment | undefined>;
   delete(id: string): Promise<void>;
+  remove(appointment: Appointment): Promise<void>;
   update(id: string, data: Partial<UpdateAppointmentDto>): Promise<Appointment>;
   existsAppointmentForPatientSchedule(
     patient_id: string,
