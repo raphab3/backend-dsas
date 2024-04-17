@@ -74,24 +74,8 @@ export class GetStatsService {
     const appointmentsByLocation =
       this.aggregateAppointmentsByLocation(appointments);
 
-    const appointmentsBySpecialty = appointments.reduce((acc, appointment) => {
-      const specialtyName = appointment.schedule.specialty.name;
-
-      if (!acc[specialtyName]) {
-        acc[specialtyName] = {
-          attended: 0,
-          canceled: 0,
-          scheduled: 0,
-          missed: 0,
-          total: 0,
-        };
-      }
-
-      acc[specialtyName][appointment.status] += 1;
-      acc[specialtyName].total += 1;
-
-      return acc;
-    }, {});
+    const appointmentsBySpecialty =
+      this.aggregateAppointmentsBySpecialty(appointments);
 
     const totalsByStatus = this.calculateTotalsByStatus(appointments);
     const totalByStatusByMonth =
@@ -261,7 +245,39 @@ export class GetStatsService {
       return acc;
     }, {});
 
-    return sortedObject; // Ou retornar sortedArray, se preferir trabalhar com arrays.
+    return sortedObject;
+  }
+
+  private aggregateAppointmentsBySpecialty(appointments: Appointment[]) {
+    const aggregated = appointments.reduce((acc, appointment) => {
+      const specialtyName = appointment.schedule.specialty.name;
+
+      if (!acc[specialtyName]) {
+        acc[specialtyName] = {
+          scheduled: 0,
+          canceled: 0,
+          missed: 0,
+          attended: 0,
+          total: 0,
+        };
+      }
+
+      acc[specialtyName][appointment.status] += 1;
+      acc[specialtyName].total += 1;
+
+      return acc;
+    }, {});
+
+    const sortedArray = Object.entries(aggregated).sort((a: any, b: any) => {
+      return b[1].total - a[1].total;
+    });
+
+    const sortedObject = sortedArray.reduce((acc, [key, value]) => {
+      acc[key] = value;
+      return acc;
+    }, {});
+
+    return sortedObject;
   }
 
   private calculateTotalsByStatus(appointments: Appointment[]) {
