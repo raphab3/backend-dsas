@@ -87,6 +87,15 @@ class AppointmentRepository implements IAppointmentRepository {
       );
     }
 
+    if (query.patient_name) {
+      appointmentsCreateQueryBuilder.andWhere(
+        `COALESCE(dependent.name, person_sig.nome) ILIKE :name`,
+        {
+          name: `%${query.patient_name}%`,
+        },
+      );
+    }
+
     if (query.locations) {
       try {
         appointmentsCreateQueryBuilder.andWhere(

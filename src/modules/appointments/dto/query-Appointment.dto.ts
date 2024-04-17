@@ -42,6 +42,13 @@ export class QueryAppointmentDto extends IQuery {
   professional_name?: string;
 
   @ApiProperty({
+    description: 'The patient name of the appomentment',
+    type: 'string',
+    required: false,
+  })
+  patient_name?: string;
+
+  @ApiProperty({
     description: 'The status of the appomentment',
     type: statusAppointmentOfTypeEnum,
     required: false,
