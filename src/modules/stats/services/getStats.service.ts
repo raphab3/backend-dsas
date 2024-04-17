@@ -73,6 +73,26 @@ export class GetStatsService {
     const appointmentsByMonth = this.aggregateAppointmentsByMonth(appointments);
     const appointmentsByLocation =
       this.aggregateAppointmentsByLocation(appointments);
+
+    const appointmentsBySpecialty = appointments.reduce((acc, appointment) => {
+      const specialtyName = appointment.schedule.specialty.name;
+
+      if (!acc[specialtyName]) {
+        acc[specialtyName] = {
+          attended: 0,
+          canceled: 0,
+          scheduled: 0,
+          missed: 0,
+          total: 0,
+        };
+      }
+
+      acc[specialtyName][appointment.status] += 1;
+      acc[specialtyName].total += 1;
+
+      return acc;
+    }, {});
+
     const totalsByStatus = this.calculateTotalsByStatus(appointments);
     const totalByStatusByMonth =
       this.calculateTotalByStatusByMonth(appointments);
@@ -104,6 +124,7 @@ export class GetStatsService {
         total_missed: totalsByStatus['missed'] || 0,
         totalByStatusByMonth,
         byLocation: appointmentsByLocation,
+        bySpecialty: appointmentsBySpecialty,
       },
       professionals: {
         total: totalProfessionalsCount,
@@ -180,6 +201,7 @@ export class GetStatsService {
       relations: [
         'schedule',
         'schedule.location',
+        'schedule.specialty',
         'patient',
         'patient.dependent',
       ],

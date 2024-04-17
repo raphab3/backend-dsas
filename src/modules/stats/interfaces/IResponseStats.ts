@@ -24,6 +24,16 @@ export interface IResponseStats {
     total_attended: number;
     total_scheduled: number;
     total_missed: number;
+    bySpecialty: Record<
+      string,
+      {
+        attended: number;
+        canceled: number;
+        scheduled: number;
+        missed: number;
+        total: number;
+      }
+    >;
     totalByStatusByMonth: Record<
       string,
       {
