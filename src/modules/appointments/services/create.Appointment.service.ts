@@ -63,6 +63,10 @@ export class CreateAppointmentService {
     }
 
     const schedule = await this.scheduleRepository.findOne(scheduleId);
+
+    /* TODO: Validar se a data da agenda é maior que a data atual
+       Deixar comentado enquando os cadastros dos meses anteriores não forem feitos
+       
     const currentDate = new Date();
     const scheduleDate = new Date(
       `${schedule.available_date}T${schedule.end_time}`,
@@ -74,6 +78,7 @@ export class CreateAppointmentService {
         HttpStatus.NOT_FOUND,
       );
     }
+    */
 
     if (schedule.max_patients <= schedule.patients_attended) {
       throw new HttpException('Agenda cheia', HttpStatus.CONFLICT);
