@@ -1,4 +1,3 @@
-import env from '@config/env';
 import {
   WebSocketGateway,
   WebSocketServer,
@@ -11,7 +10,7 @@ import { Socket, Server } from 'socket.io';
 
 @WebSocketGateway({
   cors: {
-    origin: env.BACKOFFICE_URL,
+    origin: '*',
     methods: ['GET', 'POST'],
     credentials: true,
   },
