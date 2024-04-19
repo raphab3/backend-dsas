@@ -65,4 +65,11 @@ export class QueryAppointmentDto extends IQuery {
     required: false,
   })
   schedule_id?: string;
+
+  @ApiProperty({
+    description: 'Schedule code',
+    type: 'string',
+    example: '123456',
+  })
+  schedule_code: string;
 }
