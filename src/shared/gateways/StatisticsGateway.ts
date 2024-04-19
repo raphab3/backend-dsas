@@ -1,3 +1,4 @@
+import env from '@config/env';
 import {
   WebSocketGateway,
   WebSocketServer,
@@ -10,7 +11,9 @@ import { Socket, Server } from 'socket.io';
 
 @WebSocketGateway({
   cors: {
-    origin: '*',
+    origin: env.BACKOFFICE_URL,
+    methods: ['GET', 'POST'],
+    credentials: true,
   },
 })
 export class StatisticsGateway implements OnGatewayInit, OnGatewayConnection {
