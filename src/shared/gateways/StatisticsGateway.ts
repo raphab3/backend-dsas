@@ -11,8 +11,6 @@ import { Socket, Server } from 'socket.io';
 @WebSocketGateway({
   cors: {
     origin: '*',
-    methods: ['GET', 'POST'],
-    credentials: true,
   },
 })
 export class StatisticsGateway implements OnGatewayInit, OnGatewayConnection {
