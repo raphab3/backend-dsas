@@ -42,6 +42,16 @@ class ScheduleRepository implements IScheduleRepository {
         });
       }
 
+      if (query.start_date && query.end_date) {
+        scheduleCreateQueryBuilder.andWhere(
+          'schedules.available_date BETWEEN :start_date AND :end_date',
+          {
+            start_date: query.start_date,
+            end_date: query.end_date,
+          },
+        );
+      }
+
       if (query.professional_matricula) {
         scheduleCreateQueryBuilder.andWhere(
           'professional_person_sig.matricula ILike :matricula',
