@@ -198,22 +198,39 @@ export class GetStatsService {
   }
 
   private aggregateAppointmentsByMonth(appointments: Appointment[]) {
-    return appointments.reduce((acc, appointment) => {
-      const appointmentDate = new Date(appointment.schedule.available_date);
-      const monthYearKey = `${appointmentDate.getFullYear()}-${(
-        appointmentDate.getMonth() + 1
-      )
-        .toString()
-        .padStart(2, '0')}`;
+    const aggregateAppointmentsByLocation = appointments.reduce(
+      (acc, appointment) => {
+        const appointmentDate = new Date(appointment.schedule.available_date);
+        const monthYearKey = `${appointmentDate.getFullYear()}-${(
+          appointmentDate.getMonth() + 1
+        )
+          .toString()
+          .padStart(2, '0')}`;
 
-      if (!acc[monthYearKey]) {
-        acc[monthYearKey] = 0;
-      }
+        if (!acc[monthYearKey]) {
+          acc[monthYearKey] = 0;
+        }
 
-      acc[monthYearKey] += 1;
+        acc[monthYearKey] += 1;
 
+        return acc;
+      },
+      {},
+    );
+
+    // order by month
+    const sortedArray = Object.entries(aggregateAppointmentsByLocation).sort(
+      (a: any, b: any) => {
+        return new Date(a[0]).getTime() - new Date(b[0]).getTime();
+      },
+    );
+
+    const sortedObject = sortedArray.reduce((acc, [key, value]) => {
+      acc[key] = value;
       return acc;
     }, {});
+
+    return sortedObject;
   }
 
   private aggregateAppointmentsByLocation(appointments: Appointment[]) {
