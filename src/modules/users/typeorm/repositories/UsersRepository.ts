@@ -1,6 +1,6 @@
 import IUsersRepository from './IUsersRepository';
 import { ICreateUser } from '@modules/users/interfaces/ICreateUser';
-import { ILike, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
@@ -36,36 +36,54 @@ class UsersRepository implements IUsersRepository {
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.roles', 'roles')
       .leftJoinAndSelect('user.person_sig', 'person_sig')
+      .leftJoinAndSelect('person_sig.locations', 'locations')
       .orderBy('user.created_at', 'DESC');
 
-    const where: Partial<IUserQuery> = {};
-
     if (query.id) {
-      where.id = query.id;
+      usersCreateQueryBuilder.andWhere('user.id = :id', { id: query.id });
     }
 
     if (query.name) {
-      where.name = ILike(`%${query.name}%`);
+      usersCreateQueryBuilder.andWhere('user.name ILIKE :name', {
+        name: `%${query.name}%`,
+      });
     }
 
     if (query.email) {
-      where.email = ILike(`%${query.email}%`);
+      usersCreateQueryBuilder.andWhere('user.email ILIKE :email', {
+        email: `%${query.email}%`,
+      });
     }
 
     if (query.role) {
-      where.role = query.role;
+      usersCreateQueryBuilder.andWhere('roles.name ILIKE :role', {
+        role: `%${query.role}%`,
+      });
+    }
+
+    if (query.role_id) {
+      usersCreateQueryBuilder.andWhere('roles.id = :role_id', {
+        role_id: query.role_id,
+      });
+    }
+
+    if (query.location_id) {
+      usersCreateQueryBuilder.andWhere('locations.id = :location_id', {
+        location_id: query.location_id,
+      });
     }
 
     if (query.matricula) {
-      where.person_sig = {
-        matricula: ILike(`%${query.matricula}%`),
-      };
+      usersCreateQueryBuilder.andWhere(
+        'person_sig.matricula ILIKE :matricula',
+        {
+          matricula: `%${query.matricula}%`,
+        },
+      );
     }
 
     if (query.page) page = query.page;
     if (query.perPage) perPage = query.perPage;
-
-    usersCreateQueryBuilder.where(where);
 
     const result: IPaginatedResult<IUser> = await paginate(
       usersCreateQueryBuilder,

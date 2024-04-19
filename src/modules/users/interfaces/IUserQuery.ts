@@ -10,4 +10,6 @@ export interface IUserQuery extends IQuery {
   person_sig?: {
     matricula?: FindOperator<string> | string;
   };
+  role_id?: FindOperator<string> | string;
+  location_id?: FindOperator<string> | string;
 }
