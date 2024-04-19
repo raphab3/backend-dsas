@@ -41,6 +41,8 @@ import { City } from '@modules/locations/typeorm/entities/city.entity';
 import { JobModule } from './jobs/Job.module';
 import { StatsModule } from '@modules/stats/Stats.module';
 import AuditModule from '@modules/audits/Audit.module';
+import { GatewaysModule } from '@shared/gateways/gateways.module';
+import { EventsModule } from '@shared/events/Events.module';
 
 export const entities = [
   User,
@@ -105,6 +107,8 @@ export const MODULES = [
 export const EXTRA_MODULES = [
   TYPE_ORM_MODULE,
   RATE_LIMIT_MODULE,
+  GatewaysModule,
+  EventsModule,
   SeedModule,
   // MailModule,
   // NotificationModule,

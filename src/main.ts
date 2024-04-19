@@ -25,7 +25,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('SigSaúde API')
     .setDescription('API do sistema de gestão de saúde')
-    .addServer(`${env.APP_API_URL}/api/v1`, `${env.NODE_ENV} - server`)
+    .addServer(`${env.API_URL}/api/v1`, `${env.NODE_ENV} - server`)
     .addBearerAuth(
       {
         type: 'http',

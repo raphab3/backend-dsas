@@ -7,8 +7,8 @@ const envSchema = z.object({
   SERVER_PORT: z.coerce.number().default(9001),
 
   APP_HOST: z.string(),
-  APP_API_URL: z.string(),
-  APP_URL: z.string(),
+  API_URL: z.string(),
+  BACKOFFICE_URL: z.string(),
 
   DB_HOST: z.string(),
   DB_PORT: z.coerce.number(),

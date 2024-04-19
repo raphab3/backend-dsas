@@ -7,6 +7,8 @@ import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
 import { Professional } from '@modules/professionals/typeorm/entities/professional.entity';
 import { Patient } from '@modules/patients/typeorm/entities/patient.entity';
 import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
+import { GatewaysModule } from '@shared/gateways/gateways.module';
+import { EventsModule } from '@shared/events/Events.module';
 
 const typeOrmModule = TypeOrmModule.forFeature([
   Appointment,
@@ -19,7 +21,7 @@ const typeOrmModule = TypeOrmModule.forFeature([
 @Module({
   controllers: [StatsController],
   providers: [GetStatsService],
-  imports: [typeOrmModule],
+  imports: [typeOrmModule, GatewaysModule, EventsModule],
   exports: [],
 })
 export class StatsModule {}

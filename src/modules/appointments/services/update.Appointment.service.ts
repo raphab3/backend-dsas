@@ -5,10 +5,12 @@ import { Repository } from 'typeorm';
 import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
 import { StatusAppointmentEnum } from '../interfaces/IAppointment';
 import { UpdateAppointmentDto } from '../dto/update-Appointment.dto';
+import { EventsService } from '@shared/events/EventsService';
 
 @Injectable()
 export class UpdateAppointmentService {
   constructor(
+    private readonly eventsService: EventsService,
     private readonly appointmentRepository: AppointmentRepository,
     @InjectRepository(Schedule)
     private readonly scheduleRepository: Repository<Schedule>,
@@ -37,6 +39,8 @@ export class UpdateAppointmentService {
     );
 
     await this.syncSchedulePatients(appointment.schedule.id);
+
+    this.eventsService.emit('statsUpdated');
 
     return appointmentUpdated;
   }

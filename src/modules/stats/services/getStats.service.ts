@@ -1,6 +1,6 @@
 import { Appointment } from '@modules/appointments/typeorm/entities/Appointment.entity';
 import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Repository } from 'typeorm';
 import { IQueryStats } from '../interfaces/IQueryStats';
@@ -8,10 +8,14 @@ import { IResponseStats } from '../interfaces/IResponseStats';
 import { Professional } from '@modules/professionals/typeorm/entities/professional.entity';
 import { Patient } from '@modules/patients/typeorm/entities/patient.entity';
 import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
+import { StatisticsGateway } from '../../../shared/gateways/StatisticsGateway';
+import { EventsService } from '@shared/events/EventsService';
 
 @Injectable()
-export class GetStatsService {
+export class GetStatsService implements OnModuleInit {
   constructor(
+    private eventsService: EventsService,
+    private statsGateway: StatisticsGateway,
     @InjectRepository(Appointment)
     private readonly appointmentRepository: Repository<Appointment>,
     @InjectRepository(Schedule)
@@ -23,6 +27,14 @@ export class GetStatsService {
     @InjectRepository(PersonSig)
     private readonly personSigRepository: Repository<PersonSig>,
   ) {}
+
+  onModuleInit() {
+    this.eventsService.on('statsUpdated', async () => {
+      console.log('Stats updated event received');
+      const updatedStats = await this.execute({});
+      this.statsGateway.sendUpdatedStats(updatedStats);
+    });
+  }
 
   async execute(query: IQueryStats): Promise<IResponseStats> {
     let startDate: Date;

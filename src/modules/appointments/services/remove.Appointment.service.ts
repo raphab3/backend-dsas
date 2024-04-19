@@ -1,9 +1,13 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import AppointmentRepository from '../typeorm/repositories/AppointmentRepository';
+import { EventsService } from '@shared/events/EventsService';
 
 @Injectable()
 export class RemoveAppointmentService {
-  constructor(private readonly appointmentRepository: AppointmentRepository) {}
+  constructor(
+    private readonly eventsService: EventsService,
+    private readonly appointmentRepository: AppointmentRepository,
+  ) {}
   async remove(id: string): Promise<void> {
     const appointment = await this.appointmentRepository.findOne(id);
 
@@ -19,5 +23,6 @@ export class RemoveAppointmentService {
     }
 
     await this.appointmentRepository.remove(appointment);
+    this.eventsService.emit('statsUpdated');
   }
 }

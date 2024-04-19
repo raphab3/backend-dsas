@@ -4,10 +4,12 @@ import PersonSigRepository from '@modules/persosnSig/typeorm/repositories/Person
 import ScheduleRepository from '@modules/schedules/typeorm/repositories/ScheduleRepository';
 import { CreateAppointmentDto } from '../dto/create-Appointment.dto';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { EventsService } from '@shared/events/EventsService';
 
 @Injectable()
 export class CreateAppointmentService {
   constructor(
+    private readonly eventsService: EventsService,
     private readonly appointmentRepository: AppointmentRepository,
     private readonly scheduleRepository: ScheduleRepository,
     private readonly personSigRepository: PersonSigRepository,
@@ -15,14 +17,6 @@ export class CreateAppointmentService {
   ) {}
 
   async execute(createAppointmentDto: CreateAppointmentDto) {
-    /*
-     * Verifica se o servidor existe
-     * Verifica a disponibilidade da agenda antes de processar o paciente
-     * Refatoração para criação/recuperação do paciente, deve criar com o person_sig_id e o dependent_id
-     * Criação do agendamento
-     * Atualização da agenda
-     * */
-
     const personSig = await this.personSigRepository.findByMatricula(
       createAppointmentDto.matricula,
     );
@@ -131,9 +125,13 @@ export class CreateAppointmentService {
   }
 
   private async createAppointment(scheduleId: string, patientId: string) {
-    return this.appointmentRepository.create({
+    const appointment = await this.appointmentRepository.create({
       schedule_id: scheduleId,
       patient_id: patientId,
     });
+
+    this.eventsService.emit('statsUpdated');
+
+    return appointment;
   }
 }
