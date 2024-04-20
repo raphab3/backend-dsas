@@ -31,8 +31,7 @@ export class GetStatsService implements OnModuleInit {
   onModuleInit() {
     this.eventsService.on('statsUpdated', async () => {
       console.log('Stats updated event received');
-      const updatedStats = await this.execute({});
-      this.statsGateway.sendUpdatedStats(updatedStats);
+      this.statsGateway.notifyStatsUpdated();
     });
   }
 
@@ -381,13 +380,13 @@ export class GetStatsService implements OnModuleInit {
       professional.locations.forEach((location) => {
         const locationName = location.name;
         if (!accumulator[locationName]) {
-          accumulator[locationName] = { professionals: [], total: 0 }; // Initialize total
+          accumulator[locationName] = { professionals: [], total: 0 };
         }
         accumulator[locationName].professionals.push({
           id: professional.id,
           name: professional.person_sig.nome,
         });
-        accumulator[locationName].total++; // Increment the total count
+        accumulator[locationName].total++;
       });
       return accumulator;
     }, {});

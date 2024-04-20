@@ -31,12 +31,10 @@ export class StatisticsGateway implements OnGatewayInit, OnGatewayConnection {
 
   async handleConnection(@ConnectedSocket() client: Socket) {
     console.log('Client connected', client.id);
-    // Emitir imediatamente as estatísticas atuais quando o cliente se conectar
-    this.eventsService.emit('statsUpdated');
   }
 
-  sendUpdatedStats(data: any) {
-    console.log('Emitindo evento de atualização de estatísticas', data);
-    this.server.emit('updateStats', data);
+  notifyStatsUpdated() {
+    console.log('Stats updated event received');
+    this.server.emit('statsUpdated', { updated: true });
   }
 }
