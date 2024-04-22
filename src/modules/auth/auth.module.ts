@@ -12,7 +12,7 @@ import { MeService } from './services/me.service';
 const JWT_CONFIG = JwtModule.register({
   global: true,
   secret: env.JWT_SECRET,
-  signOptions: { expiresIn: '60s' },
+  signOptions: { expiresIn: '24h' },
 });
 
 @Module({
