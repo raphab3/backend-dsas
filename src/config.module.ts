@@ -71,7 +71,6 @@ export const databaseConfig: DataSourceOptions = {
   database: env.DB_DATABASE,
   entities: [...entities],
   synchronize: true,
-  ssl: true,
 };
 
 export const TYPE_ORM_MODULE = TypeOrmModule.forRoot({

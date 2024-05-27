@@ -57,6 +57,6 @@ async function bootstrap() {
 
   await app.register(fastifyCsrfProtection);
 
-  await app.listen(env.SERVER_PORT);
+  await app.listen(env.SERVER_PORT, '0.0.0.0');
 }
 bootstrap();
