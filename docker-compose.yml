@@ -14,6 +14,8 @@ services:
       - '5432:5432'
     volumes:
       - postgres_db:/var/lib/postgresql/data
+    networks:
+      - sigsaude_net
 
 networks:
   sigsaude_net:
