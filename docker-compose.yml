@@ -14,7 +14,6 @@ services:
       - '5432:5432'
     volumes:
       - postgres_db:/var/lib/postgresql/data
-      - /docker/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
     networks:
       - sigsaude_net
 
