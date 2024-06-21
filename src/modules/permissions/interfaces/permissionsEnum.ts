@@ -22,6 +22,7 @@ export enum PermissionsEnum {
   remove_permission = 'remove_permission',
   find_all_audits = 'find_all_audits',
   create_appointment = 'create_appointment',
+  create_enduser_appointment = 'create_enduser_appointment',
   find_all_appointments = 'find_all_appointments',
   find_one_appointment = 'find_one_appointment',
   update_appointment = 'update_appointment',
@@ -80,7 +81,11 @@ export type PermissionType = (typeof PermissionsEnumList)[number];
 
 export const groupsOfPermissions = {
   admin: [...PermissionsEnumList],
-  user: [PermissionsEnum.auth_sing_in, PermissionsEnum.auth_me],
+  user: [
+    PermissionsEnum.auth_sing_in,
+    PermissionsEnum.auth_me,
+    PermissionsEnum.create_enduser_appointment,
+  ],
   manager: [
     PermissionsEnum.remove_dependent,
     PermissionsEnum.remove_patient,

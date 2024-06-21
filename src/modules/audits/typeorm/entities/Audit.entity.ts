@@ -53,6 +53,24 @@ export class Audit {
   })
   audit_log: string;
 
+  @Column({
+    type: 'text',
+    nullable: true,
+  })
+  requestBody: string;
+
+  @Column({
+    type: 'text',
+    nullable: true,
+  })
+  responsePayload: string;
+
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  responseStatus: number;
+
   @CreateDateColumn()
   created_at: Date;
 

@@ -85,7 +85,19 @@ class LocationRepository implements ILocationRepository {
       },
     );
 
-    return result;
+    const formattedData = result.data.map((location) => ({
+      id: location.id,
+      name: location.name,
+      description: location.description,
+      city: location.city,
+      created_at: location.created_at,
+      updated_at: location.updated_at,
+    }));
+
+    return {
+      data: formattedData,
+      pagination: result.pagination,
+    };
   }
 
   public async findOne(id: string): Promise<Location | undefined> {

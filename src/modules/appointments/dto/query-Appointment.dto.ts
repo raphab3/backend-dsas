@@ -72,4 +72,11 @@ export class QueryAppointmentDto extends IQuery {
     example: '123456',
   })
   schedule_code: string;
+
+  @ApiProperty({
+    description: 'The nearest appointment',
+    type: 'boolean',
+    required: false,
+  })
+  nearest_appointment: boolean;
 }

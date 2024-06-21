@@ -20,10 +20,15 @@ import {
   UseInterceptors,
   Query,
   Req,
+  NotFoundException,
 } from '@nestjs/common';
 import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum';
 import { QueryAppointmentDto } from '@modules/appointments/dto/query-Appointment.dto';
 import { Locations } from '@shared/decorators/Location';
+import { FindAllByEnduserAppointmentService } from '@modules/appointments/services/findAllByEndUserAppointment.service';
+import { validate as uuidValidate } from 'uuid';
+import { CreateEndUserAppointmentService } from '@modules/appointments/services/createEnduser.Appointment.service';
+import { CreateEndUserAppointmentDto } from '@modules/appointments/dto/create-enduser-Appointment.dto';
 
 @ApiTags('appointments')
 @Controller('appointments')
@@ -32,7 +37,9 @@ import { Locations } from '@shared/decorators/Location';
 export class AppointmentController {
   constructor(
     private readonly createAppointmentService: CreateAppointmentService,
+    private readonly createEndUserAppointmentService: CreateEndUserAppointmentService,
     private readonly findAllAppointmentService: FindAllAppointmentService,
+    private readonly findAllByEnduserAppointmentService: FindAllByEnduserAppointmentService,
     private readonly findOneAppointmentService: FindOneAppointmentService,
     private readonly updateAppointmentService: UpdateAppointmentService,
     private readonly removeAppointmentService: RemoveAppointmentService,
@@ -44,6 +51,16 @@ export class AppointmentController {
   @Permission(PermissionsEnum.create_appointment)
   create(@Body() createAppointmentDto: CreateAppointmentDto) {
     return this.createAppointmentService.execute(createAppointmentDto);
+  }
+
+  @AuditLog('CRIAR APPOINTMENT ENDUSER')
+  @Post('enduser')
+  @ApiOperation({ summary: 'Create EndUser Appointment' })
+  // @Permission(PermissionsEnum.create_enduser_appointment)
+  createEndUserAppointment(
+    @Body() createAppointmentDto: CreateEndUserAppointmentDto,
+  ) {
+    return this.createEndUserAppointmentService.execute(createAppointmentDto);
   }
 
   @Get()
@@ -62,8 +79,14 @@ export class AppointmentController {
   @Get(':id')
   @ApiOperation({ summary: 'Find one Appointment' })
   @Permission(PermissionsEnum.find_one_appointment)
-  findOne(@Param('id') id: string) {
-    return this.findOneAppointmentService.findOne(id);
+  async findOne(@Param('id') id: string, @Query() query: QueryAppointmentDto) {
+    if (uuidValidate(id)) {
+      return this.findOneAppointmentService.findOne(id);
+    } else if (id === 'enduser') {
+      return this.findAllByEnduserAppointmentService.findAll(query);
+    } else {
+      throw new NotFoundException('Invalid identifier');
+    }
   }
 
   @AuditLog('ATUALIZAR APPOINTMENT')

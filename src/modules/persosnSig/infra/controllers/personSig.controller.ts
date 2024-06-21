@@ -20,6 +20,7 @@ import {
   Query,
   UseGuards,
   UseInterceptors,
+  Req,
 } from '@nestjs/common';
 import { GetAllPersonSiglDto } from '@modules/persosnSig/dto/GetAllPersonSig.dto';
 import { FindByMatriculaPersonSigService } from '@modules/persosnSig/services/FindByMatriculaPersonSig.service';
@@ -29,6 +30,8 @@ import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
 import { AuditLog } from '@modules/audits/decorators';
 import { Permission } from '@shared/decorators/Permission';
 import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum';
+import { GetByUserIdPersonSigDto } from '@modules/persosnSig/dto/GetByUserIdPersonSigDto';
+import { FindByUserIdPersonSigService } from '@modules/persosnSig/services/FindByUserIdPersonSig.service';
 
 @ApiTags('personSig')
 @Controller('persons-sig')
@@ -44,6 +47,7 @@ export class PersonSigController {
     private readonly removePersonSigService: RemovePersonSigService,
     private readonly findExternalSigpmpbService: FindExternalSigpmpbService,
     private readonly findByMatriculaPersonSigService: FindByMatriculaPersonSigService,
+    private readonly findByUserIdPersonSigService: FindByUserIdPersonSigService,
   ) {}
 
   @AuditLog('CRIAR SERVIDOR SIGPMPB')
@@ -86,6 +90,14 @@ export class PersonSigController {
   @Permission(PermissionsEnum.find_one_personSig)
   async findByMatricula(@Query() query: GetByMatriculaPersonSigDto) {
     return await this.findByMatriculaPersonSigService.execute(query.matricula);
+  }
+
+  @Get('user')
+  @ApiOperation({ summary: 'Find PersonSig by userId' })
+  @Permission(PermissionsEnum.find_one_personSig)
+  async findByUserId(@Req() req: any, @Query() query: GetByUserIdPersonSigDto) {
+    query.userId = req?.user?.userId;
+    return await this.findByUserIdPersonSigService.execute(query.userId);
   }
 
   @AuditLog('ATUALIZAR SERVIDOR SIGPMPB')

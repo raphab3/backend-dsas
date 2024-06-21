@@ -1,31 +1,34 @@
 import AppointmentRepository from '../typeorm/repositories/AppointmentRepository';
 import PatientRepository from '@modules/patients/typeorm/repositories/PatientRepository';
-import PersonSigRepository from '@modules/persosnSig/typeorm/repositories/PersonSigRepository';
 import ScheduleRepository from '@modules/schedules/typeorm/repositories/ScheduleRepository';
-import { CreateAppointmentDto } from '../dto/create-Appointment.dto';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { EventsService } from '@shared/events/EventsService';
+import { CreateEndUserAppointmentDto } from '../dto/create-enduser-Appointment.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
-export class CreateAppointmentService {
+export class CreateEndUserAppointmentService {
   constructor(
     private readonly eventsService: EventsService,
     private readonly appointmentRepository: AppointmentRepository,
     private readonly scheduleRepository: ScheduleRepository,
-    private readonly personSigRepository: PersonSigRepository,
+    @InjectRepository(PersonSig)
+    private readonly personSigRepository: Repository<PersonSig>,
     private readonly patientRepository: PatientRepository,
   ) {}
 
-  async execute(createAppointmentDto: CreateAppointmentDto) {
-    const personSig = await this.personSigRepository.findByMatricula(
-      createAppointmentDto.matricula,
-    );
+  async execute(createAppointmentDto: CreateEndUserAppointmentDto) {
+    const personSig = await this.personSigRepository.findOne({
+      where: {
+        id: createAppointmentDto.person_sig_id,
+      },
+      relations: ['dependents'],
+    });
 
     if (!personSig) {
-      throw new HttpException(
-        `Servidor com matrícula ${createAppointmentDto.matricula} não encontrado`,
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException(`Servidor não encontrado`, HttpStatus.NOT_FOUND);
     }
 
     // Verifica a disponibilidade da agenda antes de processar o paciente
@@ -57,7 +60,8 @@ export class CreateAppointmentService {
 
     /* TODO: Validar se a data da agenda é maior que a data atual
        Deixar comentado enquando os cadastros dos meses anteriores não forem feitos
-       
+    */
+
     const currentDate = new Date();
     const scheduleDate = new Date(
       `${schedule.available_date}T${schedule.end_time}`,
@@ -69,7 +73,6 @@ export class CreateAppointmentService {
         HttpStatus.NOT_FOUND,
       );
     }
-    */
 
     if (schedule.max_patients <= schedule.patients_attended) {
       throw new HttpException('Agenda cheia', HttpStatus.CONFLICT);

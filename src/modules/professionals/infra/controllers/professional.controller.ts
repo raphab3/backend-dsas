@@ -14,15 +14,16 @@ import {
   Patch,
   Param,
   Delete,
-  Req,
   UseGuards,
   UseInterceptors,
+  Query,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '@shared/guards/Jwt-auth.guard';
 import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
 import { AuditLog } from '@modules/audits/decorators';
 import { Permission } from '@shared/decorators/Permission';
 import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum';
+import { QueryProfessionalDto } from '@modules/professionals/dto/query-professional.dto';
 
 @ApiTags('professionals')
 @Controller('professionals')
@@ -49,8 +50,7 @@ export class ProfessionalController {
   @Get()
   @ApiOperation({ summary: 'Find all Professional' })
   @Permission(PermissionsEnum.find_all_professionals)
-  findAll(@Req() req: any) {
-    const query = req.query;
+  findAll(@Query() query: QueryProfessionalDto) {
     return this.findAllProfessionalService.findAll(query);
   }
 

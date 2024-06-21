@@ -21,6 +21,8 @@ export class MeService {
       id: user.id,
       email: user.email,
       name: user.name,
+      person_sig_id: user?.person_sig.id,
+      matricula: user?.person_sig?.matricula,
       roles: user?.roles,
       locations: user?.person_sig?.locations,
     };

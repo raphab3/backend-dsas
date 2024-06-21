@@ -15,8 +15,15 @@ import { DependentModule } from '@modules/dependents/dependent.module';
 import AuditModule from '@modules/audits/Audit.module';
 import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
 import { EventsModule } from '@shared/events/Events.module';
+import { FindAllByEnduserAppointmentService } from './services/findAllByEndUserAppointment.service';
+import { CreateEndUserAppointmentService } from './services/createEnduser.Appointment.service';
+import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
 
-const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Appointment, Schedule]);
+const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([
+  Appointment,
+  Schedule,
+  PersonSig,
+]);
 
 @Module({
   controllers: [AppointmentController],
@@ -24,7 +31,9 @@ const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Appointment, Schedule]);
     AppointmentRepository,
     FindOneAppointmentService,
     CreateAppointmentService,
+    CreateEndUserAppointmentService,
     FindAllAppointmentService,
+    FindAllByEnduserAppointmentService,
     UpdateAppointmentService,
     RemoveAppointmentService,
   ],

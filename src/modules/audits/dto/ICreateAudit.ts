@@ -6,4 +6,7 @@ export interface ICreateAudit {
   audit_log: string;
   url: string;
   method: string;
+  requestBody: any;
+  responsePayload: any;
+  responseStatus: number;
 }

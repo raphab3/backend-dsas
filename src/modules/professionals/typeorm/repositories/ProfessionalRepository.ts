@@ -43,8 +43,15 @@ class ProfessionalRepository implements IProfessionalRepository {
       .orderBy('professionals.created_at', 'DESC');
 
     if (query.id) {
-      professionalsCreateQueryBuilder.andWhere('professionals.id = :id', {
+      professionalsCreateQueryBuilder.where('professionals.id = :id', {
         id: query.id,
+      });
+    }
+
+    if (query.location_id) {
+      console.log('query.location_id', query.location_id);
+      professionalsCreateQueryBuilder.andWhere('locations.id = :location', {
+        location: query.location_id,
       });
     }
 
@@ -62,16 +69,10 @@ class ProfessionalRepository implements IProfessionalRepository {
     }
 
     if (query.specialty) {
-      professionalsCreateQueryBuilder.where(
+      professionalsCreateQueryBuilder.andWhere(
         'specialties.name ILike :specialty',
         { specialty: `%${query.specialty}%` },
       );
-    }
-
-    if (query.location_id) {
-      professionalsCreateQueryBuilder.where('locations.id = :location', {
-        location: query.location_id,
-      });
     }
 
     if (query.specialty_id) {

@@ -13,6 +13,7 @@ import { UpdatePersonSigService } from './services/update.personSig.service';
 
 import { UsersModule } from '@modules/users/users.module';
 import AuditModule from '@modules/audits/Audit.module';
+import { FindByUserIdPersonSigService } from './services/FindByUserIdPersonSig.service';
 
 const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([PersonSig]);
 
@@ -27,6 +28,7 @@ const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([PersonSig]);
     RemovePersonSigService,
     FindExternalSigpmpbService,
     FindByMatriculaPersonSigService,
+    FindByUserIdPersonSigService,
   ],
   imports: [TYPE_ORM_TEMPLATES, AuditModule, UsersModule],
   exports: [PersonSigRepository],

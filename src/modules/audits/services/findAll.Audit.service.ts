@@ -1,27 +1,63 @@
-import { HttpException, Injectable } from '@nestjs/common';
-import AuditRepository from '../typeorm/repositories/AuditRepository';
+import { Injectable } from '@nestjs/common';
 import { IQueryAudit } from '../dto/IQueryAudit';
-import UsersRepository from '@modules/users/typeorm/repositories/UsersRepository';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Audit } from '../typeorm/entities/Audit.entity';
+import { IPaginatedResult } from '@shared/interfaces/IPaginations';
+import { paginate } from '@shared/utils/Pagination';
 
 @Injectable()
 export class FindAllAuditService {
   constructor(
-    private readonly auditRepository: AuditRepository,
-    private readonly userRepository: UsersRepository,
+    @InjectRepository(Audit)
+    private readonly auditRepository: Repository<Audit>,
   ) {}
 
   async findAll(query: IQueryAudit): Promise<any> {
-    if (query.matricula) {
-      const user = await this.userRepository.list({
-        matricula: query.matricula,
-      });
-
-      if (!user) {
-        throw new HttpException('Servidor não encontrado', 404);
-      }
-
-      query.userId = user.data[0].id;
+    try {
+      const audits = await this.list(query);
+      return audits;
+    } catch (error) {
+      return {
+        data: [],
+        pagination: {
+          total: 0,
+          page: 1,
+          perPage: 10,
+        },
+      };
     }
-    return this.auditRepository.list(query);
+  }
+
+  private async list(query: IQueryAudit): Promise<IPaginatedResult<Audit>> {
+    let page = 1;
+    let perPage = 10;
+
+    const usersCreateQueryBuilder = this.auditRepository
+      .createQueryBuilder('audit')
+      .orderBy('audit.created_at', 'DESC');
+
+    if (query.id) {
+      usersCreateQueryBuilder.andWhere('audit.id = :id', { id: query.id });
+    }
+
+    if (query.userId) {
+      usersCreateQueryBuilder.andWhere('audit.userId = :userId', {
+        userId: query.userId,
+      });
+    }
+
+    if (query.page) page = query.page;
+    if (query.perPage) perPage = query.perPage;
+
+    const result: IPaginatedResult<Audit> = await paginate(
+      usersCreateQueryBuilder,
+      {
+        page,
+        perPage,
+      },
+    );
+
+    return result;
   }
 }

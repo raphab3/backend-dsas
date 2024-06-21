@@ -18,7 +18,10 @@ class AuditInterceptor implements NestInterceptor {
     private readonly reflector: Reflector,
   ) {}
 
-  logger = new Logger(AuditInterceptor.name);
+  private readonly logger = new Logger(AuditInterceptor.name);
+  private readonly auditMethods = ['POST', 'PUT', 'PATCH', 'DELETE'];
+  private readonly excludeRoutes = ['auth', 'audits'];
+  private readonly sensitiveFields = ['password', 'oldPassword'];
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const auditLog = this.reflector.get(AUDIT_LOG_DATA, context.getHandler());
@@ -26,57 +29,71 @@ class AuditInterceptor implements NestInterceptor {
       return next.handle();
     }
 
+    const request = context.switchToHttp().getRequest();
+    if (!this.shouldAudit(request)) {
+      return next.handle();
+    }
+
+    const auditData = this.captureRequestData(request);
+
     return next.handle().pipe(
-      tap(() => {
-        const request = context.switchToHttp().getRequest();
-        const auditMethods = ['POST', 'PUT', 'PATCH', 'DELETE'];
-        const { method, url, body, user, ip } = request;
+      tap(async (data) => {
+        const response = context.switchToHttp().getResponse();
+        const filteredRequestBody = this.filterSensitiveData(
+          auditData.requestBody,
+        );
 
-        const excludeRoutes = ['auth'];
-
-        const isToAudit = (req: any) => {
-          return (
-            req.raw.method &&
-            auditMethods.includes(req.raw.method) &&
-            !req.url.includes(excludeRoutes.join('|'))
-          );
-        };
-
-        const sensitiveFields = ['password', 'oldPassword'];
-
-        const filterSensitiveData = (data: any) => {
-          return Object.keys(data).reduce((acc, key) => {
-            if (sensitiveFields.includes(key)) {
-              acc[key] = '*****';
-            } else {
-              acc[key] = data[key];
-            }
-            return acc;
-          }, {} as any);
-        };
-
-        const action = `${method} ${url}`;
-        const details = body ? JSON.stringify(filterSensitiveData(body)) : null;
-        const userId = user?.userId;
-        const userIp = ip;
-
-        if (!isToAudit(request)) return;
-
-        this.auditService
+        await this.auditService
           .execute({
-            userId,
-            action,
-            details,
-            userIp,
+            ...auditData,
+            requestBody: filteredRequestBody,
+            responsePayload: data,
+            responseStatus: response.statusCode,
             audit_log: auditLog,
-            url,
-            method,
+            action: auditLog,
+            details: JSON.stringify(filteredRequestBody),
+            userIp: auditData.ip,
+            url: auditData.path,
           })
-          .catch((error) =>
-            console.error('Erro ao gravar a ação de auditoria', error),
-          );
+          .catch((error) => {
+            this.logger.error('Erro ao gravar a ação de auditoria', error);
+          });
       }),
     );
+  }
+
+  private shouldAudit(request: any): boolean {
+    return (
+      this.auditMethods.includes(request.method) &&
+      !this.excludeRoutes.some((route) => request.url.includes(route))
+    );
+  }
+
+  private captureRequestData(request: any) {
+    return {
+      startTime: new Date().toISOString(),
+      ip: request.ip,
+      method: request.method,
+      path: request.url,
+      userId: request.user?.userId,
+      userEmail: request.user?.email,
+      userName: request.user?.name,
+      params: request.params,
+      query: request.query,
+      requestBody: request.body,
+      endTime: new Date().toISOString(),
+    };
+  }
+
+  private filterSensitiveData(data: any) {
+    return Object.keys(data).reduce((acc, key) => {
+      if (this.sensitiveFields.includes(key)) {
+        acc[key] = '*****';
+      } else {
+        acc[key] = data[key];
+      }
+      return acc;
+    }, {} as any);
   }
 }
 

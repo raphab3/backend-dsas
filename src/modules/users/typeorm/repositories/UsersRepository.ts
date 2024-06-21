@@ -43,6 +43,12 @@ class UsersRepository implements IUsersRepository {
       usersCreateQueryBuilder.andWhere('user.id = :id', { id: query.id });
     }
 
+    if (query.userId) {
+      usersCreateQueryBuilder.andWhere('user.userId ILIKE :userId', {
+        userId: `%${query.userId}%`,
+      });
+    }
+
     if (query.name) {
       usersCreateQueryBuilder.andWhere('user.name ILIKE :name', {
         name: `%${query.name}%`,
