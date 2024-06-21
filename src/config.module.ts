@@ -43,7 +43,6 @@ import { StatsModule } from '@modules/stats/Stats.module';
 import AuditModule from '@modules/audits/Audit.module';
 import { GatewaysModule } from '@shared/gateways/gateways.module';
 import { EventsModule } from '@shared/events/Events.module';
-import { ProviderModule } from '@shared/providers/provider.module';
 
 export const entities = [
   User,
@@ -111,7 +110,6 @@ export const EXTRA_MODULES = [
   GatewaysModule,
   EventsModule,
   SeedModule,
-  ProviderModule,
 ];
 
 export const PROVIDERS = [
