@@ -19,6 +19,20 @@ export interface ISchedule {
   updated_at: Date;
 }
 
+export interface IResponseEndUser {
+  id: string;
+  code: number;
+  description?: string;
+  available_date?: string;
+  start_time?: string;
+  end_time?: string;
+  max_patients?: number;
+  patients_attended?: number;
+  status?: boolean;
+  created_at: Date;
+  updated_at: Date;
+}
+
 export interface ICreateSchedule
   extends Omit<
     ISchedule,

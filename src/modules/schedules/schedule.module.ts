@@ -12,6 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UpdateScheduleService } from './services/update.schedule.service';
 import { LocationModule } from '@modules/locations/location.module';
 import AuditModule from '@modules/audits/Audit.module';
+import { FindAllScheduleEndUserService } from './services/findAll.schedule.enduser.service';
 
 const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Schedule]);
 
@@ -22,6 +23,7 @@ const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Schedule]);
     FindOneScheduleService,
     CreateScheduleService,
     FindAllScheduleService,
+    FindAllScheduleEndUserService,
     UpdateScheduleService,
     RemoveScheduleService,
   ],

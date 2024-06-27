@@ -8,6 +8,7 @@ import { IPaginatedResult } from '@shared/interfaces/IPaginations';
 import { paginate } from '@shared/utils/Pagination';
 import {
   ICreateSchedule,
+  IResponseEndUser,
   IUpdateSchedule,
 } from '@modules/schedules/interfaces/ISchedule';
 import { format } from 'date-fns';
@@ -21,7 +22,7 @@ class ScheduleRepository implements IScheduleRepository {
 
   public async list(
     query: Partial<IQuerySchedule>,
-  ): Promise<IPaginatedResult<Schedule>> {
+  ): Promise<IPaginatedResult<Schedule | IResponseEndUser>> {
     try {
       let page = 1;
       let perPage = 10;
@@ -98,6 +99,20 @@ class ScheduleRepository implements IScheduleRepository {
           perPage,
         },
       );
+
+      if (query.is_enduser) {
+        const response = {
+          data: [
+            ...result.data.map((schedule) => {
+              const { ...rest } = schedule;
+              return rest;
+            }),
+          ] as IResponseEndUser[],
+          pagination: result.pagination,
+        };
+
+        return response;
+      }
 
       return result;
     } catch (error) {

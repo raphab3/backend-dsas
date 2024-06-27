@@ -26,6 +26,7 @@ import { Permission } from '@shared/decorators/Permission';
 import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum';
 import { IQuerySchedule } from '@modules/schedules/interfaces/IQuerySchedule';
 import { Locations } from '@shared/decorators/Location';
+import { FindAllScheduleEndUserService } from '@modules/schedules/services/findAll.schedule.enduser.service';
 
 @ApiTags('schedules')
 @Controller('schedules')
@@ -36,6 +37,7 @@ export class ScheduleController {
   constructor(
     private readonly createScheduleService: CreateScheduleService,
     private readonly findAllScheduleService: FindAllScheduleService,
+    private readonly findAllScheduleEndUserService: FindAllScheduleEndUserService,
     private readonly findOneScheduleService: FindOneScheduleService,
     private readonly updateScheduleService: UpdateScheduleService,
     private readonly removeScheduleService: RemoveScheduleService,
@@ -44,14 +46,14 @@ export class ScheduleController {
   @AuditLog('CRIAR SCHEDULE')
   @Post()
   @ApiOperation({ summary: 'Create Schedule' })
-  @Permission(PermissionsEnum.create_appointment)
+  @Permission(PermissionsEnum.create_schedule)
   create(@Body() createScheduleDto: CreateScheduleDto) {
     return this.createScheduleService.execute(createScheduleDto);
   }
 
   @Get()
   @ApiOperation({ summary: 'Find all Schedule' })
-  @Permission(PermissionsEnum.find_all_appointments)
+  @Permission(PermissionsEnum.find_all_schedules)
   @Locations()
   findAll(@Req() req: any, @Query() query: IQuerySchedule) {
     const userLocations = req.userLocations;
@@ -63,9 +65,17 @@ export class ScheduleController {
     return this.findAllScheduleService.findAll(query);
   }
 
+  @Get('enduser')
+  @ApiOperation({ summary: 'Find all Schedule enduser' })
+  @Permission(PermissionsEnum.find_all_schedules_enduser)
+  @Locations()
+  findAllEnduser(@Query() query: IQuerySchedule) {
+    return this.findAllScheduleEndUserService.findAll(query);
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Find one Schedule' })
-  @Permission(PermissionsEnum.find_one_appointment)
+  @Permission(PermissionsEnum.find_one_schedule)
   @Locations()
   findOne(@Param('id') id: string) {
     return this.findOneScheduleService.findOne(id);
@@ -74,7 +84,7 @@ export class ScheduleController {
   @AuditLog('ATUALIZAR SCHEDULE')
   @Patch(':id')
   @ApiOperation({ summary: 'Update Schedule' })
-  @Permission(PermissionsEnum.update_appointment)
+  @Permission(PermissionsEnum.update_schedule)
   update(
     @Param('id') id: string,
     @Body() updateScheduleDto: UpdateScheduleDto,
@@ -85,7 +95,7 @@ export class ScheduleController {
   @AuditLog('REMOVER SCHEDULE')
   @Delete(':id')
   @ApiOperation({ summary: 'Remove Schedule' })
-  @Permission(PermissionsEnum.remove_appointment)
+  @Permission(PermissionsEnum.remove_schedule)
   remove(@Param('id') id: string) {
     return this.removeScheduleService.remove(id);
   }

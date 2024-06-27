@@ -11,4 +11,5 @@ export interface IQuerySchedule extends IQuery {
   professional_name?: string;
   start_date?: string;
   end_date?: string;
+  is_enduser: boolean;
 }
