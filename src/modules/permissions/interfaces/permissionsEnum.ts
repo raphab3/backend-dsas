@@ -85,6 +85,7 @@ export const groupsOfPermissions = {
     PermissionsEnum.auth_sing_in,
     PermissionsEnum.auth_me,
     PermissionsEnum.create_enduser_appointment,
+    PermissionsEnum.find_one_appointment,
   ],
   manager: [
     PermissionsEnum.remove_dependent,
