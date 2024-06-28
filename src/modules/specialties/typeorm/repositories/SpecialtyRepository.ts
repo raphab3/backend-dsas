@@ -27,7 +27,7 @@ class SpecialtyRepository implements ISpecialtyRepository {
 
     const specialtyCreateQueryBuilder = this.ormRepository
       .createQueryBuilder('specialty')
-      .orderBy('specialty.created_at', 'DESC');
+      .orderBy('specialty.name', 'ASC');
 
     if (query.id) {
       specialtyCreateQueryBuilder.where('specialty.id = :id', { id: query.id });

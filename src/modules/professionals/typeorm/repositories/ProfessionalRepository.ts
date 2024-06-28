@@ -49,7 +49,6 @@ class ProfessionalRepository implements IProfessionalRepository {
     }
 
     if (query.location_id) {
-      console.log('query.location_id', query.location_id);
       professionalsCreateQueryBuilder.andWhere('locations.id = :location', {
         location: query.location_id,
       });

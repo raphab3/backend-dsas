@@ -84,7 +84,6 @@ export class FindAllByEnduserAppointmentService {
     }
 
     if (query.userId) {
-      console.log('query.userId', query.userId);
       appointmentsCreateQueryBuilder.andWhere('user.id = :userId', {
         userId: query.userId,
       });
@@ -167,8 +166,6 @@ export class FindAllByEnduserAppointmentService {
       const currentTimeButOneHour = new Date(now.getTime() + 60 * 60 * 1000);
       const currentTime = format(currentTimeButOneHour, 'HH:mm:ss');
 
-      console.log('currentTime', currentTime);
-
       // Filtra pela data disponível a partir de hoje
       appointmentsCreateQueryBuilder.andWhere(
         'schedule.available_date = :available_date',
@@ -204,8 +201,6 @@ export class FindAllByEnduserAppointmentService {
         perPage,
       },
     );
-
-    console.log('result', result);
 
     const formattedData: IResponseEnduserAttament[] = result.data.map(
       (data) => ({

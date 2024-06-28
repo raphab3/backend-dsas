@@ -35,5 +35,3 @@ function calcularDigitoVerificador(matricula: string): number {
 
   return resultado;
 }
-
-console.log(gerarProximaMatricula(null)); // true

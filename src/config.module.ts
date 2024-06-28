@@ -64,7 +64,7 @@ export const entities = [
 
 export const databaseConfig: DataSourceOptions = {
   type: 'postgres',
-  host: 'localhost',
+  host: env.DB_HOST,
   port: env.DB_PORT,
   username: env.DB_USERNAME,
   password: env.DB_PASSWORD,

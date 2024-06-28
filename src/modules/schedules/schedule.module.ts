@@ -4,7 +4,6 @@ import { CreateScheduleService } from './services/create.schedule.service';
 import { FindAllScheduleEndUserService } from './services/findAll.schedule.enduser.service';
 import { FindAllScheduleService } from './services/findAll.schedule.service';
 import { FindOneScheduleService } from './services/findOne.schedule.service';
-import { Location } from '@modules/locations/typeorm/entities/location.entity';
 import { LocationModule } from '@modules/locations/location.module';
 import { Module } from '@nestjs/common';
 import { ProfessionalModule } from '@modules/professionals/professional.module';
@@ -15,7 +14,7 @@ import { SpecialtyModule } from '@modules/specialties/Specialty.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UpdateScheduleService } from './services/update.schedule.service';
 
-const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Schedule, Location]);
+const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Schedule]);
 
 @Module({
   controllers: [ScheduleController],

@@ -91,7 +91,6 @@ export class Schedule extends BaseEntity implements ISchedule {
   updated_at: Date;
 
   async incrementPatientsAttended() {
-    console.log('Incrementing patients attended');
     const schedule = await Schedule.findOne({
       where: { id: this.id },
     });
@@ -105,7 +104,6 @@ export class Schedule extends BaseEntity implements ISchedule {
   }
 
   async decrementPatientsAttended() {
-    console.log('Decrementing patients attended');
     const schedule = await Schedule.findOne({
       where: { id: this.id },
     });

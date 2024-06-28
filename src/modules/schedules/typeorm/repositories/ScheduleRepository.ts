@@ -102,16 +102,37 @@ class ScheduleRepository implements IScheduleRepository {
 
       if (query.is_enduser) {
         const response = {
-          data: [
-            ...result.data.map((schedule) => {
-              const { ...rest } = schedule;
-              return rest;
-            }),
-          ] as IResponseEndUser[],
+          data: result.data.map((schedule) => {
+            const {
+              id,
+              code,
+              description,
+              available_date,
+              start_time,
+              end_time,
+              max_patients,
+              patients_attended,
+              status,
+              created_at,
+              updated_at,
+            } = schedule;
+
+            return {
+              id,
+              code,
+              description,
+              available_date,
+              start_time,
+              end_time,
+              max_patients,
+              patients_attended,
+              status,
+              created_at,
+              updated_at,
+            };
+          }) as IResponseEndUser[],
           pagination: result.pagination,
         };
-
-        console.log('response', response);
 
         return response;
       }

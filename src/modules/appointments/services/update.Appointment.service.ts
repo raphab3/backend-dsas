@@ -62,12 +62,7 @@ export class UpdateAppointmentService {
         app.status === StatusAppointmentEnum.ATTENDED,
     ).length;
 
-    console.log('Real patients attended:', realPatientsAttended);
-
     if (schedule.patients_attended !== realPatientsAttended) {
-      console.log(
-        `Updating patients attended count from ${schedule.patients_attended} to ${realPatientsAttended}`,
-      );
       schedule.patients_attended = realPatientsAttended;
       await schedule.save();
     }

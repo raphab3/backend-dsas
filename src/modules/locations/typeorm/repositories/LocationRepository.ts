@@ -33,7 +33,7 @@ class LocationRepository implements ILocationRepository {
       .createQueryBuilder('locations')
       .leftJoinAndSelect('locations.person_sigs', 'person_sigs')
       .leftJoinAndSelect('person_sigs.user', 'user')
-      .orderBy('locations.created_at', 'DESC');
+      .orderBy('locations.name', 'ASC');
 
     if (query.id) {
       locationsCreateQueryBuilder.where({

@@ -31,8 +31,6 @@ export class FindByUserIdPersonSigService {
       .where('user.id = :userId', { userId })
       .getOne();
 
-    console.log(personSig);
-
     const formattedData = {
       person_sig: {
         id: personSig.id,

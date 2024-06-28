@@ -30,7 +30,6 @@ export class GetStatsService implements OnModuleInit {
 
   onModuleInit() {
     this.eventsService.on('statsUpdated', async () => {
-      console.log('Stats updated event received');
       this.statsGateway.notifyStatsUpdated();
     });
   }

@@ -100,7 +100,6 @@ class AppointmentRepository implements IAppointmentRepository {
     }
 
     if (query.schedule_code) {
-      console.log('query.schedule_code', query.schedule_code);
       appointmentsCreateQueryBuilder.andWhere('schedule.code = :code', {
         code: query.schedule_code,
       });
