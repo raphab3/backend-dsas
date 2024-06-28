@@ -98,6 +98,7 @@ export const groupsOfPermissions = {
     PermissionsEnum.find_all_specialties,
     PermissionsEnum.find_all_professionals,
     PermissionsEnum.find_all_schedules_enduser,
+    PermissionsEnum.update_appointment,
   ],
   manager: [
     PermissionsEnum.remove_dependent,
