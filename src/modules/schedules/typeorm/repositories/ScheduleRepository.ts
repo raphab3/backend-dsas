@@ -111,6 +111,8 @@ class ScheduleRepository implements IScheduleRepository {
           pagination: result.pagination,
         };
 
+        console.log('response', response);
+
         return response;
       }
 
