@@ -68,7 +68,6 @@ export class ScheduleController {
   @Get('enduser')
   @ApiOperation({ summary: 'Find all Schedule enduser' })
   @Permission(PermissionsEnum.find_all_schedules_enduser)
-  @Locations()
   findAllEnduser(@Query() query: IQuerySchedule) {
     return this.findAllScheduleEndUserService.findAll(query);
   }
