@@ -23,7 +23,7 @@ class PersonSigRepository implements IPersonSigRepository {
   public async matriculaExists(matricula: string): Promise<boolean> {
     const personSig = await this.ormRepository
       .createQueryBuilder('person_sig')
-      .where('matricula Like :matricula', { matricula: `%${matricula}%` })
+      .where('matricula ILike :matricula', { matricula: `%${matricula}%` })
       .getOne();
     return !!personSig;
   }

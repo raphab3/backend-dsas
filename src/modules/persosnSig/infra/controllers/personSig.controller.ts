@@ -78,13 +78,6 @@ export class PersonSigController {
     return this.findExternalSigpmpbService.execute(matricula);
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: 'Find one PersonSig' })
-  @Permission(PermissionsEnum.find_one_personSig)
-  findOne(@Param('id') id: string) {
-    return this.findOnePersonSigService.findOne(id);
-  }
-
   @Get('matricula')
   @ApiOperation({ summary: 'Find PersonSig by matricula' })
   @Permission(PermissionsEnum.find_one_personSig)
@@ -98,6 +91,13 @@ export class PersonSigController {
   async findByUserId(@Req() req: any, @Query() query: GetByUserIdPersonSigDto) {
     query.userId = req?.user?.userId;
     return await this.findByUserIdPersonSigService.execute(query.userId);
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Find one PersonSig' })
+  @Permission(PermissionsEnum.find_one_personSig)
+  findOne(@Param('id') id: string) {
+    return this.findOnePersonSigService.findOne(id);
   }
 
   @AuditLog('ATUALIZAR SERVIDOR SIGPMPB')

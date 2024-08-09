@@ -62,15 +62,6 @@ export class EntityExceptionFilter implements ExceptionFilter {
     };
   }
 
-  private sendForbiddenResponse(res: Response, req: Request) {
-    return res.status(HttpStatus.FORBIDDEN).json({
-      statusCode: HttpStatus.FORBIDDEN,
-      timestamp: new Date().toISOString(),
-      path: req.originalUrl,
-      message: `Access to ${req.method} ${req.originalUrl} is forbidden`,
-    });
-  }
-
   private extractMessage(responseMessage: string | object): string {
     if (typeof responseMessage === 'string') {
       return responseMessage;
@@ -94,8 +85,14 @@ export class EntityExceptionFilter implements ExceptionFilter {
       return 'Operação não permitida devido a restrições de relação entre dados. Por favor, verifique os dados e tente novamente.';
     } else if (exception.message.includes('null value in column')) {
       return 'Um ou mais campos obrigatórios não foram preenchidos. Por favor, verifique os dados e tente novamente.';
+    } else if (
+      exception.message.includes('invalid input syntax for type uuid')
+    ) {
+      return 'Erro de formato: um valor UUID inválido foi fornecido. Por favor, verifique os dados e tente novamente.';
     } else {
-      return 'Erro ao processar a solicitação. Por favor, verifique os dados e tente novamente.';
+      // Log the full error message for debugging
+      console.error('Unhandled TypeORM error:', exception.message);
+      return `Erro ao processar a solicitação: ${exception.message}. Por favor, verifique os dados e tente novamente.`;
     }
   }
 
