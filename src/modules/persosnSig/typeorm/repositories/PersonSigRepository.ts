@@ -87,7 +87,7 @@ class PersonSigRepository implements IPersonSigRepository {
     return await this.ormRepository
       .createQueryBuilder('person_sig')
       .leftJoinAndSelect('person_sig.dependents', 'dependents')
-      .where('matricula Like :matricula', { matricula: `%${matricula}%` })
+      .where('matricula ILike :matricula', { matricula: `%${matricula}%` })
       .getOne();
   }
 
