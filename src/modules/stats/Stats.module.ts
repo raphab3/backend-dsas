@@ -9,6 +9,7 @@ import { Patient } from '@modules/patients/typeorm/entities/patient.entity';
 import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
 import { GatewaysModule } from '@shared/gateways/gateways.module';
 import { EventsModule } from '@shared/events/Events.module';
+import { GetStatsServiceV2 } from './services/getStatsV2.service';
 
 const typeOrmModule = TypeOrmModule.forFeature([
   Appointment,
@@ -20,7 +21,7 @@ const typeOrmModule = TypeOrmModule.forFeature([
 
 @Module({
   controllers: [StatsController],
-  providers: [GetStatsService],
+  providers: [GetStatsService, GetStatsServiceV2],
   imports: [typeOrmModule, GatewaysModule, EventsModule],
   exports: [],
 })

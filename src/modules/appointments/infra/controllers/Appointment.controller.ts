@@ -26,7 +26,6 @@ import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum
 import { QueryAppointmentDto } from '@modules/appointments/dto/query-Appointment.dto';
 import { Locations } from '@shared/decorators/Location';
 import { FindAllByEnduserAppointmentService } from '@modules/appointments/services/findAllByEndUserAppointment.service';
-import { validate as uuidValidate } from 'uuid';
 import { CreateEndUserAppointmentService } from '@modules/appointments/services/createEnduser.Appointment.service';
 import { CreateEndUserAppointmentDto } from '@modules/appointments/dto/create-enduser-Appointment.dto';
 
@@ -80,7 +79,7 @@ export class AppointmentController {
   @ApiOperation({ summary: 'Find one Appointment' })
   @Permission(PermissionsEnum.find_one_appointment)
   async findOne(@Param('id') id: string, @Query() query: QueryAppointmentDto) {
-    if (uuidValidate(id)) {
+    if (this.isValidUUID(id)) {
       return this.findOneAppointmentService.findOne(id);
     } else if (id === 'enduser') {
       return this.findAllByEnduserAppointmentService.findAll(query);
@@ -106,5 +105,11 @@ export class AppointmentController {
   @Permission(PermissionsEnum.remove_appointment)
   async remove(@Param('id') id: string) {
     return await this.removeAppointmentService.remove(id);
+  }
+
+  isValidUUID(uuid: string): boolean {
+    const uuidRegex =
+      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    return uuidRegex.test(uuid);
   }
 }

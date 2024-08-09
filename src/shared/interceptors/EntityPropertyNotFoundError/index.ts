@@ -4,60 +4,117 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
+  Logger,
+  Injectable,
 } from '@nestjs/common';
 import { TypeORMError } from 'typeorm';
-import { FastifyReply } from 'fastify';
+import { Response, Request } from 'express';
 
-@Catch(TypeORMError, HttpException)
+@Catch()
+@Injectable()
 export class EntityExceptionFilter implements ExceptionFilter {
-  catch(exception: TypeORMError | HttpException, host: ArgumentsHost) {
+  private readonly logger = new Logger(EntityExceptionFilter.name);
+
+  catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse<FastifyReply>();
+    const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    let status =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
-    let message =
-      exception instanceof HttpException
-        ? exception.getResponse()
-        : 'Erro interno do servidor';
+    const { status, message } = this.handleException(exception);
 
-    if (exception instanceof TypeORMError) {
+    const logMessage = this.createLogMessage(request, message);
+    this.logger.error(logMessage);
+
+    const stack = this.getExceptionStack(exception);
+    this.logger.error(stack);
+
+    const errorResponse = this.createErrorResponse(
+      status,
+      request.url,
+      message,
+    );
+
+    response.status(status).json(errorResponse);
+  }
+
+  private handleException(exception: unknown): {
+    status: number;
+    message: string;
+  } {
+    let status = HttpStatus.INTERNAL_SERVER_ERROR;
+    let message = 'Erro interno do servidor';
+
+    if (exception instanceof HttpException) {
+      status = exception.getStatus();
+      const responseMessage = exception.getResponse();
+      message = this.extractMessage(responseMessage);
+    } else if (exception instanceof HttpException) {
+      status = exception.getStatus() || HttpStatus.BAD_REQUEST;
+      message = exception.message;
+    } else if (exception instanceof TypeORMError) {
       status = HttpStatus.BAD_REQUEST;
-
-      if (
-        exception.message.includes(
-          'duplicate key value violates unique constraint',
-        )
-      ) {
-        message =
-          'Esse registro já existe. Por favor, verifique os dados e tente novamente.';
-      } else if (
-        exception.message.includes('violates foreign key constraint')
-      ) {
-        message =
-          'Operação não permitida devido a restrições de relação entre dados. Por favor, verifique os dados e tente novamente.';
-      } else if (exception.message.includes('null value in column')) {
-        message =
-          'Um ou mais campos obrigatórios não foram preenchidos. Por favor, verifique os dados e tente novamente.';
-      } else {
-        message =
-          'Erro ao processar a solicitação. Por favor, verifique os dados e tente novamente.';
-      }
+      message = this.handleTypeORMError(exception);
     }
 
-    console.error(exception);
+    return {
+      status,
+      message: typeof message === 'string' ? message : JSON.stringify(message),
+    };
+  }
 
-    response
-      .code(status)
-      .header('Content-Type', 'application/json; charset=utf-8')
-      .send({
-        statusCode: status,
-        timestamp: new Date().toISOString(),
-        path: request.url,
-        message: message,
-      });
+  private sendForbiddenResponse(res: Response, req: Request) {
+    return res.status(HttpStatus.FORBIDDEN).json({
+      statusCode: HttpStatus.FORBIDDEN,
+      timestamp: new Date().toISOString(),
+      path: req.originalUrl,
+      message: `Access to ${req.method} ${req.originalUrl} is forbidden`,
+    });
+  }
+
+  private extractMessage(responseMessage: string | object): string {
+    if (typeof responseMessage === 'string') {
+      return responseMessage;
+    } else if (
+      typeof responseMessage === 'object' &&
+      responseMessage !== null
+    ) {
+      return responseMessage['message'] || JSON.stringify(responseMessage);
+    }
+    return 'Erro inesperado';
+  }
+
+  private handleTypeORMError(exception: TypeORMError): string {
+    if (
+      exception.message.includes(
+        'duplicate key value violates unique constraint',
+      )
+    ) {
+      return 'Esse registro já existe. Por favor, verifique os dados e tente novamente.';
+    } else if (exception.message.includes('violates foreign key constraint')) {
+      return 'Operação não permitida devido a restrições de relação entre dados. Por favor, verifique os dados e tente novamente.';
+    } else if (exception.message.includes('null value in column')) {
+      return 'Um ou mais campos obrigatórios não foram preenchidos. Por favor, verifique os dados e tente novamente.';
+    } else {
+      return 'Erro ao processar a solicitação. Por favor, verifique os dados e tente novamente.';
+    }
+  }
+
+  private createLogMessage(request: Request, message: string): string {
+    return `Request: ${request?.url} - Method: ${request?.method} - IP: ${request?.ip} - Message: ${message}`;
+  }
+
+  private getExceptionStack(exception: unknown): string {
+    return exception instanceof Error && exception.stack
+      ? exception.stack
+      : 'No stack available';
+  }
+
+  private createErrorResponse(status: number, path: string, message: string) {
+    return {
+      statusCode: status,
+      timestamp: new Date().toISOString(),
+      path: path,
+      message: message,
+    };
   }
 }
