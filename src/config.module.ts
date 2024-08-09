@@ -44,6 +44,7 @@ import AuditModule from '@modules/audits/Audit.module';
 import { GatewaysModule } from '@shared/gateways/gateways.module';
 import { EventsModule } from '@shared/events/Events.module';
 import { CacheModuleCustom } from '@shared/providers/Cache/cache.module';
+import { AppLoggingInterceptor } from '@shared/interceptors/AppLoggerInterceptor';
 
 export const entities = [
   User,
@@ -126,6 +127,10 @@ export const PROVIDERS = [
   {
     provide: APP_INTERCEPTOR,
     useClass: TimeoutInterceptor,
+  },
+  {
+    provide: APP_INTERCEPTOR,
+    useClass: AppLoggingInterceptor,
   },
   {
     provide: APP_GUARD,
