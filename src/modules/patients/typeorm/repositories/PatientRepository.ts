@@ -80,7 +80,7 @@ class PatientRepository implements IPatientRepository {
 
     if (query.name) {
       patientCreateQueryBuilder.where(
-        `COALESCE(dependent.name, person_sig.nome) ILIKE :name`,
+        `COALESCE(dependent.name, person_sig.nome) ILike :name`,
         {
           name: `%${query.name}%`,
         },
@@ -88,7 +88,7 @@ class PatientRepository implements IPatientRepository {
     }
 
     if (query.matricula) {
-      patientCreateQueryBuilder.where(`person_sig.matricula ILIKE :matricula`, {
+      patientCreateQueryBuilder.where(`person_sig.matricula ILike :matricula`, {
         matricula: `%${query.matricula}%`,
       });
     }
@@ -142,7 +142,7 @@ class PatientRepository implements IPatientRepository {
       .createQueryBuilder('patients')
       .leftJoinAndSelect('patients.person_sig', 'person_sig')
       .leftJoinAndSelect('patients.dependent', 'dependent')
-      .where('person_sig.matricula LIKE :matricula', {
+      .where('person_sig.matricula Like :matricula', {
         matricula: `%${matricula}%`,
       })
       .getOne();

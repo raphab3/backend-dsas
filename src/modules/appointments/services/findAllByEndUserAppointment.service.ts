@@ -91,7 +91,7 @@ export class FindAllByEnduserAppointmentService {
 
     if (query.matricula) {
       appointmentsCreateQueryBuilder.andWhere(
-        'person_sig.matricula ILIKE :matricula',
+        'person_sig.matricula ILike :matricula',
         {
           matricula: `%${query.matricula}%`,
         },
@@ -106,7 +106,7 @@ export class FindAllByEnduserAppointmentService {
 
     if (query.patient_name) {
       appointmentsCreateQueryBuilder.andWhere(
-        `COALESCE(dependent.name, person_sig.nome) ILIKE :name`,
+        `COALESCE(dependent.name, person_sig.nome) ILike :name`,
         {
           name: `%${query.patient_name}%`,
         },
@@ -128,7 +128,7 @@ export class FindAllByEnduserAppointmentService {
 
     if (query.professional_name) {
       appointmentsCreateQueryBuilder.andWhere(
-        'schedule.description ILIKE :description',
+        'schedule.description ILike :description',
         {
           description: `%${query.professional_name}%`,
         },

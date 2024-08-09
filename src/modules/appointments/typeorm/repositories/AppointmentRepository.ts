@@ -86,7 +86,7 @@ class AppointmentRepository implements IAppointmentRepository {
 
     if (query.matricula) {
       appointmentsCreateQueryBuilder.andWhere(
-        'person_sig.matricula ILIKE :matricula',
+        'person_sig.matricula ILike :matricula',
         {
           matricula: `%${query.matricula}%`,
         },
@@ -107,7 +107,7 @@ class AppointmentRepository implements IAppointmentRepository {
 
     if (query.patient_name) {
       appointmentsCreateQueryBuilder.andWhere(
-        `COALESCE(dependent.name, person_sig.nome) ILIKE :name`,
+        `COALESCE(dependent.name, person_sig.nome) ILike :name`,
         {
           name: `%${query.patient_name}%`,
         },
@@ -129,7 +129,7 @@ class AppointmentRepository implements IAppointmentRepository {
 
     if (query.professional_name) {
       appointmentsCreateQueryBuilder.andWhere(
-        'schedule.description ILIKE :description',
+        'schedule.description ILike :description',
         {
           description: `%${query.professional_name}%`,
         },

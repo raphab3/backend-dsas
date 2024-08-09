@@ -44,25 +44,25 @@ class UsersRepository implements IUsersRepository {
     }
 
     if (query.userId) {
-      usersCreateQueryBuilder.andWhere('user.userId ILIKE :userId', {
+      usersCreateQueryBuilder.andWhere('user.userId ILike :userId', {
         userId: `%${query.userId}%`,
       });
     }
 
     if (query.name) {
-      usersCreateQueryBuilder.andWhere('user.name ILIKE :name', {
+      usersCreateQueryBuilder.andWhere('user.name ILike :name', {
         name: `%${query.name}%`,
       });
     }
 
     if (query.email) {
-      usersCreateQueryBuilder.andWhere('user.email ILIKE :email', {
+      usersCreateQueryBuilder.andWhere('user.email ILike :email', {
         email: `%${query.email}%`,
       });
     }
 
     if (query.role) {
-      usersCreateQueryBuilder.andWhere('roles.name ILIKE :role', {
+      usersCreateQueryBuilder.andWhere('roles.name ILike :role', {
         role: `%${query.role}%`,
       });
     }
@@ -81,7 +81,7 @@ class UsersRepository implements IUsersRepository {
 
     if (query.matricula) {
       usersCreateQueryBuilder.andWhere(
-        'person_sig.matricula ILIKE :matricula',
+        'person_sig.matricula ILike :matricula',
         {
           matricula: `%${query.matricula}%`,
         },

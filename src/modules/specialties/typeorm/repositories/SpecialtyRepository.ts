@@ -35,7 +35,7 @@ class SpecialtyRepository implements ISpecialtyRepository {
 
     if (query.name) {
       const name = query.name.toLowerCase();
-      specialtyCreateQueryBuilder.where('LOWER(specialty.name) LIKE :name', {
+      specialtyCreateQueryBuilder.where('LOWER(specialty.name) Like :name', {
         name: `%${name}%`,
       });
     }
