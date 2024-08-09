@@ -342,7 +342,7 @@ export class GetStatsServiceV2 implements OnModuleInit {
   private aggregateAppointmentsByLocation(
     appointments: Appointment[],
   ): Record<string, Record<string, number>> {
-    return appointments.reduce(
+    const aggregated = appointments.reduce(
       (acc, appointment) => {
         const locationName = `${appointment.schedule.location.name} - ${appointment.schedule.location.city}`;
 
@@ -361,6 +361,10 @@ export class GetStatsServiceV2 implements OnModuleInit {
         return acc;
       },
       {} as Record<string, Record<string, number>>,
+    );
+
+    return Object.fromEntries(
+      Object.entries(aggregated).sort(([, a], [, b]) => b.total - a.total),
     );
   }
 
@@ -399,7 +403,7 @@ export class GetStatsServiceV2 implements OnModuleInit {
     string,
     { professionals: Array<{ id: string; name: string }>; total: number }
   > {
-    return professionals.reduce(
+    const aggregated = professionals.reduce(
       (acc, professional) => {
         professional.locations.forEach((location) => {
           const locationName = location.name;
@@ -418,6 +422,10 @@ export class GetStatsServiceV2 implements OnModuleInit {
         string,
         { professionals: Array<{ id: string; name: string }>; total: number }
       >,
+    );
+
+    return Object.fromEntries(
+      Object.entries(aggregated).sort(([, a], [, b]) => b.total - a.total),
     );
   }
 
