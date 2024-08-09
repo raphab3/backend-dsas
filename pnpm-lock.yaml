@@ -132,6 +132,9 @@ importers:
       '@types/bcrypt':
         specifier: ^5.0.0
         version: 5.0.2
+      '@types/dotenv':
+        specifier: ^8.2.0
+        version: 8.2.0
       '@types/express':
         specifier: ^4.17.17
         version: 4.17.21
@@ -919,6 +922,10 @@ packages:
 
   '@types/cors@2.8.17':
     resolution: {integrity: sha512-8CGDvrBj1zgo2qE+oS3pOCyYNqCPryMWY2bGfwA0dcfopWGgxs+78df0Rs3rc9THP4JkOhLsAa+15VdpAqkcUA==}
+
+  '@types/dotenv@8.2.0':
+    resolution: {integrity: sha512-ylSC9GhfRH7m1EUXBXofhgx4lUWmFeQDINW5oLuS+gxWdfUeW4zJdeVTYVkexEW+e2VUvlZR2kGnGGipAWR7kw==}
+    deprecated: This is a stub types definition. dotenv provides its own type definitions, so you do not need this installed.
 
   '@types/eslint-scope@3.7.7':
     resolution: {integrity: sha512-MzMFlSLBqNF2gcHWO0G1vP/YQyfvrxZ0bF+u7mzUdZ1/xK4A4sru+nraZz5i3iEIk1l1uyicaDVTB4QbbEkAYg==}
@@ -4962,6 +4969,10 @@ snapshots:
   '@types/cors@2.8.17':
     dependencies:
       '@types/node': 20.14.14
+
+  '@types/dotenv@8.2.0':
+    dependencies:
+      dotenv: 16.4.5
 
   '@types/eslint-scope@3.7.7':
     dependencies:

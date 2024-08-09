@@ -1,4 +1,3 @@
-import env from '@config/env';
 import {
   WebSocketGateway,
   WebSocketServer,
@@ -9,6 +8,7 @@ import {
 import { EventsService } from '@shared/events/EventsService';
 import { Socket, Server } from 'socket.io';
 import { Throttle } from '@nestjs/throttler';
+import env from '@config/env';
 
 @WebSocketGateway({
   cors: {
