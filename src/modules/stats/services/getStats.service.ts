@@ -3,13 +3,13 @@ import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Repository } from 'typeorm';
-import { IQueryStats } from '../interfaces/IQueryStats';
 import { IResponseStats } from '../interfaces/IResponseStats';
 import { Professional } from '@modules/professionals/typeorm/entities/professional.entity';
 import { Patient } from '@modules/patients/typeorm/entities/patient.entity';
 import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
 import { StatisticsGateway } from '../../../shared/gateways/StatisticsGateway';
 import { EventsService } from '@shared/events/EventsService';
+import { ImprovedGetStatsDto } from '../dto/getStats.dto';
 
 @Injectable()
 export class GetStatsService implements OnModuleInit {
@@ -34,7 +34,7 @@ export class GetStatsService implements OnModuleInit {
     });
   }
 
-  async execute(query: IQueryStats): Promise<IResponseStats> {
+  async execute(query: ImprovedGetStatsDto): Promise<IResponseStats> {
     let startDate: Date;
     let endDate: Date;
 
@@ -43,11 +43,8 @@ export class GetStatsService implements OnModuleInit {
     }
 
     if (query.startDate && query.endDate) {
-      startDate = query.startDate;
-      endDate = query.endDate;
-    } else if (query.year) {
-      startDate = new Date(`${query.year}-01-01`);
-      endDate = new Date(`${query.year}-12-31`);
+      startDate = new Date(query.startDate);
+      endDate = new Date(query.endDate);
     } else {
       const today = new Date();
       const currentYear = today.getFullYear();

@@ -1,9 +1,9 @@
-import { ApiTags } from '@nestjs/swagger';
-import { Controller, Get, Query } from '@nestjs/common';
+import { ImprovedGetStatsDto } from '@modules/stats/dto/getStats.dto';
 import { GetStatsService } from '@modules/stats/services/getStats.service';
-import { Public } from '@shared/decorators';
-import { GetStatsDto } from '@modules/stats/dto/getStats.dto';
 import { GetStatsServiceV2 } from '@modules/stats/services/getStatsV2.service';
+import { Controller, Get, Query, Version } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Public } from '@shared/decorators';
 
 @ApiTags('stats')
 @Controller('stats')
@@ -14,14 +14,26 @@ export class StatsController {
   ) {}
 
   @Get()
+  @Version('1')
   @Public()
-  async getStats(@Query() query: GetStatsDto) {
+  @ApiOperation({
+    summary: 'Get stats (v1)',
+    description: 'Get statistics using version 1',
+  })
+  @ApiResponse({ status: 200, description: 'Returns the stats successfully.' })
+  async getStats(@Query() query: ImprovedGetStatsDto) {
     return await this.getStatsService.execute(query);
   }
 
-  @Get('v2')
+  @Get()
+  @Version('2')
   @Public()
-  async getStatsV2(@Query() query: GetStatsDto) {
+  @ApiOperation({
+    summary: 'Get stats (v2)',
+    description: 'Get statistics using version 2',
+  })
+  @ApiResponse({ status: 200, description: 'Returns the stats successfully.' })
+  async getStatsV2(@Query() query: ImprovedGetStatsDto) {
     return await this.getStatsServiceV2.execute(query);
   }
 }

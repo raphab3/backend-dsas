@@ -3,7 +3,6 @@ import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { IQueryStats } from '../interfaces/IQueryStats';
 import { IResponseStats } from '../interfaces/IResponseStats';
 import { Professional } from '@modules/professionals/typeorm/entities/professional.entity';
 import { Patient } from '@modules/patients/typeorm/entities/patient.entity';
@@ -12,11 +11,14 @@ import { StatisticsGateway } from '../../../shared/gateways/StatisticsGateway';
 import { EventsService } from '@shared/events/EventsService';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { ImprovedGetStatsDto } from '../dto/getStats.dto';
+import env from '@config/env';
 
 @Injectable()
 export class GetStatsServiceV2 implements OnModuleInit {
   private updateInProgress = false;
   private updateQueue: (() => void)[] = [];
+  private isCacheEnabled: boolean = env.NODE_ENV === 'production';
 
   constructor(
     private eventsService: EventsService,
@@ -64,76 +66,49 @@ export class GetStatsServiceV2 implements OnModuleInit {
     await Promise.all(deletionPromises);
   }
 
-  async execute(query: IQueryStats): Promise<IResponseStats> {
+  async execute(query: ImprovedGetStatsDto): Promise<IResponseStats> {
     const cacheKey = `stats_${JSON.stringify(query)}`;
     const cachedResult = await this.cacheManager.get<IResponseStats>(cacheKey);
-    if (cachedResult) {
+    if (cachedResult && this.isCacheEnabled) {
       return cachedResult;
     }
 
     const { startDate, endDate } = this.getDateRange(query);
 
     const [
-      totalSchedules,
-      schedules,
-      appointments,
-      professionals,
-      totalPatientsCount,
-      personSigs,
+      scheduleData,
+      appointmentData,
+      professionalData,
+      patientData,
+      personSigData,
     ] = await Promise.all([
-      this.getTotalSchedules(),
-      this.findSchedules(startDate, endDate),
-      this.findAppointments(startDate, endDate),
-      this.getProfessionals(),
-      this.getTotalPatientsCount(),
-      this.getPersonSigs(),
+      this.getScheduleData(startDate, endDate),
+      this.getAppointmentData(startDate, endDate, query.locationId),
+      this.getProfessionalData(),
+      this.getPatientData(),
+      this.getPersonSigData(),
     ]);
 
     const stats: IResponseStats = {
-      schedules: this.getScheduleStats(totalSchedules, schedules),
-      appointments: this.getAppointmentStats(appointments),
-      professionals: this.getProfessionalStats(professionals),
-      patients: { total: totalPatientsCount },
-      employees: this.getEmployeeStats(personSigs),
+      schedules: this.getScheduleStats(
+        scheduleData.total,
+        scheduleData.schedules,
+      ),
+      appointments: this.getAppointmentStats(appointmentData),
+      professionals: this.getProfessionalStats(professionalData),
+      patients: { total: patientData.total },
+      employees: this.getEmployeeStats(personSigData),
     };
 
-    await this.cacheManager.set(cacheKey, stats, 300);
+    await this.cacheManager.set(cacheKey, stats, 3600);
     return stats;
   }
 
-  private getDateRange(query: IQueryStats): { startDate: Date; endDate: Date } {
-    let startDate: Date;
-    let endDate: Date;
-
-    if (query.startDate && query.endDate) {
-      startDate = new Date(query.startDate);
-      endDate = new Date(query.endDate);
-    } else if (query.year) {
-      startDate = new Date(`${query.year}-01-01`);
-      endDate = new Date(`${query.year}-12-31`);
-    } else {
-      const today = new Date();
-      const currentYear = today.getFullYear();
-      startDate = new Date(`${currentYear}-01-01`);
-      endDate = new Date(`${currentYear}-12-31`);
-    }
-
-    if (startDate > endDate) {
-      throw new Error('Invalid date range');
-    }
-
-    return { startDate, endDate };
-  }
-
-  private async getTotalSchedules(): Promise<number> {
-    return this.scheduleRepository.count();
-  }
-
-  private async findSchedules(
-    startDate: Date,
-    endDate: Date,
-  ): Promise<Schedule[]> {
-    return this.scheduleRepository
+  private async getScheduleData(
+    startDate: string,
+    endDate: string,
+  ): Promise<{ total: number; schedules: Schedule[] }> {
+    const schedules = await this.scheduleRepository
       .createQueryBuilder('schedule')
       .leftJoinAndSelect('schedule.location', 'location')
       .where('schedule.available_date BETWEEN :startDate AND :endDate', {
@@ -142,28 +117,72 @@ export class GetStatsServiceV2 implements OnModuleInit {
       })
       .cache(true)
       .getMany();
+
+    return {
+      total: schedules.length,
+      schedules,
+    };
   }
 
-  private async findAppointments(
-    startDate: Date,
-    endDate: Date,
+  private getDateRange(query: ImprovedGetStatsDto): {
+    startDate: string;
+    endDate: string;
+  } {
+    let startDate: string;
+    let endDate: string;
+
+    if (query.startDate && query.endDate) {
+      startDate = query.startDate;
+      endDate = query.endDate;
+    } else {
+      const today = new Date();
+      const currentYear = today.getFullYear();
+      startDate = `${currentYear}-01-01`;
+      endDate = `${currentYear}-12-31`;
+    }
+
+    if (new Date(startDate) > new Date(endDate)) {
+      throw new Error('Invalid date range');
+    }
+
+    return { startDate, endDate };
+  }
+
+  private async getAppointmentData(
+    startDate: string,
+    endDate: string,
+    locationId?: string,
   ): Promise<Appointment[]> {
-    return this.appointmentRepository
+    console.log('Start Date:', startDate);
+    console.log('End Date:', endDate);
+    console.log('locationId:', locationId);
+
+    let query = this.appointmentRepository
       .createQueryBuilder('appointment')
       .leftJoinAndSelect('appointment.schedule', 'schedule')
       .leftJoinAndSelect('schedule.location', 'location')
       .leftJoinAndSelect('schedule.specialty', 'specialty')
       .leftJoinAndSelect('appointment.patient', 'patient')
+      .leftJoinAndSelect('patient.person_sig', 'patient_person_sig')
       .leftJoinAndSelect('patient.dependent', 'dependent')
+      .leftJoinAndSelect('dependent.person_sigs', 'dependent_person_sig')
+      .leftJoinAndSelect('schedule.professional', 'professional')
+      .leftJoinAndSelect('professional.person_sig', 'professional_person_sig')
       .where('schedule.available_date BETWEEN :startDate AND :endDate', {
         startDate,
         endDate,
-      })
-      .cache(true)
-      .getMany();
+      });
+
+    if (locationId) {
+      query = query.andWhere('location.id = :locationId', { locationId });
+    }
+
+    const result = await query.cache(true).getMany();
+
+    return result;
   }
 
-  private async getProfessionals(): Promise<Professional[]> {
+  private async getProfessionalData(): Promise<Professional[]> {
     return this.professionalRepository
       .createQueryBuilder('professional')
       .leftJoinAndSelect('professional.locations', 'locations')
@@ -172,11 +191,12 @@ export class GetStatsServiceV2 implements OnModuleInit {
       .getMany();
   }
 
-  private async getTotalPatientsCount(): Promise<number> {
-    return this.patientRepository.count();
+  private async getPatientData(): Promise<{ total: number }> {
+    const total = await this.patientRepository.count();
+    return { total };
   }
 
-  private async getPersonSigs(): Promise<PersonSig[]> {
+  private async getPersonSigData(): Promise<PersonSig[]> {
     return this.personSigRepository.find();
   }
 

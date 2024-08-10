@@ -1,7 +1,7 @@
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import env from '@config/env';
 
 async function bootstrap() {
@@ -13,10 +13,17 @@ async function bootstrap() {
     methods: ['*'],
   });
 
+  app.setGlobalPrefix('api');
+
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: ['1', '2'],
+    prefix: 'v',
+  });
+
   const config = new DocumentBuilder()
     .setTitle('SigSaúde API')
     .setDescription('API do sistema de gestão de saúde')
-    .addServer(`${env.API_URL}/api/v1`, `${env.NODE_ENV} - server`)
     .addBearerAuth(
       {
         type: 'http',
@@ -39,7 +46,6 @@ async function bootstrap() {
     },
   });
 
-  app.setGlobalPrefix('/api/v1');
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
