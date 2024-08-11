@@ -1,28 +1,24 @@
 import { Appointment } from '@modules/appointments/typeorm/entities/Appointment.entity';
 import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IResponseStats } from '../interfaces/IResponseStats';
 import { Professional } from '@modules/professionals/typeorm/entities/professional.entity';
 import { Patient } from '@modules/patients/typeorm/entities/patient.entity';
 import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
-import { StatisticsGateway } from '../../../shared/gateways/StatisticsGateway';
-import { EventsService } from '@shared/events/EventsService';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { ImprovedGetStatsDto } from '../dto/getStats.dto';
 import env from '@config/env';
 
 @Injectable()
-export class GetStatsServiceV2 implements OnModuleInit {
-  private updateInProgress = false;
-  private updateQueue: (() => void)[] = [];
+export class GetStatsServiceV3 {
+  private readonly CACHE_TTL = 3600;
   private isCacheEnabled: boolean = env.NODE_ENV === 'production';
+  private readonly logger = new Logger(GetStatsServiceV3.name);
 
   constructor(
-    private eventsService: EventsService,
-    private statsGateway: StatisticsGateway,
     @InjectRepository(Appointment)
     private readonly appointmentRepository: Repository<Appointment>,
     @InjectRepository(Schedule)
@@ -36,43 +32,65 @@ export class GetStatsServiceV2 implements OnModuleInit {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
-  onModuleInit() {
-    this.eventsService.on('statsUpdated', async () => {
-      if (this.updateInProgress) {
-        this.updateQueue.push(() => this.handleStatsUpdate());
-      } else {
-        await this.handleStatsUpdate();
-      }
-    });
-  }
-
-  private async handleStatsUpdate() {
-    this.updateInProgress = true;
-    try {
-      await this.clearCache();
-      this.statsGateway.notifyStatsUpdated();
-    } finally {
-      this.updateInProgress = false;
-      if (this.updateQueue.length > 0) {
-        const nextUpdate = this.updateQueue.shift();
-        nextUpdate();
-      }
-    }
-  }
-
-  private async clearCache() {
-    const keys = await this.cacheManager.store.keys();
-    const deletionPromises = keys.map((key) => this.cacheManager.del(key));
-    await Promise.all(deletionPromises);
-  }
-
   async execute(query: ImprovedGetStatsDto): Promise<IResponseStats> {
-    const cacheKey = `stats_${JSON.stringify(query)}`;
-    const cachedResult = await this.cacheManager.get<IResponseStats>(cacheKey);
-    if (cachedResult && this.isCacheEnabled) {
-      return cachedResult;
+    const cacheKey = this.generateCacheKey(query);
+    if (this.isCacheEnabled) {
+      try {
+        const cachedResult = await this.getCachedResult(cacheKey);
+        if (cachedResult) {
+          this.logger.log(`Cache hit for key: ${cacheKey}`);
+          return cachedResult;
+        }
+      } catch (error) {
+        this.logger.error(
+          `Error retrieving cache: ${error.message}`,
+          error.stack,
+        );
+      }
     }
 
+    this.logger.log(`Cache miss or disabled for key: ${cacheKey}`);
+    const stats = await this.generateStats(query);
+
+    if (this.isCacheEnabled) {
+      try {
+        await this.setCachedResult(cacheKey, stats);
+        this.logger.log(`Cache set for key: ${cacheKey}`);
+      } catch (error) {
+        this.logger.error(`Error setting cache: ${error.message}`, error.stack);
+      }
+    }
+
+    return stats;
+  }
+
+  private generateCacheKey(query: ImprovedGetStatsDto): string {
+    return `stats_${JSON.stringify(query)}`;
+  }
+
+  private async getCachedResult(key: string): Promise<IResponseStats | null> {
+    try {
+      return await this.cacheManager.get<IResponseStats>(key);
+    } catch (error) {
+      console.error('Cache retrieval error:', error);
+      return null;
+    }
+  }
+
+  private async setCachedResult(
+    key: string,
+    value: IResponseStats,
+  ): Promise<void> {
+    try {
+      await this.cacheManager.set(key, value, this.CACHE_TTL);
+    } catch (error) {
+      console.error('Cache setting error:', error);
+    }
+  }
+
+  private async generateStats(
+    query: ImprovedGetStatsDto,
+  ): Promise<IResponseStats> {
     const { startDate, endDate } = this.getDateRange(query);
 
     const [
@@ -89,7 +107,7 @@ export class GetStatsServiceV2 implements OnModuleInit {
       this.getPersonSigData(),
     ]);
 
-    const stats: IResponseStats = {
+    const result = {
       schedules: this.getScheduleStats(
         scheduleData.total,
         scheduleData.schedules,
@@ -100,8 +118,7 @@ export class GetStatsServiceV2 implements OnModuleInit {
       employees: this.getEmployeeStats(personSigData),
     };
 
-    await this.cacheManager.set(cacheKey, stats, 3600);
-    return stats;
+    return result;
   }
 
   private async getScheduleData(
@@ -115,13 +132,10 @@ export class GetStatsServiceV2 implements OnModuleInit {
         startDate,
         endDate,
       })
-      .cache(true)
       .getMany();
 
-    return {
-      total: schedules.length,
-      schedules,
-    };
+    const result = { total: schedules.length, schedules };
+    return result;
   }
 
   private getDateRange(query: ImprovedGetStatsDto): {

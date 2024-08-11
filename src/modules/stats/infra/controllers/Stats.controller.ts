@@ -1,6 +1,6 @@
 import { ImprovedGetStatsDto } from '@modules/stats/dto/getStats.dto';
 import { GetStatsService } from '@modules/stats/services/getStats.service';
-import { GetStatsServiceV2 } from '@modules/stats/services/getStatsV2.service';
+import { GetStatsServiceV3 } from '@modules/stats/services/getStatsV3.service ';
 import { Controller, Get, Query, Version } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Public } from '@shared/decorators';
@@ -10,7 +10,7 @@ import { Public } from '@shared/decorators';
 export class StatsController {
   constructor(
     private readonly getStatsService: GetStatsService,
-    private readonly getStatsServiceV2: GetStatsServiceV2,
+    private readonly getStatsServiceV3: GetStatsServiceV3,
   ) {}
 
   @Get()
@@ -34,6 +34,6 @@ export class StatsController {
   })
   @ApiResponse({ status: 200, description: 'Returns the stats successfully.' })
   async getStatsV2(@Query() query: ImprovedGetStatsDto) {
-    return await this.getStatsServiceV2.execute(query);
+    return await this.getStatsServiceV3.execute(query);
   }
 }
