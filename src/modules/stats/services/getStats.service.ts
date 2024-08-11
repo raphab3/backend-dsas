@@ -95,6 +95,10 @@ export class GetStatsService implements OnModuleInit {
       schedules: {
         total: totalSchedules,
         monthly: monthlySchedules,
+        total_vacancies: schedules.reduce(
+          (acc, schedule) => acc + schedule.max_patients,
+          0,
+        ),
         total_vacancies_filled: this.calculateTotalVacanciesFilled(schedules),
         total_vacancies_available:
           this.calculateTotalVacanciesAvailable(schedules),

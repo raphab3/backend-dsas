@@ -133,7 +133,7 @@ export class GetStatsServiceV3 {
     const queryBuilder = this.scheduleRepository
       .createQueryBuilder('schedule')
       .leftJoinAndSelect('schedule.location', 'location')
-      .where('schedule.available_date BETWEEN :startDate AND :endDate', {
+      .andWhere('schedule.available_date BETWEEN :startDate AND :endDate', {
         startDate,
         endDate,
       });
@@ -237,6 +237,7 @@ export class GetStatsServiceV3 {
     return {
       total: totalSchedules,
       monthly: monthlySchedules,
+      total_vacancies: this.calculateTotalVacancies(schedules),
       total_vacancies_filled: this.calculateTotalVacanciesFilled(schedules),
       total_vacancies_available:
         this.calculateTotalVacanciesAvailable(schedules),
@@ -315,6 +316,13 @@ export class GetStatsServiceV3 {
 
       return acc;
     }, {});
+  }
+
+  private calculateTotalVacancies(schedules: Schedule[]): number {
+    return schedules.reduce(
+      (total, schedule) => total + schedule.max_patients,
+      0,
+    );
   }
 
   private calculateTotalVacanciesFilled(schedules: Schedule[]): number {

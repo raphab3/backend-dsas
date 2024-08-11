@@ -11,6 +11,7 @@ export interface IResponseStats {
         schedulesByLocation: Record<string, number>;
       }
     >;
+    total_vacancies: number;
     total_vacancies_filled: number;
     total_vacancies_available: number;
     schedulesByLocation: Record<string, number>;
