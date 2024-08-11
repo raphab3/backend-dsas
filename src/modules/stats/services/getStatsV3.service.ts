@@ -100,7 +100,7 @@ export class GetStatsServiceV3 {
       patientData,
       personSigData,
     ] = await Promise.all([
-      this.getScheduleData(startDate, endDate),
+      this.getScheduleData(startDate, endDate, query.locationId),
       this.getAppointmentData(startDate, endDate, query.locationId),
       this.getProfessionalData(),
       this.getPatientData(),
@@ -128,18 +128,23 @@ export class GetStatsServiceV3 {
   private async getScheduleData(
     startDate: string,
     endDate: string,
+    locationId?: string,
   ): Promise<{ total: number; schedules: Schedule[] }> {
-    const schedules = await this.scheduleRepository
+    const queryBuilder = this.scheduleRepository
       .createQueryBuilder('schedule')
       .leftJoinAndSelect('schedule.location', 'location')
       .where('schedule.available_date BETWEEN :startDate AND :endDate', {
         startDate,
         endDate,
-      })
-      .getMany();
+      });
 
-    const result = { total: schedules.length, schedules };
-    return result;
+    if (locationId) {
+      queryBuilder.andWhere('location.id = :locationId', { locationId });
+    }
+
+    const [schedules, total] = await queryBuilder.getManyAndCount();
+
+    return { total, schedules };
   }
 
   private getDateRange(query: ImprovedGetStatsDto): {
@@ -381,6 +386,7 @@ export class GetStatsServiceV3 {
     return appointments.reduce(
       (acc, appointment) => {
         const appointmentDate = new Date(appointment.schedule.available_date);
+        console.log(appointmentDate, start, end);
         if (appointmentDate >= start && appointmentDate <= end) {
           const monthYearKey = `${appointmentDate.getFullYear()}-${(
             appointmentDate.getMonth() + 1

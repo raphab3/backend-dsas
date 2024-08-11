@@ -1,6 +1,6 @@
 import { ImprovedGetStatsDto } from '@modules/stats/dto/getStats.dto';
 import { GetStatsService } from '@modules/stats/services/getStats.service';
-import { GetStatsServiceV3 } from '@modules/stats/services/getStatsV3.service ';
+import { GetStatsServiceV3 } from '@modules/stats/services/getStatsV3.service';
 import { Controller, Get, Query, Version } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Public } from '@shared/decorators';
