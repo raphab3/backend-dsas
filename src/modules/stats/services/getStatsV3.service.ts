@@ -72,7 +72,7 @@ export class GetStatsServiceV3 {
     try {
       return await this.cacheManager.get<IResponseStats>(key);
     } catch (error) {
-      console.error('Cache retrieval error:', error);
+      this.logger.error('Cache retrieval error:', error);
       return null;
     }
   }
@@ -84,7 +84,7 @@ export class GetStatsServiceV3 {
     try {
       await this.cacheManager.set(key, value, this.CACHE_TTL);
     } catch (error) {
-      console.error('Cache setting error:', error);
+      this.logger.error('Cache setting error:', error);
     }
   }
 
@@ -394,7 +394,6 @@ export class GetStatsServiceV3 {
     return appointments.reduce(
       (acc, appointment) => {
         const appointmentDate = new Date(appointment.schedule.available_date);
-        console.log(appointmentDate, start, end);
         if (appointmentDate >= start && appointmentDate <= end) {
           const monthYearKey = `${appointmentDate.getFullYear()}-${(
             appointmentDate.getMonth() + 1
