@@ -112,7 +112,11 @@ export class GetStatsServiceV3 {
         scheduleData.total,
         scheduleData.schedules,
       ),
-      appointments: this.getAppointmentStats(appointmentData),
+      appointments: this.getAppointmentStats(
+        appointmentData,
+        startDate,
+        endDate,
+      ),
       professionals: this.getProfessionalStats(professionalData),
       patients: { total: patientData.total },
       employees: this.getEmployeeStats(personSigData),
@@ -235,7 +239,11 @@ export class GetStatsServiceV3 {
     };
   }
 
-  private getAppointmentStats(appointments: Appointment[]): any {
+  private getAppointmentStats(
+    appointments: Appointment[],
+    startDate: string,
+    endDate: string,
+  ): any {
     const totalsByStatus = this.calculateTotalsByStatus(appointments);
     return {
       total: appointments.length,
@@ -248,7 +256,11 @@ export class GetStatsServiceV3 {
       total_attended: totalsByStatus['attended'] || 0,
       total_scheduled: totalsByStatus['scheduled'] || 0,
       total_missed: totalsByStatus['missed'] || 0,
-      totalByStatusByMonth: this.calculateTotalByStatusByMonth(appointments),
+      totalByStatusByMonth: this.calculateTotalByStatusByMonth(
+        appointments,
+        startDate,
+        endDate,
+      ),
       byLocation: this.aggregateAppointmentsByLocation(appointments),
       bySpecialty: this.aggregateAppointmentsBySpecialty(appointments),
     };
@@ -360,22 +372,33 @@ export class GetStatsServiceV3 {
 
   private calculateTotalByStatusByMonth(
     appointments: Appointment[],
+    startDate: string,
+    endDate: string,
   ): Record<string, Record<string, number>> {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
     return appointments.reduce(
       (acc, appointment) => {
         const appointmentDate = new Date(appointment.schedule.available_date);
-        const monthYearKey = `${appointmentDate.getFullYear()}-${(appointmentDate.getMonth() + 1).toString().padStart(2, '0')}`;
+        if (appointmentDate >= start && appointmentDate <= end) {
+          const monthYearKey = `${appointmentDate.getFullYear()}-${(
+            appointmentDate.getMonth() + 1
+          )
+            .toString()
+            .padStart(2, '0')}`;
 
-        if (!acc[monthYearKey]) {
-          acc[monthYearKey] = {
-            attended: 0,
-            canceled: 0,
-            scheduled: 0,
-            missed: 0,
-          };
+          if (!acc[monthYearKey]) {
+            acc[monthYearKey] = {
+              attended: 0,
+              canceled: 0,
+              scheduled: 0,
+              missed: 0,
+            };
+          }
+
+          acc[monthYearKey][appointment.status]++;
         }
-
-        acc[monthYearKey][appointment.status]++;
         return acc;
       },
       {} as Record<string, Record<string, number>>,
