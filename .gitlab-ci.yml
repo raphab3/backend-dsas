@@ -71,6 +71,8 @@ stage:
         export DB_HOST=${DB_HOST}
         export DB_DATABASE=${DB_DATABASE}
 
+        docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+
         docker compose down -v
         docker compose pull
         docker compose up -d
