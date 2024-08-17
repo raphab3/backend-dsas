@@ -1,0 +1,75 @@
+image: docker
+
+services:
+  - docker:dind
+
+variables:
+  # Variáveis de ambiente que começam com $CI_ são disponibilizadas pelo Gitlab
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  CACHE_IMAGE_TAG: $CI_REGISTRY_IMAGE:latest
+
+# Debug para verificar se o docker está funcinando corretamente no runner
+before_script:
+  - docker info
+  - echo "Image tag ${IMAGE_TAG}"
+  - echo "Cache image tag ${CACHE_IMAGE_TAG}"
+
+stages:
+  - build
+  - stage
+
+build image:
+  stage: build
+  tags:
+    - stage
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $CACHE_IMAGE_TAG || true
+    - docker build --cache-from $CACHE_IMAGE_TAG --tag $IMAGE_TAG --tag $CACHE_IMAGE_TAG .
+    - docker push $IMAGE_TAG
+    - docker push $CACHE_IMAGE_TAG
+
+.server_access_granted:
+  before_script:
+    - mkdir -p ~/.ssh
+    - echo "${SERVER_PRIVATE_KEY}" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - eval "$(ssh-agent -s)"
+    - ssh-add ~/.ssh/id_rsa
+    - echo "IP do servidor - ${SERVER_IP}"
+    - ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
+
+stage:
+  extends: .deploy_stage_template
+  stage: stage
+  when: manual
+  only:
+    - main
+  variables:
+    APP_FOLDER: 'stage'
+    COMPOSE_FILE: 'docker-compose.prod.yml'
+    SERVER_IP: $STAGE_SERVER_IP
+    SERVER_PRIVATE_KEY: $STAGE_SERVER_PRIVATE_KEY
+  environment:
+    name: stage
+    url: https://sigsaude.stage.pm.pb.gov.br
+
+.deploy_stage_template:
+  extends: .server_access_granted
+  tags:
+    - stage
+  script:
+    - ssh root@$SERVER_IP "mkdir -p $APP_FOLDER"
+    - scp -r ./$COMPOSE_FILE root@$SERVER_IP:~/$APP_FOLDER/compose.yaml
+    - >
+      ssh root@$SERVER_IP << ENDSSH
+        cd $APP_FOLDER
+
+        export IMAGE_TAG=${IMAGE_TAG}
+
+        docker compose down -v
+        docker compose pull
+        docker compose up -d
+
+      ENDSSH
+
