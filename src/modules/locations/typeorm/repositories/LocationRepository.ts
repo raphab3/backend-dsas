@@ -33,6 +33,7 @@ class LocationRepository implements ILocationRepository {
       .createQueryBuilder('locations')
       .leftJoinAndSelect('locations.person_sigs', 'person_sigs')
       .leftJoinAndSelect('person_sigs.user', 'user')
+      .leftJoinAndSelect('locations.professionals', 'professionals')
       .orderBy('locations.name', 'ASC');
 
     if (query.id) {
@@ -63,9 +64,19 @@ class LocationRepository implements ILocationRepository {
     }
 
     if (query.person_sig_id) {
+      console.log('query.person_sig_id', query.person_sig_id);
       locationsCreateQueryBuilder.andWhere('person_sigs.id = :person_sig_id', {
         person_sig_id: query.person_sig_id,
       });
+    }
+
+    if (query.professional_id) {
+      locationsCreateQueryBuilder.andWhere(
+        'professionals.id = :professional_id',
+        {
+          professional_id: query.professional_id,
+        },
+      );
     }
 
     if (query.userId) {

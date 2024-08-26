@@ -1,5 +1,6 @@
 import { LocationCityEnum } from '@modules/locations/interfaces/ILocation';
 import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
+import { Professional } from '@modules/professionals/typeorm/entities/professional.entity';
 import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
 import {
   BeforeInsert,
@@ -7,6 +8,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -42,6 +44,14 @@ export class Location {
 
   @ManyToMany(() => PersonSig, (personSig) => personSig.locations)
   person_sigs: PersonSig[];
+
+  @ManyToMany(() => Professional, (professional) => professional.locations)
+  @JoinTable({
+    name: 'professionals_locations',
+    joinColumns: [{ name: 'location_id' }],
+    inverseJoinColumns: [{ name: 'professional_id' }],
+  })
+  professionals: Professional[];
 
   @CreateDateColumn()
   created_at: Date;

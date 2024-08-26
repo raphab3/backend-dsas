@@ -35,12 +35,21 @@ class ScheduleRepository implements IScheduleRepository {
         .leftJoinAndSelect('schedules.appointments', 'appointments')
         .leftJoinAndSelect('appointments.patient', 'patient')
         .leftJoinAndSelect('schedules.location', 'location')
-        .orderBy('schedules.created_at', 'DESC');
+        .orderBy('schedules.available_date', 'ASC');
 
       if (query.id) {
         scheduleCreateQueryBuilder.where({
           id: query.id,
         });
+      }
+
+      if (query.start_date) {
+        scheduleCreateQueryBuilder.andWhere(
+          'schedules.available_date >= :start_date',
+          {
+            start_date: query.start_date,
+          },
+        );
       }
 
       if (query.start_date && query.end_date) {
@@ -58,6 +67,15 @@ class ScheduleRepository implements IScheduleRepository {
           'professional_person_sig.matricula ILike :matricula',
           {
             matricula: `%${query.professional_matricula}%`,
+          },
+        );
+      }
+
+      if (query.professional_id) {
+        scheduleCreateQueryBuilder.andWhere(
+          'professional.id = :professional_id',
+          {
+            professional_id: query.professional_id,
           },
         );
       }
