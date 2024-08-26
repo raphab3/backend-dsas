@@ -39,6 +39,12 @@ export class Location {
   })
   city: LocationCityEnum;
 
+  @Column({
+    type: 'boolean',
+    default: true,
+  })
+  schedule_enabled: boolean;
+
   @OneToMany(() => Schedule, (schedule) => schedule.location)
   schedules: Schedule[];
 

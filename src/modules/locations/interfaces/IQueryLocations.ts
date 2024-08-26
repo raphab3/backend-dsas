@@ -6,4 +6,5 @@ export interface IQueryLocations extends IQuery {
   city?: string;
   person_sig_id?: string;
   professional_id?: string;
+  schedule_enabled?: boolean;
 }
