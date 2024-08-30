@@ -77,6 +77,11 @@ export enum PermissionsEnum {
   update_location = 'update_location',
   remove_location = 'remove_location',
   find_all_stats = 'find_all_stats',
+  create_trainee = 'create_trainee',
+  find_all_trainees = 'find_all_trainees',
+  find_one_trainee = 'find_one_trainee',
+  update_trainee = 'update_trainee',
+  remove_trainee = 'remove_trainee',
 }
 
 export const PermissionsEnumList: PermissionsEnum[] = Object.keys(
@@ -107,6 +112,10 @@ export const groupsOfPermissions = {
     PermissionsEnum.remove_location,
     PermissionsEnum.update_location,
     PermissionsEnum.find_all_schedules_enduser,
+    PermissionsEnum.find_all_trainees,
+    PermissionsEnum.find_one_trainee,
+    PermissionsEnum.update_trainee,
+    PermissionsEnum.remove_trainee,
   ],
   receptionist: [
     PermissionsEnum.find_external_personSigs,

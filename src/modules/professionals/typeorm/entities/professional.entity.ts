@@ -3,6 +3,7 @@ import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity
 import { IProfessional } from '@modules/professionals/interfaces/IProfessional';
 import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
 import { Specialty } from '@modules/specialties/typeorm/entities/Specialty.entity';
+import { Trainee } from '@modules/trainees/entities/trainee.entity';
 import {
   Column,
   CreateDateColumn,
@@ -42,13 +43,24 @@ export class Professional implements IProfessional {
   @OneToMany(() => Schedule, (schedule) => schedule.professional)
   schedules: Schedule[];
 
-  @ManyToMany(() => Location, (location) => location.professionals)
+  @ManyToMany(() => Location, (location) => location.professionals, {
+    cascade: true,
+  })
   @JoinTable({
     name: 'professionals_locations',
-    joinColumns: [{ name: 'professional_id' }],
-    inverseJoinColumns: [{ name: 'location_id' }],
+    joinColumn: {
+      name: 'professional_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'location_id',
+      referencedColumnName: 'id',
+    },
   })
   locations: Location[];
+
+  @OneToMany(() => Trainee, (trainee) => trainee.supervisor)
+  trainees: Trainee[];
 
   @CreateDateColumn()
   created_at: Date;

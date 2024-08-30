@@ -48,18 +48,12 @@ export class EntityExceptionFilter implements ExceptionFilter {
       status = exception.getStatus();
       const responseMessage = exception.getResponse();
       message = this.extractMessage(responseMessage);
-    } else if (exception instanceof HttpException) {
-      status = exception.getStatus() || HttpStatus.BAD_REQUEST;
-      message = exception.message;
     } else if (exception instanceof TypeORMError) {
       status = HttpStatus.BAD_REQUEST;
       message = this.handleTypeORMError(exception);
     }
 
-    return {
-      status,
-      message: typeof message === 'string' ? message : JSON.stringify(message),
-    };
+    return { status, message };
   }
 
   private extractMessage(responseMessage: string | object): string {
@@ -69,7 +63,13 @@ export class EntityExceptionFilter implements ExceptionFilter {
       typeof responseMessage === 'object' &&
       responseMessage !== null
     ) {
-      return responseMessage['message'] || JSON.stringify(responseMessage);
+      if (Array.isArray(responseMessage['message'])) {
+        // Handle multiple validation errors
+        const errors = responseMessage['message'] as string[];
+        return `Erros:\n${errors.map((err) => `- ${err}`).join('\n')}`;
+      } else {
+        return responseMessage['message'] || JSON.stringify(responseMessage);
+      }
     }
     return 'Erro inesperado';
   }
@@ -90,7 +90,6 @@ export class EntityExceptionFilter implements ExceptionFilter {
     ) {
       return 'Erro de formato: um valor UUID inválido foi fornecido. Por favor, verifique os dados e tente novamente.';
     } else {
-      // Log the full error message for debugging
       console.error('Unhandled TypeORM error:', exception.message);
       return `Erro ao processar a solicitação: ${exception.message}. Por favor, verifique os dados e tente novamente.`;
     }

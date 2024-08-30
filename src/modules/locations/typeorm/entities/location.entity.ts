@@ -8,7 +8,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -52,11 +51,6 @@ export class Location {
   person_sigs: PersonSig[];
 
   @ManyToMany(() => Professional, (professional) => professional.locations)
-  @JoinTable({
-    name: 'professionals_locations',
-    joinColumns: [{ name: 'location_id' }],
-    inverseJoinColumns: [{ name: 'professional_id' }],
-  })
   professionals: Professional[];
 
   @CreateDateColumn()

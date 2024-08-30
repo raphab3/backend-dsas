@@ -8,7 +8,9 @@ import { paginate } from '@shared/utils/Pagination';
 import {
   ICreateProfessional,
   IUpdateProfessional,
+  ProfessionalResponse,
 } from '@modules/professionals/interfaces/IProfessional';
+import { IQueryProfessional } from '@modules/professionals/interfaces/IQueryProfessional';
 
 @Injectable()
 class ProfessionalRepository implements IProfessionalRepository {
@@ -31,7 +33,9 @@ class ProfessionalRepository implements IProfessionalRepository {
     }
   }
 
-  public async list(query: any): Promise<IPaginatedResult<any>> {
+  public async list(
+    query: IQueryProfessional,
+  ): Promise<IPaginatedResult<ProfessionalResponse>> {
     let page = 1;
     let perPage = 10;
 
@@ -39,6 +43,7 @@ class ProfessionalRepository implements IProfessionalRepository {
       .createQueryBuilder('professionals')
       .leftJoinAndSelect('professionals.person_sig', 'person_sig')
       .leftJoinAndSelect('professionals.specialties', 'specialties')
+      .leftJoinAndSelect('professionals.trainees', 'trainees')
       .leftJoinAndSelect('professionals.locations', 'locations')
       .orderBy('professionals.created_at', 'DESC');
 
@@ -91,12 +96,46 @@ class ProfessionalRepository implements IProfessionalRepository {
       },
     );
 
-    return result;
+    const dto: ProfessionalResponse[] = result.data.map((professional) => {
+      const { specialties, person_sig, ...rest } = professional;
+      return {
+        ...rest,
+        locations: professional.locations.map((location) => {
+          return {
+            id: location.id,
+            name: location.name,
+            city: location.city,
+          };
+        }),
+        specialties: specialties.map((specialty) => {
+          return {
+            id: specialty.id,
+            name: specialty.name,
+          };
+        }),
+        person_sig: {
+          id: person_sig.id,
+          nome: person_sig.nome,
+          matricula: person_sig.matricula,
+        },
+        trainees: professional.trainees.map((trainee) => {
+          return {
+            id: trainee.id,
+            name: trainee.name,
+          };
+        }),
+      };
+    });
+
+    return {
+      data: dto,
+      pagination: result.pagination,
+    };
   }
 
   public async findOne(id: string): Promise<Professional | undefined> {
     return this.ormRepository.findOne({
-      relations: ['specialties', 'person_sig'],
+      relations: ['specialties', 'person_sig', 'locations'],
       where: {
         id,
       },

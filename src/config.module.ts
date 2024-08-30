@@ -45,6 +45,8 @@ import { GatewaysModule } from '@shared/gateways/gateways.module';
 import { EventsModule } from '@shared/events/Events.module';
 import { CacheModuleCustom } from '@shared/providers/Cache/cache.module';
 import { AppLoggingInterceptor } from '@shared/interceptors/AppLoggerInterceptor';
+import { Trainee } from '@modules/trainees/entities/trainee.entity';
+import { TraineeModule } from '@modules/trainees/trainee.module';
 
 export const entities = [
   User,
@@ -62,6 +64,7 @@ export const entities = [
   Schedule,
   Appointment,
   City,
+  Trainee,
 ];
 
 export const databaseConfig: DataSourceOptions = {
@@ -104,6 +107,7 @@ export const MODULES = [
   LocationModule,
   JobModule,
   StatsModule,
+  TraineeModule,
 ];
 
 export const EXTRA_MODULES = [

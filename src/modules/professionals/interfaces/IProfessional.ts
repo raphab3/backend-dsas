@@ -17,3 +17,28 @@ export interface ICreateProfessional
 
 export interface IUpdateProfessional
   extends Omit<IProfessional, 'created_at' | 'updated_at' | 'person_sig'> {}
+
+export interface ProfessionalResponse {
+  id: string;
+  council: string;
+  created_at: string;
+  updated_at: string;
+  person_sig: {
+    id: string;
+    nome: string;
+    matricula: string;
+  };
+  specialties: Array<{
+    id: string;
+    name: string;
+  }>;
+  trainees: Array<{
+    id: string;
+    name: string;
+  }>;
+  locations: Array<{
+    id: string;
+    name: string;
+    city: string;
+  }>;
+}
