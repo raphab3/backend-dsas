@@ -8,10 +8,14 @@ import { IPaginatedResult } from '@shared/interfaces/IPaginations';
 import { paginate } from '@shared/utils/Pagination';
 import {
   ICreateSchedule,
-  IResponseEndUser,
   IUpdateSchedule,
+  ScheduleDto,
+  ScheduleEndUserDto,
+  ScheduleEndUserResponseDto,
+  ScheduleResponseDto,
 } from '@modules/schedules/interfaces/ISchedule';
 import { addDays, endOfDay, format, parseISO, startOfDay } from 'date-fns';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 class ScheduleRepository implements IScheduleRepository {
@@ -22,7 +26,7 @@ class ScheduleRepository implements IScheduleRepository {
 
   public async list(
     query: Partial<IQuerySchedule>,
-  ): Promise<IPaginatedResult<Schedule | IResponseEndUser>> {
+  ): Promise<IPaginatedResult<ScheduleDto | ScheduleEndUserDto>> {
     try {
       let page = 1;
       let perPage = 10;
@@ -129,45 +133,29 @@ class ScheduleRepository implements IScheduleRepository {
       );
 
       if (query.is_enduser) {
-        const response = {
-          data: result.data.map((schedule) => {
-            const {
-              id,
-              code,
-              description,
-              available_date,
-              start_time,
-              end_time,
-              max_patients,
-              patients_attended,
-              status,
-              created_at,
-              updated_at,
-            } = schedule;
-
-            return {
-              id,
-              code,
-              description,
-              available_date,
-              start_time,
-              end_time,
-              max_patients,
-              patients_attended,
-              status,
-              created_at,
-              updated_at,
-            };
-          }) as IResponseEndUser[],
-          pagination: result.pagination,
-        };
-
-        return response;
+        const endUserResponse = plainToClass(
+          ScheduleEndUserResponseDto,
+          {
+            data: result.data,
+            pagination: result.pagination,
+          },
+          { excludeExtraneousValues: true },
+        );
+        return endUserResponse as unknown as IPaginatedResult<ScheduleEndUserDto>;
+      } else {
+        const fullResponse = plainToClass(
+          ScheduleResponseDto,
+          {
+            data: result.data,
+            pagination: result.pagination,
+          },
+          { excludeExtraneousValues: true },
+        );
+        return fullResponse as unknown as IPaginatedResult<ScheduleDto>;
       }
-
-      return result;
     } catch (error) {
       console.log('error', error);
+      throw error;
     }
   }
 

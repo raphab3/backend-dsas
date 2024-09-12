@@ -149,6 +149,11 @@ export const groupsOfPermissions = {
     PermissionsEnum.find_one_schedule,
     PermissionsEnum.update_schedule,
     PermissionsEnum.remove_schedule,
+    PermissionsEnum.create_trainee,
+    PermissionsEnum.find_all_trainees,
+    PermissionsEnum.find_one_trainee,
+    PermissionsEnum.update_trainee,
+    PermissionsEnum.remove_trainee,
   ],
   professional: [
     PermissionsEnum.find_all_appointments,
