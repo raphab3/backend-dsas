@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional } from 'class-validator';
 
 export class CreateScheduleDto {
   @ApiProperty({
@@ -49,4 +50,12 @@ export class CreateScheduleDto {
     example: 'uuid',
   })
   location_id: string;
+
+  @ApiProperty({
+    description: 'Trainee of the schedule',
+    type: 'string',
+    example: 'uuid',
+  })
+  @IsOptional()
+  trainee_id?: string;
 }

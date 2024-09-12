@@ -11,7 +11,7 @@ import {
   IResponseEndUser,
   IUpdateSchedule,
 } from '@modules/schedules/interfaces/ISchedule';
-import { format } from 'date-fns';
+import { addDays, endOfDay, format, parseISO, startOfDay } from 'date-fns';
 
 @Injectable()
 class ScheduleRepository implements IScheduleRepository {
@@ -29,6 +29,7 @@ class ScheduleRepository implements IScheduleRepository {
 
       const scheduleCreateQueryBuilder = this.ormRepository
         .createQueryBuilder('schedules')
+        .leftJoinAndSelect('schedules.trainee', 'trainee')
         .leftJoinAndSelect('schedules.professional', 'professional')
         .leftJoinAndSelect('professional.person_sig', 'professional_person_sig')
         .leftJoinAndSelect('schedules.specialty', 'specialty')
@@ -53,11 +54,20 @@ class ScheduleRepository implements IScheduleRepository {
       }
 
       if (query.start_date && query.end_date) {
+        const startDate = parseISO(query.start_date);
+        const endDate = parseISO(query.end_date);
+
+        const formattedStartDate = format(startOfDay(startDate), 'yyyy-MM-dd');
+        const formattedEndDate = format(
+          addDays(endOfDay(endDate), 1),
+          'yyyy-MM-dd',
+        );
+
         scheduleCreateQueryBuilder.andWhere(
-          'schedules.available_date BETWEEN :start_date AND :end_date',
+          'schedules.available_date >= :start_date AND schedules.available_date < :end_date',
           {
-            start_date: query.start_date,
-            end_date: query.end_date,
+            start_date: formattedStartDate,
+            end_date: formattedEndDate,
           },
         );
       }

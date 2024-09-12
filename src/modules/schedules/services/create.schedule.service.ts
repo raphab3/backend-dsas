@@ -74,7 +74,7 @@ export class CreateScheduleService {
   }
 
   checkIfStartTimeIsBeforeEndTime(startTime: string, endTime: string) {
-    const referenceDate = '2000-01-01'; // Data arbitrária, apenas para criação do objeto Date
+    const referenceDate = '2000-01-01';
     const start = new Date(`${referenceDate}T${startTime}:00`);
     const end = new Date(`${referenceDate}T${endTime}:00`);
 
@@ -130,6 +130,9 @@ export class CreateScheduleService {
       professional: { id: createScheduleDto.professional_id },
       specialty: { id: createScheduleDto.specialty_id },
       location: { id: createScheduleDto.location_id },
+      trainee: createScheduleDto.trainee_id
+        ? { id: createScheduleDto.trainee_id }
+        : null,
     };
   }
 }

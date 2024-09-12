@@ -1,6 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateScheduleDto } from './create-schedule.dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional } from 'class-validator';
 
 export class UpdateScheduleDto extends PartialType(CreateScheduleDto) {
   @ApiProperty({
@@ -51,4 +52,12 @@ export class UpdateScheduleDto extends PartialType(CreateScheduleDto) {
     example: 'uuid',
   })
   location_id: string;
+
+  @ApiProperty({
+    description: 'Trainee of the schedule',
+    type: 'string',
+    example: 'uuid',
+  })
+  @IsOptional()
+  trainee_id?: string;
 }

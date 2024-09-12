@@ -1,9 +1,11 @@
 import { Professional } from '@modules/professionals/typeorm/entities/professional.entity';
+import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -20,6 +22,7 @@ export class Trainee {
 
   @Column({
     type: 'varchar',
+    unique: true,
   })
   email: string;
 
@@ -43,6 +46,7 @@ export class Trainee {
 
   @Column({
     type: 'varchar',
+    unique: true,
   })
   cpf: string;
 
@@ -69,6 +73,9 @@ export class Trainee {
 
   @ManyToOne(() => Professional, (professional) => professional.trainees)
   supervisor: Professional;
+
+  @OneToMany(() => Schedule, (schedule) => schedule.trainee)
+  schedules: Schedule[];
 
   @CreateDateColumn()
   created_at: Date;

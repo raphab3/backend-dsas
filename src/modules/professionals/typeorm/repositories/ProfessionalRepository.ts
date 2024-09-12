@@ -135,7 +135,7 @@ class ProfessionalRepository implements IProfessionalRepository {
 
   public async findOne(id: string): Promise<Professional | undefined> {
     return this.ormRepository.findOne({
-      relations: ['specialties', 'person_sig', 'locations'],
+      relations: ['specialties', 'person_sig', 'locations', 'trainees'],
       where: {
         id,
       },

@@ -3,6 +3,7 @@ import { Location } from '@modules/locations/typeorm/entities/location.entity';
 import { Professional } from '@modules/professionals/typeorm/entities/professional.entity';
 import { ISchedule } from '@modules/schedules/interfaces/ISchedule';
 import { Specialty } from '@modules/specialties/typeorm/entities/Specialty.entity';
+import { Trainee } from '@modules/trainees/entities/trainee.entity';
 import {
   BaseEntity,
   Column,
@@ -83,6 +84,9 @@ export class Schedule extends BaseEntity implements ISchedule {
 
   @ManyToOne(() => Location, (location) => location.schedules)
   location: Location;
+
+  @ManyToOne(() => Trainee, (trainee) => trainee.schedules)
+  trainee: Trainee;
 
   @CreateDateColumn()
   created_at: Date;

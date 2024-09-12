@@ -109,6 +109,9 @@ export class UpdateScheduleService {
       specialty: {
         id: updateScheduleDto.specialty_id,
       },
+      trainee: {
+        id: updateScheduleDto.trainee_id,
+      },
       start_time: updateScheduleDto.start_time,
       end_time: updateScheduleDto.end_time,
       max_patients: updateScheduleDto.max_patients,

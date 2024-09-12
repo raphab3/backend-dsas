@@ -15,6 +15,7 @@ export interface ISchedule {
   professional?: Partial<IProfessional>;
   specialty?: Partial<ISpecialty>;
   location?: Partial<ILocation>;
+  trainee?: Partial<IProfessional>;
   created_at: Date;
   updated_at: Date;
 }
