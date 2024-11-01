@@ -2,6 +2,7 @@ import {
   IAppointment,
   StatusAppointmentEnum,
 } from '@modules/appointments/interfaces/IAppointment';
+import { Attendance } from '@modules/attendances/entities/attendance.entity';
 import { Patient } from '@modules/patients/typeorm/entities/patient.entity';
 import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
 import {
@@ -12,6 +13,7 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
@@ -35,6 +37,9 @@ export class Appointment extends BaseEntity implements IAppointment {
     default: 'scheduled',
   })
   status: StatusAppointmentEnum;
+
+  @OneToMany(() => Attendance, (attendance) => attendance.appointment)
+  attendances: Attendance;
 
   @CreateDateColumn()
   created_at: Date;

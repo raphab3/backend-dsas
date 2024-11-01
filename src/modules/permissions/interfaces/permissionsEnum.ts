@@ -82,6 +82,21 @@ export enum PermissionsEnum {
   find_one_trainee = 'find_one_trainee',
   update_trainee = 'update_trainee',
   remove_trainee = 'remove_trainee',
+  create_attendance = 'create_attendance',
+  find_all_attendances = 'find_all_attendances',
+  find_one_attendance = 'find_one_attendance',
+  update_attendance = 'update_attendance',
+  remove_attendance = 'remove_attendance',
+  create_groupFormTemplate = 'create_groupFormTemplate',
+  find_all_groupFormTemplates = 'find_all_groupFormTemplates',
+  find_one_groupFormTemplate = 'find_one_groupFormTemplate',
+  update_groupFormTemplate = 'update_groupFormTemplate',
+  remove_groupFormTemplate = 'remove_groupFormTemplate',
+  create_patientRecord = 'create_patientRecord',
+  find_all_patientRecords = 'find_all_patientRecords',
+  find_one_patientRecord = 'find_one_patientRecord',
+  update_patientRecord = 'update_patientRecord',
+  remove_patientRecord = 'remove_patientRecord',
 }
 
 export const PermissionsEnumList: PermissionsEnum[] = Object.keys(

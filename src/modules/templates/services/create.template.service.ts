@@ -1,11 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import TemplateRepository from '../typeorm/repositories/TemplateRepository';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Template } from '../entities/template.entity';
+import { Repository } from 'typeorm';
+import { CreateTemplateDto } from '../dto/create-template.dto';
 
 @Injectable()
 export class CreateTemplateService {
-  constructor(private readonly templateRepository: TemplateRepository) {}
+  constructor(
+    @InjectRepository(Template)
+    private templateRepository: Repository<Template>,
+  ) {}
 
-  async execute(createTemplateDto: any) {
-    await this.templateRepository.create(createTemplateDto);
+  async execute(createTemplateDto: CreateTemplateDto) {
+    const createTemplate = this.templateRepository.create(createTemplateDto);
+    const templateSaved = await this.templateRepository.save(createTemplate);
+
+    return templateSaved;
   }
 }

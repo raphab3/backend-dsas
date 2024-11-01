@@ -1,0 +1,500 @@
+{
+    "name": "Teste de Denver II",
+    "category": "test",
+    "sessions": [
+      {
+        "_id": "67016d1b768c071576f9cad2",
+        "name": "Instruções",
+        "fields": [
+          {
+            "_id": "67016d1b768c071576f9cad1",
+            "name": "instrues",
+            "description": "",
+            "type": "rich_text_display",
+            "label": "Administração do Teste",
+            "validations": {
+              "required": false
+            },
+            "options": [],
+            "order": 0,
+            "content": "<p>O Denver II pode ser usado para examinar uma criança repetidamente, do nascimento até os seis anos de idade. Para usar a mesma folha de teste em mais de uma ocasião, recomenda-se que uma nova linha de idade (com a data do teste colocada acima dela) seja riscada cada vez que a criança for avaliada, e que o escore dos itens seja feito de tal maneira, que seja possível distinguir os escores de cada avaliação. Por exemplo, isto pode ser feito utilizando canetas de cores diferentes. Todos os itens precisam ser testados de acordo com os procedimentos estandardizados descritos no manual, caso contrário, as normas retratadas pelas barras não serão aplicáveis. Examinadores devem rever as diretrizes para administração do teste periodicamente para se precaver contra desvios não intencionais.&nbsp;</p>",
+            "metadata": [
+              {
+                "key": "function",
+                "value": "avaliarDenverII"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "_id": "67016d1b768c071576f9cad5",
+        "name": "Dados Básicos",
+        "fields": [
+          {
+            "_id": "67016f23768c071576f9d1a0",
+            "name": "idade-da-criana",
+            "description": "Esse parametro será utilizado para calcular a idade atual da criança subtraindo da data da realização do teste",
+            "type": "number",
+            "label": "Idade da Criança em meses",
+            "validations": {
+              "required": false
+            },
+            "options": [],
+            "order": 0,
+            "metadata": []
+          },
+          {
+            "_id": "67016d1b768c071576f9cad4",
+            "name": "prematura-se-sim-coloque-um-valor",
+            "description": "",
+            "type": "number",
+            "label": "Prematura? Se sim coloque um valor em semanas.",
+            "validations": {
+              "required": false
+            },
+            "options": [],
+            "order": 1,
+            "metadata": []
+          },
+          {
+            "_id": "67016fa9768c071576f9d1a5",
+            "name": "data-do-aplicao-do-teste",
+            "description": "",
+            "type": "date",
+            "label": "Data do aplicação do teste",
+            "validations": {
+              "required": false
+            },
+            "options": [],
+            "order": 2,
+            "metadata": [
+              {
+                "key": "minAgeMonth",
+                "value": "0"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "_id": "67016d1b768c071576f9cb54",
+        "name": "Pessoal - Social",
+        "description": "",
+        "fields": [
+          {
+            "_id": "67016d1b768c071576f9cada",
+            "name": "olha-a-face-regard-face-birth",
+            "description": "Segure a criança ou coloque-a deitada de supino. Aproxime seu rosto a uma\ndistância de aproximadamente 30 cm acima da face da criança.\nPassa se a criança realmente olha para você.",
+            "type": "radio",
+            "label": "Olha a face (Regard Face – Birth)",
+            "validations": {
+              "required": true
+            },
+            "options": [
+              {
+                "_id": "67016d1b768c071576f9cad6",
+                "label": "Passou",
+                "value": "P",
+                "score": 1
+              },
+              {
+                "_id": "67016d1b768c071576f9cad7",
+                "label": "Falhou",
+                "value": "F",
+                "score": -1
+              },
+              {
+                "_id": "67016d1b768c071576f9cad8",
+                "label": "Recusou",
+                "value": "R",
+                "score": 0
+              },
+              {
+                "_id": "67016d1b768c071576f9cad9",
+                "label": "Não houve oportunidade",
+                "value": "NO",
+                "score": 0
+              }
+            ],
+            "order": 0,
+            "metadata": [
+              {
+                "key": "minAgeMonth",
+                "value": "0"
+              }
+            ]
+          },
+          {
+            "_id": "67016d1b768c071576f9cadf",
+            "name": "sorri-em-resposta-smile-responsively-21-sem-a-15-meses",
+            "description": "Com a criança em supino, sorria e converse com a criança. Não faça cócegas\nou toque a face da criança.\nPassa se a criança sorri em resposta. O objetivo é uma resposta social e não\nfísica. ",
+            "type": "radio",
+            "label": "Sorri em resposta (Smile Responsively – 2.1 sem a 1.5 meses)",
+            "validations": {
+              "required": false
+            },
+            "options": [
+              {
+                "_id": "67016d1b768c071576f9cadb",
+                "label": "Passou",
+                "value": "P",
+                "score": 1
+              },
+              {
+                "_id": "67016d1b768c071576f9cadc",
+                "label": "Falhou",
+                "value": "F",
+                "score": -1
+              },
+              {
+                "_id": "67016d1b768c071576f9cadd",
+                "label": "Recusou",
+                "value": "R",
+                "score": 0
+              },
+              {
+                "_id": "67016d1b768c071576f9cade",
+                "label": "Não houve oportunidade",
+                "value": "NO",
+                "score": 0
+              }
+            ],
+            "order": 1,
+            "metadata": [
+              {
+                "key": "minAgeMonth",
+                "value": "0.5"
+              },
+              {
+                "key": "maxAgeMonth",
+                "value": "1.5"
+              }
+            ]
+          },
+          {
+            "_id": "67016d1b768c071576f9cae5",
+            "name": "sorri-em-resposta-smile-responsively-21-sem-a-15-meses-copy-1728080226039",
+            "description": "Durante o teste , note se a criança observa uma de suas mãos por vários\nsegundos pelo menos, ao contrário de só olhar rapidamente de relance. Se isto\nnão for observado, pergunte aos pais se a criança já fez isto .\nPassa se os pais relatarem que a criança faz isto ou se for observado durante\no teste. ",
+            "type": "radio",
+            "label": "Sorri espontaneamente ( R ) (Smile Spontaneously – 2.6 sem a 2.1 meses)",
+            "validations": {
+              "required": true
+            },
+            "options": [
+              {
+                "_id": "67016d1b768c071576f9cae0",
+                "label": "Passou",
+                "value": "P",
+                "score": 1
+              },
+              {
+                "_id": "67016d1b768c071576f9cae1",
+                "label": "Falhou",
+                "value": "F",
+                "score": -1
+              },
+              {
+                "_id": "67016d1b768c071576f9cae2",
+                "label": "Recusou",
+                "value": "R",
+                "score": 0
+              },
+              {
+                "_id": "67016d1b768c071576f9cae3",
+                "label": "Não houve oportunidade",
+                "value": "NO",
+                "score": 0
+              },
+              {
+                "_id": "67016d1b768c071576f9cae4",
+                "label": "Não administrado",
+                "value": "NO",
+                "score": 0
+              }
+            ],
+            "order": 2,
+            "metadata": [
+              {
+                "key": "minAgeMonth",
+                "value": "0.9"
+              },
+              {
+                "key": "maxAgeMonth",
+                "value": "4"
+              },
+              {
+                "key": "canBeReported",
+                "value": "true"
+              }
+            ]
+          },
+          {
+            "_id": "67016d1b768c071576f9caea",
+            "name": "olha-a-propria-mao",
+            "description": "Durante o teste, note se a criança observa uma de suas mãos por vários segundos pelo menos, ao contrário de só olhar rapidamente de relance. Se isto não for observado, pergunte aos pais se a criança já fez isto.",
+            "type": "radio",
+            "label": "Olha a própria mão ( R ) (Regard Own Hand – 3.4 sem a 4.0 meses)",
+            "validations": {
+              "required": false
+            },
+            "options": [
+              {
+                "_id": "67016d1b768c071576f9cae6",
+                "label": "Passou",
+                "value": "P",
+                "score": 1
+              },
+              {
+                "_id": "67016d1b768c071576f9cae7",
+                "label": "Falhou",
+                "value": "F",
+                "score": -1
+              },
+              {
+                "_id": "67016d1b768c071576f9cae8",
+                "label": "Recusou",
+                "value": "R",
+                "score": 0
+              },
+              {
+                "_id": "67016d1b768c071576f9cae9",
+                "label": "Não houve oportunidade",
+                "value": "NO",
+                "score": 0
+              }
+            ],
+            "order": 3,
+            "metadata": [
+              {
+                "key": "minAgeMonth",
+                "value": "0.85"
+              },
+              {
+                "key": "maxAgeMonth",
+                "value": "4.0"
+              },
+              {
+                "key": "canBeReported",
+                "value": "true"
+              }
+            ]
+          },
+          {
+            "_id": "67016d1b768c071576f9cb49",
+            "name": "joga-jogos-de-mesa-ou-cartas",
+            "description": "Pergunte aos pais se a criança brinca com jogos de mesa simples ou cartas. (Exemplos: baralho, memória, Lince). Certifique-se que a criança realmente joga e compreende o jogo.",
+            "type": "radio",
+            "label": "Joga jogos de mesa ou cartas ( R ) (Play Board/Cards Games – 2.7 a 4.9 anos)",
+            "validations": {
+              "required": false
+            },
+            "options": [
+              {
+                "_id": "67016d1b768c071576f9cb45",
+                "label": "Passou",
+                "value": "P",
+                "score": 1
+              },
+              {
+                "_id": "67016d1b768c071576f9cb46",
+                "label": "Falhou",
+                "value": "F",
+                "score": -1
+              },
+              {
+                "_id": "67016d1b768c071576f9cb47",
+                "label": "Recusou",
+                "value": "R",
+                "score": 0
+              },
+              {
+                "_id": "67016d1b768c071576f9cb48",
+                "label": "Não houve oportunidade",
+                "value": "NO",
+                "score": 0
+              }
+            ],
+            "order": 22,
+            "metadata": [
+              {
+                "key": "minAgeMonth",
+                "value": "32.4"
+              },
+              {
+                "key": "maxAgeMonth",
+                "value": "58.8"
+              },
+              {
+                "key": "canBeReported",
+                "value": "true"
+              }
+            ]
+          },
+          {
+            "_id": "67016d1b768c071576f9cb4e",
+            "name": "escova-dentes-sem-ajuda",
+            "description": "Pergunte aos pais se a criança, algumas vezes, escova seus dentes sem ajuda ou supervisão, incluindo colocar pasta dental na escova de dente e escovar todos os dentes com movimentos corretos para trás e para frente na linha da gengiva.",
+            "type": "radio",
+            "label": "Escova os dentes, sem ajuda ( R ) (Brush Teeth, No Help – 2.6 a 5.0 anos)",
+            "validations": {
+              "required": false
+            },
+            "options": [
+              {
+                "_id": "67016d1b768c071576f9cb4a",
+                "label": "Passou",
+                "value": "P",
+                "score": 1
+              },
+              {
+                "_id": "67016d1b768c071576f9cb4b",
+                "label": "Falhou",
+                "value": "F",
+                "score": -1
+              },
+              {
+                "_id": "67016d1b768c071576f9cb4c",
+                "label": "Recusou",
+                "value": "R",
+                "score": 0
+              },
+              {
+                "_id": "67016d1b768c071576f9cb4d",
+                "label": "Não houve oportunidade",
+                "value": "NO",
+                "score": 0
+              }
+            ],
+            "order": 23,
+            "metadata": [
+              {
+                "key": "minAgeMonth",
+                "value": "31.2"
+              },
+              {
+                "key": "maxAgeMonth",
+                "value": "60.0"
+              },
+              {
+                "key": "canBeReported",
+                "value": "true"
+              }
+            ]
+          },
+          {
+            "_id": "67016d1b768c071576f9cb53",
+            "name": "prepara-lanche-simples",
+            "description": "Pergunte aos pais se a criança pode preparar um lanche simples sem ajuda (excluindo-se itens que são difíceis de alcançar), incluindo pegar o prato, colher, alimento e líquido e colocar a bebida no copo sem derramar muito. Se os pais relatarem que a criança não consegue fazê-lo porque a vasilha de líquido é muito pesada, pergunte se a criança poderia colocar se fosse de uma vasilha quase vazia, de um recipiente menor ou de um copo. (Exemplos: Preparar um Toddy/Nescau ou um suco pronto).",
+            "type": "radio",
+            "label": "Prepara lanche simples ( R ) (Preparate Cereal – 3.0 a 5.1 anos)",
+            "validations": {
+              "required": false
+            },
+            "options": [
+              {
+                "_id": "67016d1b768c071576f9cb4f",
+                "label": "Passou",
+                "value": "P",
+                "score": 1
+              },
+              {
+                "_id": "67016d1b768c071576f9cb50",
+                "label": "Falhou",
+                "value": "F",
+                "score": -1
+              },
+              {
+                "_id": "67016d1b768c071576f9cb51",
+                "label": "Recusou",
+                "value": "R",
+                "score": 0
+              },
+              {
+                "_id": "67016d1b768c071576f9cb52",
+                "label": "Não houve oportunidade",
+                "value": "NO",
+                "score": 0
+              }
+            ],
+            "order": 24,
+            "metadata": [
+              {
+                "key": "minAgeMonth",
+                "value": "36.0"
+              },
+              {
+                "key": "maxAgeMonth",
+                "value": "61.2"
+              },
+              {
+                "key": "canBeReported",
+                "value": "true"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "rules": [
+      {
+        "_id": "6701887e7b6b2b0e1e7c2221",
+        "name": "Regra 1",
+        "type": "calculation",
+        "calculation": {
+          "operation": "sum",
+          "sourceFields": [
+            "olha-a-face-regard-face-birth",
+            "sorri-em-resposta-smile-responsively-21-sem-a-15-meses",
+            "sorri-em-resposta-smile-responsively-21-sem-a-15-meses-copy-1728080226039",
+            "olha-a-propria-mao",
+            "esforca-para-pegar-brinquedo",
+            "alimenta-se-sozinha",
+            "bate-palminhas",
+            "indica-desejo",
+            "da-tchau"
+          ]
+        }
+      },
+      {
+        "_id": "670188a97b6b2b0e1e7c2228",
+        "name": "Regra 2",
+        "type": "calculation",
+        "calculation": {
+          "operation": "count",
+          "sourceFields": [
+            "olha-a-face-regard-face-birth",
+            "sorri-em-resposta-smile-responsively-21-sem-a-15-meses",
+            "sorri-em-resposta-smile-responsively-21-sem-a-15-meses-copy-1728080226039",
+            "olha-a-propria-mao"
+          ]
+        }
+      },
+      {
+        "_id": "670188c17b6b2b0e1e7c222c",
+        "name": "Regra 3",
+        "type": "condition",
+        "condition": {
+          "sourceRuleId": "6701887e7b6b2b0e1e7c2221",
+          "operator": "equals",
+          "value": 20
+        }
+      },
+      {
+        "_id": "670188d77b6b2b0e1e7c2230",
+        "name": "Regra 4",
+        "type": "condition",
+        "condition": {
+          "sourceRuleId": "670188a97b6b2b0e1e7c2228",
+          "operator": "equals",
+          "value": 0
+        }
+      }
+    ],
+    "metadata": [
+      {
+        "key": "function",
+        "value": "denverCalc"
+      }
+    ]
+  }

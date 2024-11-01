@@ -3,6 +3,7 @@ import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
 
 export enum StatusAppointmentEnum {
   SCHEDULED = 'scheduled',
+  IN_PROGRESS = 'in_progress',
   CANCELED = 'canceled',
   MISSED = 'missed',
   ATTENDED = 'attended',

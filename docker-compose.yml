@@ -6,9 +6,9 @@ services:
     user: postgres
     restart: always
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: secret
-      POSTGRES_DB: db_sigsaude
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
       TZ: 'UTC'
     ports:
       - '5432:5432'
@@ -17,9 +17,41 @@ services:
     networks:
       - sigsaude_net
 
+  mongodb:
+    image: mongo:7.0
+    container_name: sigsaude_mongo_db
+    environment:
+      MONGODB_DATABASE: ${MONGODB_DATABASE}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASS}
+    networks:
+      - sigsaude_net
+    ports:
+      - 27017:27017
+    expose:
+      - 27017
+    volumes:
+      - mongo_db:/data/db
+
+  mongo-express:
+    container_name: sigsaude_mongo_express
+    image: mongo-express:latest
+    restart: always
+    ports:
+      - 8081:8081
+    expose:
+      - 8081
+    networks:
+      - sigsaude_net
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGODB_USER}:${MONGODB_PASS}@sigsaude_mongo_db:${MONGODB_PORT}/
+      ME_CONFIG_BASICAUTH_USERNAME: ${MONGODB_USER}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGODB_PASS}
+
 networks:
   sigsaude_net:
     name: sigsaude_net
 
 volumes:
   postgres_db:
+  mongo_db:

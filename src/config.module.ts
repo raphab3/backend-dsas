@@ -1,86 +1,39 @@
-import env from '@config/env';
+import AuditModule from '@modules/audits/Audit.module';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { Appointment } from '@modules/appointments/typeorm/entities/Appointment.entity';
+import { AppLoggingInterceptor } from '@shared/interceptors/AppLoggerInterceptor';
 import { AppointmentModule } from '@modules/appointments/appointment.module';
-import { Asset } from '@modules/assets/typeorm/entities/Asset.entity';
 import { AssetModule } from '@modules/assets/Asset.module';
-import { Audit } from '@modules/audits/typeorm/entities/Audit.entity';
 import { AuthModule } from '@modules/auth/auth.module';
-import { DataSourceOptions } from 'typeorm';
-import { Dependent } from '@modules/dependents/typeorm/entities/dependent.entity';
+import { CacheModuleCustom } from '@shared/providers/Cache/cache.module';
 import { DependentModule } from '@modules/dependents/dependent.module';
-import { Inventory } from '@modules/inventories/typeorm/entities/Inventory.entity';
+import { EntityExceptionFilter } from '@shared/interceptors/EntityPropertyNotFoundError';
+import { EventsModule } from '@shared/events/Events.module';
+import { GatewaysModule } from '@shared/gateways/gateways.module';
 import { InvetaryModule } from '@modules/inventories/Inventery.module';
+import { JobModule } from './jobs/Job.module';
 import { JwtAuthGuard } from '@shared/guards/Jwt-auth.guard';
-import { Location } from '@modules/locations/typeorm/entities/location.entity';
 import { LocationModule } from '@modules/locations/location.module';
-import { Patient } from '@modules/patients/typeorm/entities/patient.entity';
+import { LocationsGuard } from '@shared/guards/Location.guard';
 import { PatientModule } from '@modules/patients/patient.module';
-import { Permission } from '@modules/permissions/typeorm/entities/permission.entity';
 import { PermissionModule } from '@modules/permissions/permission.module';
 import { PermissionsGuard } from '@shared/guards/Permissions.guard';
-import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
 import { PersonSigModule } from '@modules/persosnSig/personSig.module';
-import { Professional } from '@modules/professionals/typeorm/entities/professional.entity';
 import { ProfessionalModule } from '@modules/professionals/professional.module';
-import { Role } from '@modules/roles/typeorm/entities/role.entity';
 import { RoleModule } from '@modules/roles/role.module';
-import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
 import { ScheduleModule } from '@modules/schedules/schedule.module';
 import { SeedModule } from '@shared/seeders/seed.module';
-import { Specialty } from '@modules/specialties/typeorm/entities/Specialty.entity';
 import { SpecialtyModule } from '@modules/specialties/Specialty.module';
+import { StatsModule } from '@modules/stats/Stats.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { TimeoutInterceptor } from '@shared/interceptors/TimeoutInterceptor';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from '@modules/users/typeorm/entities/user.entity';
-import { UsersModule } from '@modules/users/users.module';
-import { EntityExceptionFilter } from '@shared/interceptors/EntityPropertyNotFoundError';
-import { LocationsGuard } from '@shared/guards/Location.guard';
-import { City } from '@modules/locations/typeorm/entities/city.entity';
-import { JobModule } from './jobs/Job.module';
-import { StatsModule } from '@modules/stats/Stats.module';
-import AuditModule from '@modules/audits/Audit.module';
-import { GatewaysModule } from '@shared/gateways/gateways.module';
-import { EventsModule } from '@shared/events/Events.module';
-import { CacheModuleCustom } from '@shared/providers/Cache/cache.module';
-import { AppLoggingInterceptor } from '@shared/interceptors/AppLoggerInterceptor';
-import { Trainee } from '@modules/trainees/entities/trainee.entity';
 import { TraineeModule } from '@modules/trainees/trainee.module';
-
-export const entities = [
-  User,
-  Patient,
-  PersonSig,
-  Location,
-  Specialty,
-  Professional,
-  Inventory,
-  Asset,
-  Dependent,
-  Audit,
-  Role,
-  Permission,
-  Schedule,
-  Appointment,
-  City,
-  Trainee,
-];
-
-export const databaseConfig: DataSourceOptions = {
-  type: 'postgres',
-  host: env.DB_HOST,
-  port: env.DB_PORT,
-  username: env.DB_USERNAME,
-  password: env.DB_PASSWORD,
-  database: env.DB_DATABASE,
-  entities: [...entities],
-  synchronize: true,
-};
-
-export const TYPE_ORM_MODULE = TypeOrmModule.forRoot({
-  ...databaseConfig,
-});
+import { UsersModule } from '@modules/users/users.module';
+import { DatabasesModule } from '@shared/databases/databases.module';
+import { ProvidersModule } from '@shared/providers/providers.module';
+import { FormsResponseModule } from '@modules/formResponses/form_responses.module';
+import { FormTemplateModule } from '@modules/formsTemplates/form_template.module';
+import { AttendanceModule } from '@modules/attendances/attendance.module';
+import { GroupFormTemplateModule } from '@modules/groupFormTemplates/groupFormTemplate.module';
 
 export const RATE_LIMIT_MODULE = ThrottlerModule.forRoot([
   {
@@ -108,15 +61,20 @@ export const MODULES = [
   JobModule,
   StatsModule,
   TraineeModule,
+  FormsResponseModule,
+  FormTemplateModule,
+  GroupFormTemplateModule,
+  AttendanceModule,
 ];
 
 export const EXTRA_MODULES = [
-  TYPE_ORM_MODULE,
   RATE_LIMIT_MODULE,
+  DatabasesModule,
   GatewaysModule,
   EventsModule,
   SeedModule,
   CacheModuleCustom,
+  ProvidersModule,
 ];
 
 export const PROVIDERS = [

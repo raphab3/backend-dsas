@@ -53,6 +53,15 @@ class ProfessionalRepository implements IProfessionalRepository {
       });
     }
 
+    if (query.person_sig_id) {
+      professionalsCreateQueryBuilder.andWhere(
+        '  person_sig.id = :person_sig',
+        {
+          person_sig: query.person_sig_id,
+        },
+      );
+    }
+
     if (query.location_id) {
       professionalsCreateQueryBuilder.andWhere('locations.id = :location', {
         location: query.location_id,
