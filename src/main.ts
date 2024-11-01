@@ -1,8 +1,9 @@
+import env from '@config/env';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestFactory } from '@nestjs/core';
+import { SystemMonitor } from 'watchdock';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
-import env from '@config/env';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -12,6 +13,43 @@ async function bootstrap() {
   app.enableCors({
     methods: ['*'],
   });
+
+  const monitor = new SystemMonitor({
+    interval: '*/5 * * * *',
+    application: {
+      name: 'SigSaude API',
+      metadata: {
+        version: '1.0.0',
+      },
+    },
+    providers: [
+      {
+        type: 'discord',
+        webhookUrl: env.DISCORD_WEBHOOK_URL,
+        username: 'SigSaúde API',
+      },
+    ],
+    notifications: {
+      cpu: {
+        value: 80,
+        duration: 5,
+        notify: true,
+      },
+      memory: {
+        value: 90,
+        notify: true,
+      },
+      disk: {
+        value: 85,
+        notify: true,
+      },
+      status: {
+        notifyOn: ['unhealthy', 'degraded'],
+      },
+    },
+  });
+
+  monitor.start();
 
   app.setGlobalPrefix('api');
 

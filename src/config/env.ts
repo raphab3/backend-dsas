@@ -25,6 +25,8 @@ const envSchema = z.object({
   SIGPMPB_PASS: z.string(),
   TOKEN_SIGPMPB: z.string(),
   REFERER_SIGPMPB: z.string(),
+
+  DISCORD_WEBHOOK_URL: z.string().url(),
 });
 
 const env = envSchema.parse(process.env);
