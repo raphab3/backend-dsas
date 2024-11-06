@@ -16,6 +16,12 @@ const envSchema = z.object({
   DB_PASSWORD: z.string(),
   DB_USERNAME: z.string(),
 
+  MONGODB_HOST: z.string(),
+  MONGODB_DATABASE: z.string(),
+  MONGODB_USER: z.string(),
+  MONGODB_PASS: z.string(),
+  MONGODB_PORT: z.coerce.number(),
+
   TZ: z.string().default('America/Sao_Paulo'),
 
   JWT_SECRET: z.string(),

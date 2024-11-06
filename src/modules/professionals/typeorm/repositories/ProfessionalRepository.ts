@@ -28,7 +28,6 @@ class ProfessionalRepository implements IProfessionalRepository {
       await this.ormRepository.save(professional);
       return professional;
     } catch (error) {
-      console.log('error', error);
       throw new HttpException('Erro ao criar profissional', 500);
     }
   }
@@ -51,6 +50,15 @@ class ProfessionalRepository implements IProfessionalRepository {
       professionalsCreateQueryBuilder.where('professionals.id = :id', {
         id: query.id,
       });
+    }
+
+    if (query.person_sig_id) {
+      professionalsCreateQueryBuilder.andWhere(
+        '  person_sig.id = :person_sig',
+        {
+          person_sig: query.person_sig_id,
+        },
+      );
     }
 
     if (query.location_id) {

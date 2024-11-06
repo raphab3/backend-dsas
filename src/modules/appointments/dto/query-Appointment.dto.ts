@@ -39,6 +39,13 @@ export class QueryAppointmentDto extends IQuery {
   professional_name?: string;
 
   @ApiProperty({
+    description: 'The professional uuid of the appomentment',
+    type: 'string',
+    required: false,
+  })
+  professional_uuid?: string;
+
+  @ApiProperty({
     description: 'The patient name of the appomentment',
     type: 'string',
     required: false,
@@ -79,4 +86,11 @@ export class QueryAppointmentDto extends IQuery {
     required: false,
   })
   nearest_appointment: boolean;
+
+  @ApiProperty({
+    description: 'The specialty id',
+    type: 'string',
+    required: false,
+  })
+  specialty_id?: string;
 }

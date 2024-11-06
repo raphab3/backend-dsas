@@ -55,6 +55,7 @@ class AppointmentRepository implements IAppointmentRepository {
     const appointmentsCreateQueryBuilder = this.ormRepository
       .createQueryBuilder('appointments')
       .leftJoinAndSelect('appointments.schedule', 'schedule')
+      .leftJoinAndSelect('schedule.professional', 'professional')
       .leftJoinAndSelect('appointments.patient', 'patient')
       .leftJoinAndSelect('patient.dependent', 'dependent')
       .leftJoinAndSelect('patient.person_sig', 'person_sig')
@@ -89,6 +90,15 @@ class AppointmentRepository implements IAppointmentRepository {
         'person_sig.matricula ILike :matricula',
         {
           matricula: `%${query.matricula}%`,
+        },
+      );
+    }
+
+    if (query.professional_uuid) {
+      appointmentsCreateQueryBuilder.andWhere(
+        'schedule.professional.id = :professional_uuid',
+        {
+          professional_uuid: query.professional_uuid,
         },
       );
     }

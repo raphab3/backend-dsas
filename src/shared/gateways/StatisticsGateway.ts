@@ -5,22 +5,23 @@ import {
   OnGatewayInit,
   ConnectedSocket,
 } from '@nestjs/websockets';
-import { EventsService } from '@shared/events/EventsService';
 import { Socket, Server } from 'socket.io';
 import { Throttle } from '@nestjs/throttler';
 import env from '@config/env';
 
 @WebSocketGateway({
   cors: {
-    origin: [env.BACKOFFICE_URL, 'http://localhost:3000'],
+    origin: [
+      env.BACKOFFICE_URL,
+      'https://sigsaude.apps.pm.pb.gov.br',
+      'http://localhost:3000',
+    ],
     methods: ['GET', 'POST'],
     credentials: true,
   },
 })
 export class StatisticsGateway implements OnGatewayInit, OnGatewayConnection {
   @WebSocketServer() server: Server;
-
-  constructor(private eventsService: EventsService) {}
 
   afterInit() {
     console.log('Gateway inicializado');
