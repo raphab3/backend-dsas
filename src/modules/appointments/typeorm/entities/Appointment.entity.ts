@@ -12,6 +12,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -25,10 +26,18 @@ export class Appointment extends BaseEntity implements IAppointment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Schedule, (schedule) => schedule.appointments)
+  @ManyToOne(() => Schedule, (schedule) => schedule.appointments, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn()
   schedule: Schedule;
 
-  @ManyToOne(() => Patient, (patient) => patient.appointments)
+  @ManyToOne(() => Patient, (patient) => patient.appointments, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn()
   patient: Patient;
 
   @Column({
@@ -38,8 +47,11 @@ export class Appointment extends BaseEntity implements IAppointment {
   })
   status: StatusAppointmentEnum;
 
-  @OneToMany(() => Attendance, (attendance) => attendance.appointment)
-  attendances: Attendance;
+  @OneToMany(() => Attendance, (attendance) => attendance.appointment, {
+    cascade: true,
+    nullable: true,
+  })
+  attendances: Attendance[];
 
   @CreateDateColumn()
   created_at: Date;

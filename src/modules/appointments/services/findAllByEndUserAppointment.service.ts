@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { QueryAppointmentDto } from '../dto/query-Appointment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Appointment } from '../typeorm/entities/Appointment.entity';
@@ -31,6 +31,7 @@ interface IResponseEnduserAttament {
 
 @Injectable()
 export class FindAllByEnduserAppointmentService {
+  private readonly logger = new Logger(FindAllByEnduserAppointmentService.name);
   constructor(
     @InjectRepository(Appointment)
     private readonly appointmentRepository: Repository<Appointment>,
@@ -122,7 +123,7 @@ export class FindAllByEnduserAppointmentService {
           },
         );
       } catch (error) {
-        console.log('error', error);
+        this.logger.error('error', error);
       }
     }
 

@@ -81,7 +81,7 @@ export class CreateFormTemplateService {
         mongoTemplateId: savedMongoTemplate._id.toString(),
         category: createFormTemplateDto.category,
         createdBy: { id: createFormTemplateDto.createdBy },
-        isPublished: false,
+        isPublished: createFormTemplateDto.isPublished,
       });
 
       const savedPgTemplate = await queryRunner.manager.save(pgTemplate);
@@ -114,7 +114,6 @@ export class CreateFormTemplateService {
             `Falha ao remover documento MongoDB: ${mongoError.message}`,
             mongoError.stack,
           );
-          // Opcional: Você pode lançar uma exceção ou apenas registrar o erro
         }
       }
 

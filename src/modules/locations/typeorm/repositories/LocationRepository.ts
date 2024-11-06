@@ -64,7 +64,6 @@ class LocationRepository implements ILocationRepository {
     }
 
     if (query.person_sig_id) {
-      console.log('query.person_sig_id', query.person_sig_id);
       locationsCreateQueryBuilder.andWhere('person_sigs.id = :person_sig_id', {
         person_sig_id: query.person_sig_id,
       });

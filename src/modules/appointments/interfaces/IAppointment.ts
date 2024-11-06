@@ -6,6 +6,7 @@ export enum StatusAppointmentEnum {
   IN_PROGRESS = 'in_progress',
   CANCELED = 'canceled',
   MISSED = 'missed',
+  IN_ATTENDANCE = 'in_attendance',
   ATTENDED = 'attended',
 }
 

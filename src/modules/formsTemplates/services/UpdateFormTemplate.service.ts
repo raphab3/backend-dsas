@@ -68,11 +68,6 @@ export class UpdateFormTemplateService {
         updateFormTemplateDto.description ?? mongoTemplate.description;
 
       if (updateFormTemplateDto.sessions) {
-        // this.validateAndPrepareSessions(updateFormTemplateDto.sessions);
-        console.log(
-          'updateFormTemplateDto.sessions',
-          updateFormTemplateDto.sessions,
-        );
         mongoTemplate.sessions = updateFormTemplateDto.sessions.map(
           (session) => ({
             ...session,

@@ -97,6 +97,11 @@ export enum PermissionsEnum {
   find_one_patientRecord = 'find_one_patientRecord',
   update_patientRecord = 'update_patientRecord',
   remove_patientRecord = 'remove_patientRecord',
+  create_clinicalMetric = 'create_clinicalMetric',
+  find_all_clinicalMetrics = 'find_all_clinicalMetrics',
+  find_one_clinicalMetric = 'find_one_clinicalMetric',
+  update_clinicalMetric = 'update_clinicalMetric',
+  remove_clinicalMetric = 'remove_clinicalMetric',
 }
 
 export const PermissionsEnumList: PermissionsEnum[] = Object.keys(

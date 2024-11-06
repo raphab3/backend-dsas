@@ -11,21 +11,20 @@ import {
   UpdateDateColumn,
   JoinColumn,
   Index,
-  Generated,
+  BeforeInsert,
+  OneToMany,
 } from 'typeorm';
 import { AttendanceStatusEnum } from '../types';
+import { format } from 'date-fns';
+import { ClinicalMetric } from '@modules/clinicalMetrics/entities/clinicalMetric.entity';
 
 @Entity('attendances')
+@Index('IDX_UNIQUE_CODE', ['code'], { unique: true })
 export class Attendance {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Generated('increment')
-  @Column({
-    type: 'varchar',
-    length: 10,
-  })
-  @Index()
+  @Column({ unique: true })
   code: string;
 
   @ManyToOne(() => Patient)
@@ -42,11 +41,9 @@ export class Attendance {
   @Index()
   startAttendance: Date;
 
-  @Column({ type: 'timestamptz' })
+  @Column({ type: 'timestamptz', nullable: true })
   @Index()
   endAttendance: Date;
-
-  //Add audit attendance status
 
   @Column({
     type: 'enum',
@@ -57,6 +54,17 @@ export class Attendance {
 
   @Column('simple-array', { nullable: true })
   formResponseIds: string[];
+
+  @Column({ type: 'jsonb', nullable: true })
+  summary?: {
+    mainComplaints?: string[];
+    diagnosis?: string[];
+    procedures?: string[];
+    recommendations?: string[];
+    metricsProcessed?: number;
+    metricsWithAlerts?: number;
+    [key: string]: any;
+  };
 
   @ManyToOne(() => Appointment, (appointment) => appointment.attendances, {
     nullable: true,
@@ -72,9 +80,18 @@ export class Attendance {
   )
   groupFormTemplate: GroupFormTemplate;
 
+  @OneToMany(() => ClinicalMetric, (metric) => metric.attendance)
+  clinicalMetrics: ClinicalMetric[];
+
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @BeforeInsert()
+  generateCode() {
+    const now = new Date();
+    this.code = `ATD${format(now, 'yyyyMMddHHmmssSSS')}`;
+  }
 }

@@ -3,13 +3,13 @@ import { Appointment } from '@modules/appointments/typeorm/entities/Appointment.
 import { Asset } from '@modules/assets/typeorm/entities/Asset.entity';
 import { Attendance } from '@modules/attendances/entities/attendance.entity';
 import { Audit } from '@modules/audits/typeorm/entities/Audit.entity';
+import { ClinicalMetric } from '@modules/clinicalMetrics/entities/clinicalMetric.entity';
 import { Dependent } from '@modules/dependents/typeorm/entities/dependent.entity';
 import { FormTemplate } from '@modules/formsTemplates/entities/forms_template.entity';
 import { GroupFormTemplate } from '@modules/groupFormTemplates/entities/groupFormTemplate.entity';
 import { Inventory } from '@modules/inventories/typeorm/entities/Inventory.entity';
 import { City } from '@modules/locations/typeorm/entities/city.entity';
 import { Location } from '@modules/locations/typeorm/entities/location.entity';
-import { PatientRecord } from '@modules/patientRecords/entities/patientRecord.entity';
 import { Patient } from '@modules/patients/typeorm/entities/patient.entity';
 import { Permission } from '@modules/permissions/typeorm/entities/permission.entity';
 import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
@@ -43,7 +43,7 @@ export const entities = [
   FormTemplate,
   Attendance,
   GroupFormTemplate,
-  PatientRecord,
+  ClinicalMetric,
 ];
 
 export const databaseConfig: DataSourceOptions = {

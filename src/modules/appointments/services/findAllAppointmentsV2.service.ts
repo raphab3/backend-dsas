@@ -96,6 +96,12 @@ export class FindAlAppointmentsV2Service {
       );
     }
 
+    if (query.professional_uuid) {
+      baseQueryBuilder.andWhere('professional.id = :professionalUuid', {
+        professionalUuid: query.professional_uuid,
+      });
+    }
+
     if (query.status) {
       baseQueryBuilder.andWhere('appointment.status = :status', {
         status: query.status,
@@ -147,7 +153,7 @@ export class FindAlAppointmentsV2Service {
 
     if (patient.dependent) {
       return {
-        id: patient.dependent.id,
+        id: patient.id,
         name: patient.dependent.name,
         cpf: patient.dependent.cpf,
         birth_date: standardizeDateFormat(patient.dependent.birth_date),
@@ -158,7 +164,7 @@ export class FindAlAppointmentsV2Service {
       };
     } else {
       return {
-        id: patient.person_sig.id,
+        id: patient.id,
         name: patient.person_sig.nome,
         cpf: patient.person_sig.cpf,
         birth_date: standardizeDateFormat(patient.person_sig.data_nascimento),

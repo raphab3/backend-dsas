@@ -15,6 +15,10 @@ import {
 import AuditModule from '@modules/audits/Audit.module';
 import { CreateFormResponseService } from './services/create.formResponse.service';
 import { FormResponseController } from './controllers/form_response.controller';
+import { DeleteFormResponseService } from './services/delete.formResponse.service';
+import { GenerateFormResultService } from './services/GenerateFormResult.service';
+import { GetFormResponseByIdService } from './services/GetFormResponseById.service';
+import { UpdateFormResponseService } from './services/update.formResponse.service';
 
 const SCHEMA_TEMPLATES = MongooseModule.forFeature([
   { name: FormResponseMongo.name, schema: FormResponseMongoSchema },
@@ -24,8 +28,14 @@ const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([FormTemplate]);
 
 @Module({
   controllers: [FormResponseController],
-  providers: [CreateFormResponseService],
+  providers: [
+    CreateFormResponseService,
+    DeleteFormResponseService,
+    GenerateFormResultService,
+    GetFormResponseByIdService,
+    UpdateFormResponseService,
+  ],
   imports: [TYPE_ORM_TEMPLATES, SCHEMA_TEMPLATES, AuditModule, DatabasesModule],
-  exports: [],
+  exports: [CreateFormResponseService],
 })
 export class FormsResponseModule {}

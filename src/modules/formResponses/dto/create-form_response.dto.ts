@@ -20,12 +20,14 @@ export class CreateFormResponseDto {
 
   @IsNotEmpty()
   @IsEnum(FormResponseType)
-  type: FormResponseType;
+  @IsOptional()
+  type?: FormResponseType;
 
   @IsObject()
   @ValidateNested()
+  @IsOptional()
   @Type(() => FieldResponse)
-  responses: FieldResponse;
+  responses?: FieldResponse;
 
   @IsOptional()
   @IsObject()

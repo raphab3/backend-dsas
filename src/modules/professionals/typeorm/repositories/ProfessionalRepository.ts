@@ -28,7 +28,6 @@ class ProfessionalRepository implements IProfessionalRepository {
       await this.ormRepository.save(professional);
       return professional;
     } catch (error) {
-      console.log('error', error);
       throw new HttpException('Erro ao criar profissional', 500);
     }
   }

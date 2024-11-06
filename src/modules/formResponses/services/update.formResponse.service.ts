@@ -1,7 +1,6 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { Injectable, HttpException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { UpdateFormAnswerArrayDto } from '../dto/update-form_answer-array.dto';
 import {
   FormResponseMongo,
   FormResponseMongoDocument,
@@ -11,23 +10,38 @@ import {
 export class UpdateFormResponseService {
   constructor(
     @InjectModel(FormResponseMongo.name)
-    private readonly formAnswerModel: Model<FormResponseMongoDocument>,
+    private formResponseModel: Model<FormResponseMongoDocument>,
   ) {}
 
-  async update(
+  async execute(
     id: string,
-    updateformAnswerDto: UpdateFormAnswerArrayDto,
-  ): Promise<void> {
+    data: { fieldUpdates: { fieldId: string; value: any }[] },
+  ) {
     try {
-      const bulkOperations = updateformAnswerDto.fields.map((field) => ({
-        updateOne: {
-          filter: { _id: id, 'fields._id': field._id },
-          update: { $set: { 'fields.$.value': field.value } },
-        },
-      }));
+      const formResponse = await this.formResponseModel.findById(id);
+      if (!formResponse) {
+        throw new HttpException('Form response not found', 404);
+      }
 
-      await this.formAnswerModel.bulkWrite(bulkOperations);
+      if (!Array.isArray(data.fieldUpdates)) {
+        throw new HttpException('Invalid fieldUpdates format', 400);
+      }
+
+      for (const update of data.fieldUpdates) {
+        const session = formResponse.sessions.find((s) =>
+          s.fields.some((f) => f.name === update.fieldId),
+        );
+        if (session) {
+          const field = session.fields.find((f) => f.name === update.fieldId);
+          if (field) {
+            field.response = update.value;
+          }
+        }
+      }
+
+      await formResponse.save();
     } catch (e) {
+      console.error('Error updating form response:', e);
       throw new HttpException(e.message, 400);
     }
   }
