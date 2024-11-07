@@ -11,14 +11,33 @@ import env from '@config/env';
 
 @WebSocketGateway({
   cors: {
-    origin: [
-      env.BACKOFFICE_URL,
-      'https://sigsaude.apps.pm.pb.gov.br',
-      'http://localhost:3000',
-    ],
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        env.BACKOFFICE_URL,
+        'https://sigsaude.apps.pm.pb.gov.br',
+        'http://localhost:3000',
+      ];
+
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+
+      if (
+        allowedOrigins.indexOf(origin) !== -1 ||
+        origin.match(/^http:\/\/localhost:/)
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     methods: ['GET', 'POST'],
     credentials: true,
+    allowedHeaders: ['Authorization', 'Content-Type'],
   },
+  transports: ['websocket', 'polling'],
+  allowEIO3: true,
+  pingTimeout: 60000,
+  pingInterval: 25000,
 })
 export class StatisticsGateway implements OnGatewayInit, OnGatewayConnection {
   @WebSocketServer() server: Server;
