@@ -20,6 +20,7 @@ services:
   mongodb:
     image: mongo:7.0
     container_name: sigsaude_mongo_db
+    restart: always
     environment:
       MONGODB_DATABASE: ${MONGODB_DATABASE}
       MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
