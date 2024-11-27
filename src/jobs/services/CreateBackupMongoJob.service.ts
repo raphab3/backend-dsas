@@ -9,8 +9,8 @@ import { S3Provider } from '@shared/providers/StorageProvider/services/S3Storage
 const execAsync = promisify(exec);
 
 @Injectable()
-export class CreateBackupPostgresJobService {
-  private readonly logger = new Logger(CreateBackupPostgresJobService.name);
+export class CreateBackupMongoJobService {
+  private readonly logger = new Logger(CreateBackupMongoJobService.name);
 
   constructor(private readonly s3Provider: S3Provider) {}
 
@@ -28,7 +28,7 @@ export class CreateBackupPostgresJobService {
 
   @Cron(CronExpression.EVERY_DAY_AT_6AM)
   async handleBackup() {
-    this.logger.log('Iniciando backup do PostgreSQL...');
+    this.logger.log('Iniciando backup do MongoDB...');
     let backupPath: string | null = null;
 
     try {
@@ -39,13 +39,17 @@ export class CreateBackupPostgresJobService {
         '..',
         'scripts',
         'database',
-        'postgresql',
+        'mongodb',
         'backup.sh',
       );
 
       const currentDate = new Date().toISOString().split('T')[0];
       const timestamp = this.getLocalTimestamp();
-      const expectedBackupPath = resolve('backup', `db_dump_${timestamp}.sql`);
+      const expectedBackupPath = resolve(
+        'backup',
+        'mongodb',
+        `mongodb_dump_${timestamp}.gz`,
+      );
 
       const { stderr } = await execAsync(`bash ${scriptPath}`);
 
@@ -56,35 +60,34 @@ export class CreateBackupPostgresJobService {
 
       this.logger.log(`Procurando arquivo de backup em: ${expectedBackupPath}`);
 
-      // Verificar se o arquivo existe
       if (expectedBackupPath) {
         backupPath = expectedBackupPath;
         const fileName = backupPath.split('/').pop();
 
         // Upload para S3
-        const key = `backups/postgres/${currentDate}/${fileName}`;
+        const key = `backups/mongodb/${currentDate}/${fileName}`;
 
         this.logger.log(
           `Tentando fazer upload do arquivo: ${backupPath} para ${key}`,
         );
+
         try {
           await this.s3Provider.uploadFile(backupPath, key, {
-            contentType: 'application/sql',
+            contentType: 'application/gzip',
             metadata: {
-              'database-type': 'postgres',
+              'database-type': 'mongodb',
               'backup-date': currentDate,
             },
           });
 
           this.logger.log(`Backup enviado para S3: ${key}`);
 
-          // Only remove the file if upload was successful
+          // Remover arquivo local após upload bem-sucedido
           await unlink(backupPath);
           this.logger.log(`Arquivo local removido: ${backupPath}`);
         } catch (error) {
           this.logger.error(`Erro ao enviar para S3: ${error.message}`);
           this.logger.log(`Arquivo de backup mantido em: ${backupPath}`);
-          // Re-throw the error to be caught by the outer catch block
           throw error;
         }
       } else {
@@ -92,16 +95,6 @@ export class CreateBackupPostgresJobService {
       }
     } catch (error) {
       this.logger.error(`Erro ao processar o backup: ${error.message}`);
-      if (backupPath) {
-        try {
-          await unlink(backupPath);
-          this.logger.log(`Arquivo local removido após erro: ${backupPath}`);
-        } catch (unlinkError) {
-          this.logger.error(
-            `Erro ao remover arquivo local: ${unlinkError.message}`,
-          );
-        }
-      }
     }
   }
 
