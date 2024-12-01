@@ -41,6 +41,7 @@ export enum FieldType {
   TEXTAREA = 'textarea',
   RICH_TEXT_DISPLAY = 'rich_text_display',
   RICH_TEXT_INPUT = 'rich_text_input',
+  DOCUMENT_TEMPLATE = 'document_template',
 }
 
 export interface Condition {
@@ -94,6 +95,11 @@ export interface FormField {
   description?: string;
   type: FieldType;
   label: string;
+  documentConfig?: {
+    documentType?: string;
+    orientation?: string;
+    variables?: string[];
+  };
   validations: {
     required: boolean;
     min?: number;

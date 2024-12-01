@@ -10,6 +10,64 @@ import {
 } from '../types';
 
 @Schema({ _id: false })
+class DocumentVariable {
+  @Prop({ required: true })
+  name: string;
+
+  @Prop({ required: true })
+  label: string;
+
+  @Prop({ required: true, enum: ['field', 'custom'] })
+  type: string;
+
+  @Prop({ required: false })
+  fieldReference?: string;
+}
+
+@Schema({ _id: false })
+class DocumentConfig {
+  @Prop({ required: false })
+  documentType?: string;
+
+  @Prop({ required: false, enum: ['portrait', 'landscape'] })
+  orientation?: string;
+
+  @Prop({ type: [DocumentVariable], required: false, default: [] })
+  variables: DocumentVariable[];
+
+  @Prop({ type: [String], required: false, default: [] })
+  customVariables: string[];
+
+  @Prop({
+    required: false,
+    type: {
+      header: String,
+      footer: String,
+      margins: {
+        top: Number,
+        right: Number,
+        bottom: Number,
+        left: Number,
+      },
+      fontSize: Number,
+      fontFamily: String,
+    },
+  })
+  metadata?: {
+    header?: string;
+    footer?: string;
+    margins?: {
+      top: number;
+      right: number;
+      bottom: number;
+      left: number;
+    };
+    fontSize?: number;
+    fontFamily?: string;
+  };
+}
+
+@Schema({ _id: false })
 class ValidationSchema {
   @Prop({ required: true })
   required: boolean;
@@ -79,6 +137,9 @@ class FieldSchema {
 
   @Prop({ required: true })
   order: number;
+
+  @Prop({ type: DocumentConfig, required: false })
+  documentConfig?: DocumentConfig;
 
   @Prop({ required: false })
   content?: string;
