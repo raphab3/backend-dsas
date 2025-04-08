@@ -14,42 +14,44 @@ async function bootstrap() {
     methods: ['*'],
   });
 
-  const monitor = new SystemMonitor({
-    interval: '*/5 * * * *',
-    application: {
-      name: 'SigSaude API',
-      metadata: {
-        version: '1.0.0',
+  if (env.NODE_ENV === 'production') {
+    const monitor = new SystemMonitor({
+      interval: '*/5 * * * *',
+      application: {
+        name: 'SigSaude API',
+        metadata: {
+          version: '1.0.0',
+        },
       },
-    },
-    providers: [
-      {
-        type: 'discord',
-        webhookUrl: env.DISCORD_WEBHOOK_URL,
-        username: 'SigSaúde API',
+      providers: [
+        {
+          type: 'discord',
+          webhookUrl: env.DISCORD_WEBHOOK_URL,
+          username: `SigSaúde API - ${env.NODE_ENV}`,
+        },
+      ],
+      notifications: {
+        cpu: {
+          value: 80,
+          duration: 5,
+          notify: true,
+        },
+        memory: {
+          value: 90,
+          notify: true,
+        },
+        disk: {
+          value: 85,
+          notify: true,
+        },
+        status: {
+          notifyOn: ['unhealthy', 'degraded'],
+        },
       },
-    ],
-    notifications: {
-      cpu: {
-        value: 80,
-        duration: 5,
-        notify: true,
-      },
-      memory: {
-        value: 90,
-        notify: true,
-      },
-      disk: {
-        value: 85,
-        notify: true,
-      },
-      status: {
-        notifyOn: ['unhealthy', 'degraded'],
-      },
-    },
-  });
+    });
 
-  monitor.start();
+    monitor.start();
+  }
 
   app.setGlobalPrefix('api');
 

@@ -6,7 +6,6 @@ import { AssetModule } from '@modules/assets/Asset.module';
 import { AuthModule } from '@modules/auth/auth.module';
 import { CacheModuleCustom } from '@shared/providers/Cache/cache.module';
 import { DependentModule } from '@modules/dependents/dependent.module';
-import { EntityExceptionFilter } from '@shared/interceptors/EntityPropertyNotFoundError';
 import { EventsModule } from '@shared/events/Events.module';
 import { GatewaysModule } from '@shared/gateways/gateways.module';
 import { InvetaryModule } from '@modules/inventories/Inventery.module';
@@ -34,6 +33,7 @@ import { FormsResponseModule } from '@modules/formResponses/form_responses.modul
 import { FormTemplateModule } from '@modules/formsTemplates/form_template.module';
 import { AttendanceModule } from '@modules/attendances/attendance.module';
 import { GroupFormTemplateModule } from '@modules/groupFormTemplates/groupFormTemplate.module';
+import { NotificationsModule } from '@shared/providers/Notification/notifications.module';
 
 export const RATE_LIMIT_MODULE = ThrottlerModule.forRoot([
   {
@@ -75,6 +75,7 @@ export const EXTRA_MODULES = [
   SeedModule,
   CacheModuleCustom,
   ProvidersModule,
+  NotificationsModule,
 ];
 
 export const PROVIDERS = [
@@ -83,15 +84,11 @@ export const PROVIDERS = [
     useClass: ThrottlerGuard,
   },
   {
-    provide: APP_FILTER,
-    useClass: EntityExceptionFilter,
-  },
-  {
     provide: APP_INTERCEPTOR,
     useClass: TimeoutInterceptor,
   },
   {
-    provide: APP_INTERCEPTOR,
+    provide: APP_FILTER,
     useClass: AppLoggingInterceptor,
   },
   {

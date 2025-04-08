@@ -38,6 +38,9 @@ const envSchema = z.object({
   REFERER_SIGPMPB: z.string(),
 
   DISCORD_WEBHOOK_URL: z.string().url(),
+
+  API_TELEGRAM_TOKEN: z.string(),
+  API_TELEGRAM_CHAT_ID: z.string(),
 });
 
 const env = envSchema.parse(process.env);
