@@ -18,7 +18,6 @@ import {
   HttpException,
   Req,
   UseInterceptors,
-  UseFilters,
 } from '@nestjs/common';
 import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
 import { AuditLog } from '@modules/audits/decorators';
@@ -26,7 +25,6 @@ import { Permission } from '@shared/decorators/Permission';
 import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum';
 import { AddedPermissionUserDto } from '@modules/users/dto/added-permission-user.dto';
 import { AddPermissionUserService } from '@modules/users/services/addPermissionUser.service';
-import { EntityExceptionFilter } from '@shared/interceptors/EntityPropertyNotFoundError';
 import { UpdatePasswordUsersService } from '@modules/users/services/updatePassword.users.service';
 import { UpdatePasswordUser } from '@modules/users/dto/updatePasswordUser.dto';
 import { ResetPasswordUsersService } from '@modules/users/services/resetPassord.users.service';
@@ -36,7 +34,6 @@ import { ResetPasswordUsersService } from '@modules/users/services/resetPassord.
 @Controller('users')
 @ApiBearerAuth('JWT')
 @UseInterceptors(AuditInterceptor)
-@UseFilters(new EntityExceptionFilter())
 export class UsersController {
   constructor(
     private readonly createUsersService: CreateUsersService,

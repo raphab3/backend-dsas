@@ -21,17 +21,14 @@ import {
   Query,
   UseInterceptors,
   UseGuards,
-  UseFilters,
 } from '@nestjs/common';
 import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum';
-import { EntityExceptionFilter } from '@shared/interceptors/EntityPropertyNotFoundError';
 
 @ApiTags('dependents')
 @Controller('dependents')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth('JWT')
 @UseInterceptors(AuditInterceptor)
-@UseFilters(new EntityExceptionFilter())
 export class DependentController {
   constructor(
     private readonly createDependentService: CreateDependentService,
