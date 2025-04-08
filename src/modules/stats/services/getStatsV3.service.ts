@@ -38,7 +38,6 @@ export class GetStatsServiceV3 {
       try {
         const cachedResult = await this.getCachedResult(cacheKey);
         if (cachedResult) {
-          this.logger.log(`Cache hit for key: ${cacheKey}`);
           return cachedResult;
         }
       } catch (error) {
@@ -49,13 +48,11 @@ export class GetStatsServiceV3 {
       }
     }
 
-    this.logger.log(`Cache miss or disabled for key: ${cacheKey}`);
     const stats = await this.generateStats(query);
 
     if (this.isCacheEnabled) {
       try {
         await this.setCachedResult(cacheKey, stats);
-        this.logger.log(`Cache set for key: ${cacheKey}`);
       } catch (error) {
         this.logger.error(`Error setting cache: ${error.message}`, error.stack);
       }
@@ -91,21 +88,26 @@ export class GetStatsServiceV3 {
   private async generateStats(
     query: ImprovedGetStatsDto,
   ): Promise<IResponseStats> {
-    const { startDate, endDate } = this.getDateRange(query);
+    const { startDate, endDate, locationId } = this.getFilterParams(query);
 
-    const [
-      scheduleData,
-      appointmentData,
-      professionalData,
-      patientData,
-      personSigData,
-    ] = await Promise.all([
-      this.getScheduleData(startDate, endDate, query.locationId),
-      this.getAppointmentData(startDate, endDate, query.locationId),
-      this.getProfessionalData(),
-      this.getPatientData(),
-      this.getPersonSigData(),
-    ]);
+    // First get the appointments to use for other filters
+    const appointmentData = await this.getAppointmentData(
+      startDate,
+      endDate,
+      locationId,
+    );
+
+    // Get IDs of patients and professionals involved in the filtered appointments
+    const patientIds = this.extractPatientIds(appointmentData);
+    const professionalIds = this.extractProfessionalIds(appointmentData);
+
+    const [scheduleData, professionalData, patientData, personSigData] =
+      await Promise.all([
+        this.getScheduleData(startDate, endDate, locationId),
+        this.getProfessionalData(professionalIds, locationId),
+        this.getPatientData(patientIds),
+        this.getPersonSigData(locationId),
+      ]);
 
     const result = {
       schedules: this.getScheduleStats(
@@ -123,6 +125,39 @@ export class GetStatsServiceV3 {
     };
 
     return result;
+  }
+
+  private getFilterParams(query: ImprovedGetStatsDto): {
+    startDate: string;
+    endDate: string;
+    locationId?: string;
+  } {
+    const { startDate, endDate } = this.getDateRange(query);
+    return {
+      startDate,
+      endDate,
+      locationId: query.locationId,
+    };
+  }
+
+  private extractPatientIds(appointments: Appointment[]): string[] {
+    return [
+      ...new Set(
+        appointments
+          .map((appointment) => appointment.patient?.id)
+          .filter(Boolean),
+      ),
+    ];
+  }
+
+  private extractProfessionalIds(appointments: Appointment[]): string[] {
+    return [
+      ...new Set(
+        appointments
+          .map((appointment) => appointment.schedule?.professional?.id)
+          .filter(Boolean),
+      ),
+    ];
   }
 
   private async getScheduleData(
@@ -203,6 +238,7 @@ export class GetStatsServiceV3 {
         'specialty.name',
         'patient.id',
         'dependent.id',
+        'professional.id',
       ]);
 
     if (locationId) {
@@ -214,21 +250,56 @@ export class GetStatsServiceV3 {
     return result;
   }
 
-  private async getProfessionalData(): Promise<Professional[]> {
-    return this.professionalRepository
+  private async getProfessionalData(
+    professionalIds?: string[],
+    locationId?: string,
+  ): Promise<Professional[]> {
+    const queryBuilder = this.professionalRepository
       .createQueryBuilder('professional')
       .leftJoinAndSelect('professional.locations', 'locations')
-      .leftJoinAndSelect('professional.person_sig', 'person_sig')
-      .cache(true)
-      .getMany();
+      .leftJoinAndSelect('professional.person_sig', 'person_sig');
+
+    // Add filters
+    if (professionalIds && professionalIds.length > 0) {
+      queryBuilder.andWhere('professional.id IN (:...professionalIds)', {
+        professionalIds,
+      });
+    }
+
+    if (locationId) {
+      queryBuilder.andWhere('locations.id = :locationId', { locationId });
+    }
+
+    return queryBuilder.cache(true).getMany();
   }
 
-  private async getPatientData(): Promise<{ total: number }> {
+  private async getPatientData(
+    patientIds?: string[],
+  ): Promise<{ total: number }> {
+    if (patientIds && patientIds.length > 0) {
+      const total = await this.patientRepository
+        .createQueryBuilder('patient')
+        .where('patient.id IN (:...patientIds)', { patientIds })
+        .getCount();
+      return { total };
+    }
+
+    // If no specific patient IDs, return all patients (keeping existing behavior)
     const total = await this.patientRepository.count();
     return { total };
   }
 
-  private async getPersonSigData(): Promise<PersonSig[]> {
+  private async getPersonSigData(locationId?: string): Promise<PersonSig[]> {
+    if (locationId) {
+      return this.personSigRepository
+        .createQueryBuilder('person_sig')
+        .leftJoin('person_sig.professional', 'professional')
+        .leftJoin('professional.locations', 'locations')
+        .where('locations.id = :locationId', { locationId })
+        .getMany();
+    }
+
+    // If no filters, return all (keeping existing behavior)
     return this.personSigRepository.find();
   }
 
