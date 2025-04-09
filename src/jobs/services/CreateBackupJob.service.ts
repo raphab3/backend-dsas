@@ -5,6 +5,8 @@ import { resolve } from 'path';
 import { promisify } from 'util';
 import { unlink } from 'fs/promises';
 import { S3Provider } from '@shared/providers/StorageProvider/services/S3StorageProvider';
+import { TelegramBotService } from '@shared/providers/Notification/services/TelegramBot.service';
+import env from '@config/env';
 
 const execAsync = promisify(exec);
 
@@ -12,7 +14,10 @@ const execAsync = promisify(exec);
 export class CreateBackupPostgresJobService {
   private readonly logger = new Logger(CreateBackupPostgresJobService.name);
 
-  constructor(private readonly s3Provider: S3Provider) {}
+  constructor(
+    private readonly s3Provider: S3Provider,
+    private readonly telegram: TelegramBotService,
+  ) {}
 
   private getLocalTimestamp(): string {
     const now = new Date();
@@ -81,6 +86,13 @@ export class CreateBackupPostgresJobService {
           // Only remove the file if upload was successful
           await unlink(backupPath);
           this.logger.log(`Arquivo local removido: ${backupPath}`);
+
+          await this.telegram.sendMessage(
+            `✅ Backup do banco concluído com sucesso!\n\n` +
+              `🕒 Data: ${new Date().toLocaleString()}\n` +
+              `🗄️ Backup armazenado com segurança 🔒`,
+            env.API_TELEGRAM_CHAT_ID,
+          );
         } catch (error) {
           this.logger.error(`Erro ao enviar para S3: ${error.message}`);
           this.logger.log(`Arquivo de backup mantido em: ${backupPath}`);
