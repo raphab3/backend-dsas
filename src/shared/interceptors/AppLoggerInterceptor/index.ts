@@ -11,6 +11,7 @@ import {
 import { Response, Request } from 'express';
 import { TelegramBotService } from '@shared/providers/Notification/services/TelegramBot.service';
 import { TypeORMError } from 'typeorm';
+import { SECURITY_PROBE_PATTERNS } from './utils';
 
 enum StatusEmoji {
   ServerError = '🚨',
@@ -22,6 +23,7 @@ interface ErrorDetails {
   status: number;
   message: string;
 }
+
 @Catch()
 @Injectable()
 export class AppLoggingInterceptor implements ExceptionFilter {
@@ -37,7 +39,7 @@ export class AppLoggingInterceptor implements ExceptionFilter {
     const { status, message } = this.getErrorDetails(exception);
     this.logError(request, status, message, exception);
 
-    if (this.shouldNotifyTelegram(status)) {
+    if (this.shouldNotifyTelegram(status, request)) {
       this.notifyViaTelegram(status, request, message, exception);
     }
 
@@ -72,20 +74,40 @@ export class AppLoggingInterceptor implements ExceptionFilter {
     message: string,
     exception: unknown,
   ): void {
-    const logMessage = `[ERROR] ${request.method} ${request.url} - Status: ${status} - IP: ${request.ip} - Message: ${message}`;
+    // Determine if this is a security probe
+    const isSecurityProbe = this.isSecurityProbe(request);
+
+    // Add probe info to log message if detected
+    const probeInfo = isSecurityProbe ? ' [SECURITY_PROBE]' : '';
+
+    const logMessage = `[ERROR]${probeInfo} ${request.method} ${request.url} - Status: ${status} - IP: ${request.ip} - Message: ${message}`;
     this.logger.error(logMessage);
-    this.logger.error(this.getExceptionStack(exception));
+
+    // Only log stack trace for non-security probes or if in development environment
+    if (!isSecurityProbe || env.NODE_ENV !== 'production') {
+      this.logger.error(this.getExceptionStack(exception));
+    }
   }
 
-  private shouldNotifyTelegram(status: number): boolean {
-    const notAllowedErrorsNotfication = [
+  private isSecurityProbe(request: Request): boolean {
+    // Check URL against known security probe patterns
+    return SECURITY_PROBE_PATTERNS.some((pattern) => pattern.test(request.url));
+  }
+
+  private shouldNotifyTelegram(status: number, request: Request): boolean {
+    const notAllowedErrorsNotification = [
       HttpStatus.UNAUTHORIZED,
       HttpStatus.FORBIDDEN,
     ];
 
+    // Don't notify about 404s that match security probe patterns
+    if (status === HttpStatus.NOT_FOUND && this.isSecurityProbe(request)) {
+      return false;
+    }
+
     return (
       env.NODE_ENV === 'production' &&
-      !notAllowedErrorsNotfication.includes(status)
+      !notAllowedErrorsNotification.includes(status)
     );
   }
 
