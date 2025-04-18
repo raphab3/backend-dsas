@@ -37,3 +37,5 @@ lerna-debug.log*
 .env
 /backup
 /src/config/firebase-sig-saude.json
+sigsaude-app-8dc66eea515f.json
+*.pem
