@@ -1,4 +1,3 @@
-// dto/query-attendance.dto.ts
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsOptional,
@@ -58,6 +57,11 @@ export class QueryAttendanceDto {
   @IsOptional()
   @IsUUID()
   professionalId?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsUUID()
+  personSigId?: string;
 
   @ApiPropertyOptional()
   @IsOptional()

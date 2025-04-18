@@ -113,6 +113,12 @@ export class FindAllAttendanceService {
       });
     }
 
+    if (query.personSigId) {
+      baseQueryBuilder.andWhere('person_sig_profesional.id = :personSigId', {
+        personSigId: query.personSigId,
+      });
+    }
+
     if (query.patientId) {
       baseQueryBuilder.andWhere('patient.id = :patientId', {
         patientId: query.patientId,

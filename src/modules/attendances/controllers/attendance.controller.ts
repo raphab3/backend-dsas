@@ -121,7 +121,11 @@ export class AttendanceController {
   @Get()
   @ApiOperation({ summary: 'Find all Attendance' })
   @Permission(PermissionsEnum.find_all_attendances)
-  findAll(@Query() query: QueryAttendanceDto): Promise<any> {
+  findAll(
+    @Query() query: QueryAttendanceDto,
+    @CurrentPersonSigId() personSigId: string,
+  ): Promise<any> {
+    query.personSigId = personSigId;
     return this.findAllAttendanceService.findAll(query);
   }
 
@@ -169,7 +173,9 @@ export class AttendanceController {
   @ApiOperation({ summary: 'Upload attachment to attendance' })
   @Permission(PermissionsEnum.update_attendance)
   @UseGuards(PersonSigGuard)
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', { limits: { fileSize: 1024 * 1024 * 10 } }),
+  )
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     schema: {
@@ -189,7 +195,6 @@ export class AttendanceController {
     @UploadedFile() file: Express.Multer.File,
     @CurrentPersonSigId() personSigId: string,
   ) {
-    console.log('personSigId', personSigId);
     return this.attendanceAttachmentService.uploadAttachment(
       id,
       file,
