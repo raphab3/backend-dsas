@@ -1,57 +1,66 @@
 // dto/query-attendance.dto.ts
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsOptional, IsUUID } from 'class-validator';
+import {
+  IsOptional,
+  IsUUID,
+  IsString,
+  IsArray,
+  IsEnum,
+  IsNumber,
+} from 'class-validator';
 import { AttendanceStatusEnum } from '../types';
 import { Transform } from 'class-transformer';
-import { IQuery } from '@shared/interfaces/IQuery';
 
-export class QueryAttendanceDto extends IQuery {
-  @ApiPropertyOptional({
-    description: 'Patient ID',
-    type: 'string',
-  })
+export class QueryAttendanceDto {
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsNumber()
+  @Transform(({ value }) => parseInt(value, 10))
+  page?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsNumber()
+  @Transform(({ value }) => parseInt(value, 10))
+  perPage?: number;
+
+  @ApiPropertyOptional()
   @IsOptional()
   @IsUUID()
   patientId?: string;
 
-  @ApiPropertyOptional({
-    description: 'Professional ID',
-    type: 'string',
-  })
-  @IsOptional()
-  @IsUUID()
-  professionalId?: string;
-
-  @ApiPropertyOptional({
-    description: 'Status do atendimento',
-    enum: AttendanceStatusEnum,
-  })
+  @ApiPropertyOptional()
   @IsOptional()
   @IsEnum(AttendanceStatusEnum)
   status?: AttendanceStatusEnum;
 
-  @ApiPropertyOptional({
-    description: 'Status do atendimento',
-    enum: AttendanceStatusEnum,
-    isArray: true,
-  })
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsArray()
   listStatus?: AttendanceStatusEnum[];
 
-  @ApiPropertyOptional({
-    description: 'Data inicial',
-    type: 'string',
-    format: 'date',
-  })
+  @ApiPropertyOptional()
   @IsOptional()
-  @Transform(({ value }) => new Date(value))
-  startDate?: Date;
+  @IsString()
+  orderBy?: string;
 
-  @ApiPropertyOptional({
-    description: 'Data final',
-    type: 'string',
-    format: 'date',
-  })
+  @ApiPropertyOptional()
   @IsOptional()
-  @Transform(({ value }) => new Date(value))
-  endDate?: Date;
+  @IsString()
+  orderDirection?: 'ASC' | 'DESC';
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  startDate?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsUUID()
+  professionalId?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  endDate?: string;
 }

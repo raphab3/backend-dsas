@@ -5,8 +5,14 @@ export enum FormCategory {
   EVOLUTION = 'evolution',
   MEDICATION = 'medication',
   EXAM = 'exam',
-  TEST = 'test',
   OTHER = 'other',
+}
+
+export enum TemplateType {
+  FORM = 'form',
+  HEADER = 'header',
+  FOOTER = 'footer',
+  DOCUMENT = 'document',
 }
 
 export enum ConditionType {
@@ -130,6 +136,7 @@ export interface FormTemplate {
   name: string;
   description?: string;
   category: FormCategory;
+  type: TemplateType;
   rules?: Rule[];
   sessions?: FormSession[];
   tags?: string[];
@@ -143,7 +150,8 @@ export interface FormTemplate {
 export interface FormTemplateCreate {
   name: string;
   description: string;
-  category: FormCategory;
+  category?: FormCategory;
+  type: TemplateType;
   sessions?: FormSession[];
   rules?: Rule[];
   tags?: string[];

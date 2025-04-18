@@ -1,44 +1,28 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
+import { DataSource } from 'typeorm';
 import { Attendance } from '../entities/attendance.entity';
-import { GroupFormTemplate } from '@modules/groupFormTemplates/entities/groupFormTemplate.entity';
 import { Patient } from '@modules/patients/typeorm/entities/patient.entity';
 import { Professional } from '@modules/professionals/typeorm/entities/professional.entity';
 import { Appointment } from '@modules/appointments/typeorm/entities/Appointment.entity';
-import { CreateFormResponseService } from '@modules/formResponses/services/create.formResponse.service';
 import { AttendanceStatusEnum } from '../types';
 import { StartAttendanceDto } from '../dto/start-attendance.dto';
-import { FormResponseType } from '@modules/formResponses/interfaces';
-import { InjectConnection } from '@nestjs/mongoose';
-import { Connection as MongoConnection } from 'mongoose';
 import { StatusAppointmentEnum } from '@modules/appointments/interfaces/IAppointment';
+import { Specialty } from '@modules/specialties/typeorm/entities/Specialty.entity';
+import { Location } from '@modules/locations/typeorm/entities/location.entity';
+import { FindOptionsWhere } from 'typeorm';
 
 @Injectable()
 export class StartAttendanceService {
-  constructor(
-    private dataSource: DataSource,
-    @InjectConnection() private mongoConnection: MongoConnection,
-    @InjectRepository(Attendance)
-    private attendanceRepository: Repository<Attendance>,
-    @InjectRepository(GroupFormTemplate)
-    private groupFormTemplateRepository: Repository<GroupFormTemplate>,
-    @InjectRepository(Patient)
-    private patientRepository: Repository<Patient>,
-    @InjectRepository(Professional)
-    private professionalRepository: Repository<Professional>,
-    @InjectRepository(Appointment)
-    private appointmentRepository: Repository<Appointment>,
-    private createFormResponseService: CreateFormResponseService,
-  ) {}
+  constructor(private dataSource: DataSource) {}
 
   async execute(startAttendanceDto: StartAttendanceDto) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
-
-    const mongoSession = await this.mongoConnection.startSession();
-    mongoSession.startTransaction();
 
     try {
       // 1. Validate if patient exists
@@ -57,20 +41,11 @@ export class StartAttendanceService {
         throw new NotFoundException('Professional not found');
       }
 
-      // 3. Get group form template with its templates
-      const groupFormTemplate = await queryRunner.manager.findOne(
-        GroupFormTemplate,
-        {
-          where: { id: startAttendanceDto.groupFormTemplateId },
-          relations: ['templates'],
-        },
-      );
-      if (!groupFormTemplate) {
-        throw new NotFoundException('Group Form Template not found');
-      }
-
       // 4. Get and update appointment if provided
       let appointment = null;
+      let specialty = null;
+      let location = null;
+
       if (startAttendanceDto.appointmentId) {
         // Primeiro buscar o appointment com lock
         appointment = await queryRunner.manager
@@ -88,56 +63,75 @@ export class StartAttendanceService {
         // Depois buscar as relações
         appointment = await queryRunner.manager.findOne(Appointment, {
           where: { id: appointment.id },
-          relations: ['patient', 'schedule', 'schedule.professional'],
+          relations: [
+            'patient',
+            'schedule',
+            'schedule.professional',
+            'schedule.specialty',
+          ],
         });
 
         // Validate if appointment belongs to the patient and professional
-        if (
-          appointment.patient.id !== patient.id ||
-          appointment.schedule.professional.id !== professional.id
-        ) {
-          throw new NotFoundException(
-            'Appointment does not match patient and professional',
-          );
+        // if (
+        //   appointment.patient.id !== patient.id ||
+        //   appointment.schedule.professional.id !== professional.id
+        // ) {
+        //   throw new NotFoundException(
+        //     'Esse agendamento não foi destinado profissional informado',
+        //   );
+        // }
+
+        // Get specialty and location from appointment
+        if (appointment.schedule?.specialty) {
+          specialty = appointment.schedule.specialty;
+        }
+
+        if (appointment.schedule?.location) {
+          location = appointment.schedule.location;
         }
 
         // Update appointment status
         appointment.status = StatusAppointmentEnum.IN_ATTENDANCE;
         await queryRunner.manager.save(Appointment, appointment);
+      } else if (startAttendanceDto.specialtyId) {
+        // If no appointment but specialtyId is provided, get the specialty
+        specialty = await queryRunner.manager.findOne(Specialty, {
+          where: { id: startAttendanceDto.specialtyId },
+        });
+
+        if (!specialty) {
+          throw new NotFoundException('Specialty not found');
+        }
+
+        // If locationId is provided, get the location
+        if (startAttendanceDto.locationId) {
+          location = await queryRunner.manager.findOne(Location, {
+            where: {
+              id: startAttendanceDto.locationId,
+            } as FindOptionsWhere<Location>,
+          });
+
+          if (!location) {
+            throw new NotFoundException('Location not found');
+          }
+        }
+      } else {
+        // For standalone attendances without appointment, specialtyId is required
+        throw new BadRequestException(
+          'Either appointmentId or specialtyId must be provided',
+        );
       }
-
-      // 5. Create form responses for each template in the group using mongoTemplateId
-      const formResponsePromises = groupFormTemplate.templates.map((template) =>
-        this.createFormResponseService.execute({
-          templateId: template.mongoTemplateId,
-          createdBy: professional.id,
-          type: FormResponseType.ATTENDANCE,
-          metadata: {
-            patientId: patient.id,
-            professionalId: professional.id,
-            formTemplateId: template.id,
-            category: template.category,
-            appointmentId: appointment?.id,
-            isScheduled: !!appointment,
-          },
-        }),
-      );
-
-      const formResponses = await Promise.all(formResponsePromises);
-      const formResponseIds = formResponses.map((response) =>
-        response._id.toString(),
-      );
 
       // 6. Create attendance
       const attendance = queryRunner.manager.create(Attendance, {
         patient,
         professional,
-        groupFormTemplate,
-        formResponseIds,
         startAttendance: new Date(),
         status: AttendanceStatusEnum.IN_PROGRESS,
         endAttendance: null,
         appointment,
+        specialty,
+        location,
       });
 
       const savedAttendance = await queryRunner.manager.save(
@@ -146,16 +140,13 @@ export class StartAttendanceService {
       );
 
       await queryRunner.commitTransaction();
-      await mongoSession.commitTransaction();
 
       return savedAttendance;
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      await mongoSession.abortTransaction();
       throw error;
     } finally {
       await queryRunner.release();
-      await mongoSession.endSession();
     }
   }
 }

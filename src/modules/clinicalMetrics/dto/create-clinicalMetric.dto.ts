@@ -82,25 +82,11 @@ class MetadataDto {
 
 export class CreateClinicalMetricDto {
   @ApiProperty({
-    description: 'The patient ID',
-    example: '123e4567-e89b-12d3-a456-426614174000',
-  })
-  @IsNotEmpty()
-  patient: { id: string };
-
-  @ApiProperty({
-    description: 'The professional ID',
-    example: '123e4567-e89b-12d3-a456-426614174000',
-  })
-  @IsOptional()
-  professional?: { id: string };
-
-  @ApiProperty({
     description: 'The attendance ID',
     example: '123e4567-e89b-12d3-a456-426614174000',
   })
   @IsOptional()
-  attendance?: { id: string };
+  attendanceId?: string;
 
   @ApiProperty({
     enum: MetricType,
@@ -151,4 +137,16 @@ export class CreateClinicalMetricDto {
   @IsOptional()
   @Type(() => SourceDto)
   source?: SourceDto;
+
+  @ApiProperty({
+    description: 'The ID of the form response',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
+  patientId: string;
+
+  @ApiProperty({
+    description: 'The ID of the professional',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
+  professionalId?: string;
 }

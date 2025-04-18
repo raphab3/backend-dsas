@@ -43,6 +43,15 @@ class UsersRepository implements IUsersRepository {
       usersCreateQueryBuilder.andWhere('user.id = :id', { id: query.id });
     }
 
+    if (query.search) {
+      usersCreateQueryBuilder.andWhere(
+        '(LOWER(user.name) LIKE LOWER(:search) OR LOWER(user.email) LIKE LOWER(:search) OR LOWER(person_sig.matricula) LIKE LOWER(:search))',
+        {
+          search: `%${query.search}%`,
+        },
+      );
+    }
+
     if (query.userId) {
       usersCreateQueryBuilder.andWhere('user.userId ILike :userId', {
         userId: `%${query.userId}%`,
@@ -50,14 +59,14 @@ class UsersRepository implements IUsersRepository {
     }
 
     if (query.name) {
-      usersCreateQueryBuilder.andWhere('user.name ILike :name', {
-        name: `%${query.name}%`,
+      usersCreateQueryBuilder.andWhere('LOWER(user.name) = LOWER(:name)', {
+        name: query.name,
       });
     }
 
     if (query.email) {
-      usersCreateQueryBuilder.andWhere('user.email ILike :email', {
-        email: `%${query.email}%`,
+      usersCreateQueryBuilder.andWhere('LOWER(user.email) = LOWER(:email)', {
+        email: query.email,
       });
     }
 

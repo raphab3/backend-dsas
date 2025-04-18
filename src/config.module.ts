@@ -14,6 +14,7 @@ import { JwtAuthGuard } from '@shared/guards/Jwt-auth.guard';
 import { LocationModule } from '@modules/locations/location.module';
 import { LocationsGuard } from '@shared/guards/Location.guard';
 import { PatientModule } from '@modules/patients/patient.module';
+import { PatientHealthModule } from '@modules/patientHealth/patient-health.module';
 import { PermissionModule } from '@modules/permissions/permission.module';
 import { PermissionsGuard } from '@shared/guards/Permissions.guard';
 import { PersonSigModule } from '@modules/persosnSig/personSig.module';
@@ -33,7 +34,14 @@ import { FormsResponseModule } from '@modules/formResponses/form_responses.modul
 import { FormTemplateModule } from '@modules/formsTemplates/form_template.module';
 import { AttendanceModule } from '@modules/attendances/attendance.module';
 import { GroupFormTemplateModule } from '@modules/groupFormTemplates/groupFormTemplate.module';
+import { VitalSignsModule } from '@modules/VitalSigns/VitalSign.module';
+import { DocumentModule } from '@modules/Documents/Document.module';
+import { DigitalSignaturesModule } from '@modules/DigitalSignatures/digital-signatures.module';
 import { NotificationsModule } from '@shared/providers/Notification/notifications.module';
+import { CidModule } from '@modules/cids/cid.module';
+import { AttachmentModule } from '@modules/attachments/Attachment.module';
+import { GuardModule } from '@shared/guards/guard.module';
+import { FormSharesModule } from '@modules/formShares/form-shares.module';
 
 export const RATE_LIMIT_MODULE = ThrottlerModule.forRoot([
   {
@@ -65,6 +73,13 @@ export const MODULES = [
   FormTemplateModule,
   GroupFormTemplateModule,
   AttendanceModule,
+  VitalSignsModule,
+  DocumentModule,
+  DigitalSignaturesModule,
+  PatientHealthModule,
+  CidModule,
+  AttachmentModule,
+  FormSharesModule,
 ];
 
 export const EXTRA_MODULES = [
@@ -76,6 +91,7 @@ export const EXTRA_MODULES = [
   CacheModuleCustom,
   ProvidersModule,
   NotificationsModule,
+  GuardModule,
 ];
 
 export const PROVIDERS = [

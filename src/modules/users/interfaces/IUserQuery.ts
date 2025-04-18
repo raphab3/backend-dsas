@@ -12,4 +12,5 @@ export interface IUserQuery extends IQuery {
   };
   role_id?: FindOperator<string> | string;
   location_id?: FindOperator<string> | string;
+  search?: FindOperator<string> | string;
 }

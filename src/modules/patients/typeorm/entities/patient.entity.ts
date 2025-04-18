@@ -1,6 +1,7 @@
 import { Appointment } from '@modules/appointments/typeorm/entities/Appointment.entity';
 import { Dependent } from '@modules/dependents/typeorm/entities/dependent.entity';
 import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
+import { VitalSigns } from '@modules/VitalSigns/entities/VitalSigns.entity';
 import {
   CreateDateColumn,
   Entity,
@@ -28,6 +29,12 @@ export class Patient {
 
   @OneToMany(() => Appointment, (appointment) => appointment.patient)
   appointments: Appointment[];
+
+  @OneToMany(() => VitalSigns, (vitalSigns) => vitalSigns.patient)
+  vitalSings: VitalSigns[];
+
+  // @OneToMany(() => Document, (Document) => Document.patient)
+  // documents: Document[];
 
   @CreateDateColumn()
   created_at: Date;

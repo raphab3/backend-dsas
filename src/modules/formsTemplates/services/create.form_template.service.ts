@@ -15,6 +15,8 @@ import {
   FormTemplateMongoDocument,
 } from '../schemas/forms_template.schema';
 import { CreateFormTemplateDto } from '../dto/form-template.dto';
+import { TemplateType } from '../types';
+import { Location } from '@modules/locations/typeorm/entities/location.entity';
 
 @Injectable()
 export class CreateFormTemplateService {
@@ -25,6 +27,8 @@ export class CreateFormTemplateService {
     private userRepository: Repository<User>,
     @InjectRepository(FormTemplate)
     private formTemplateRepository: Repository<FormTemplate>,
+    @InjectRepository(Location)
+    private locationRepository: Repository<Location>,
     @InjectModel(FormTemplateMongo.name)
     private formTemplateMongoModel: Model<FormTemplateMongoDocument>,
   ) {}
@@ -51,6 +55,18 @@ export class CreateFormTemplateService {
       throw new HttpException('Usuário não encontrado', 404);
     }
 
+    let location = null;
+    if (createFormTemplateDto.location_id && !createFormTemplateDto.is_global) {
+      location = await this.locationRepository.findOne({
+        where: { id: createFormTemplateDto.location_id },
+      });
+
+      if (!location) {
+        await queryRunner.release();
+        throw new HttpException('Localização não encontrada', 404);
+      }
+    }
+
     // Variável para armazenar o ID do documento MongoDB criado
     let savedMongoTemplate: FormTemplateMongoDocument | null = null;
 
@@ -65,11 +81,11 @@ export class CreateFormTemplateService {
         name: createFormTemplateDto.name,
         description: createFormTemplateDto.description,
         category: createFormTemplateDto.category,
+        type: createFormTemplateDto.type || TemplateType.FORM,
         sessions: createFormTemplateDto.sessions || [],
         rules: createFormTemplateDto.rules,
         tags: createFormTemplateDto.tags,
         createdBy: createFormTemplateDto.createdBy,
-        isPublished: false,
       });
 
       savedMongoTemplate = await mongoTemplate.save();
@@ -80,8 +96,11 @@ export class CreateFormTemplateService {
         description: createFormTemplateDto.description,
         mongoTemplateId: savedMongoTemplate._id.toString(),
         category: createFormTemplateDto.category,
+        type: createFormTemplateDto.type || TemplateType.FORM,
         createdBy: { id: createFormTemplateDto.createdBy },
         isPublished: createFormTemplateDto.isPublished,
+        is_global: createFormTemplateDto.is_global || false,
+        location_id: createFormTemplateDto.location_id,
       });
 
       const savedPgTemplate = await queryRunner.manager.save(pgTemplate);

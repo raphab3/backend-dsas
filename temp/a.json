@@ -1,0 +1,1806 @@
+{
+  "sessions": [
+    {
+      "name": "Informações do Caso",
+      "fields": [
+        {
+          "name": "caso_id",
+          "description": "Número de identificação do caso",
+          "type": "text",
+          "label": "CASO Nº (ID)",
+          "validations": {
+            "required": true
+          },
+          "order": 0,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "batalhao",
+          "description": "Batalhão ao qual o militar pertence",
+          "type": "text",
+          "label": "BATALHÃO",
+          "validations": {
+            "required": true
+          },
+          "order": 1,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "data",
+          "description": "Data da coleta de dados",
+          "type": "date",
+          "label": "DATA",
+          "validations": {
+            "required": true
+          },
+          "order": 2,
+          "metadata": [],
+          "options": []
+        }
+      ]
+    },
+    {
+      "name": "Identificação do Militar",
+      "fields": [
+        {
+          "name": "matricula_nome_graduacao",
+          "description": "Dados de identificação do militar",
+          "type": "text",
+          "label": "Matrícula/Nome do Militar (completo)/Graduação",
+          "validations": {
+            "required": true
+          },
+          "order": 0,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "data_nascimento",
+          "description": "Data de nascimento do militar",
+          "type": "date",
+          "label": "Data de Nascimento",
+          "validations": {
+            "required": true
+          },
+          "order": 1,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "idade",
+          "description": "Idade do militar em anos",
+          "type": "number",
+          "label": "Idade (anos)",
+          "validations": {
+            "required": true
+          },
+          "order": 2,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "raca_cor",
+          "description": "Raça ou cor autodeclarada pelo militar",
+          "type": "radio",
+          "label": "Raça/Cor (Autodeclarado)",
+          "validations": {
+            "required": true
+          },
+          "order": 3,
+          "metadata": [],
+          "options": [
+            {
+              "label": "Branco",
+              "value": "branco"
+            },
+            {
+              "label": "Preto",
+              "value": "preto"
+            },
+            {
+              "label": "Pardo",
+              "value": "pardo"
+            },
+            {
+              "label": "Indígena",
+              "value": "indigena"
+            }
+          ]
+        },
+        {
+          "name": "endereco",
+          "description": "Endereço do militar",
+          "type": "text",
+          "label": "Endereço",
+          "validations": {
+            "required": true
+          },
+          "order": 4,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "bairro",
+          "description": "Bairro de residência do militar",
+          "type": "text",
+          "label": "Bairro",
+          "validations": {
+            "required": true
+          },
+          "order": 5,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "telefone",
+          "description": "Telefone principal para contato",
+          "type": "text",
+          "label": "Telefone",
+          "validations": {
+            "required": true
+          },
+          "order": 6,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "telefone2",
+          "description": "Telefone secundário para contato",
+          "type": "text",
+          "label": "Telefone 2",
+          "validations": {
+            "required": false
+          },
+          "order": 7,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "anos_estudo",
+          "description": "Quantidade de anos de estudo formal",
+          "type": "number",
+          "label": "Escolaridade (Anos de estudo)",
+          "validations": {
+            "required": true
+          },
+          "order": 8,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "nivel_escolaridade",
+          "description": "Nível de escolaridade conforme legenda",
+          "type": "select",
+          "label": "Nível de Escolaridade",
+          "validations": {
+            "required": true
+          },
+          "order": 9,
+          "metadata": [],
+          "options": [
+            {
+              "label": "1 = Ensino básico incompleto",
+              "value": "1"
+            },
+            {
+              "label": "2 = Ensino básico completo",
+              "value": "2"
+            },
+            {
+              "label": "3 = Ensino fundamental incompleto",
+              "value": "3"
+            },
+            {
+              "label": "4 = Ensino fundamental completo",
+              "value": "4"
+            },
+            {
+              "label": "5 = Ensino médio incompleto",
+              "value": "5"
+            },
+            {
+              "label": "6 = Ensino médio completo",
+              "value": "6"
+            },
+            {
+              "label": "7 = Ensino superior incompleto",
+              "value": "7"
+            },
+            {
+              "label": "8 = Ensino superior completo",
+              "value": "8"
+            },
+            {
+              "label": "9 = Mestrado",
+              "value": "9"
+            },
+            {
+              "label": "10 = Doutorado",
+              "value": "10"
+            },
+            {
+              "label": "11 = Especialização",
+              "value": "11"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Classificação da Pressão Arterial (PA) e Índice de Massa Corporal (IMC)",
+      "fields": [
+        {
+          "name": "valor_pa",
+          "description": "Valor da Pressão Arterial em milímetros de mercúrio",
+          "type": "text",
+          "label": "Valor da PA (mmHg)",
+          "validations": {
+            "required": true
+          },
+          "order": 0,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "classificacao_pa",
+          "description": "Classificação da Pressão Arterial",
+          "type": "radio",
+          "label": "Classificação da PA",
+          "validations": {
+            "required": true
+          },
+          "order": 1,
+          "metadata": [],
+          "options": [
+            {
+              "label": "PAS < 129 mmHg e PAD < 85 mmHg – pressão normal",
+              "value": "pressao_normal"
+            },
+            {
+              "label": "PAS 130 – 139 mmHg e PAD 85 – 89 mmHg – Pré-hipertensão",
+              "value": "pre_hipertensao"
+            },
+            {
+              "label": "HAS estágio 1 - PAS 140 – 159 mmHg ou PAD 90 – 99 mmHg",
+              "value": "has_estagio1"
+            },
+            {
+              "label": "HAS estágio 2 - PAS 160 – 179 mmHg ou PAD 100 – 109 mmHg",
+              "value": "has_estagio2"
+            },
+            {
+              "label": "HAS estágio 3 - PAS ≥180 mmHg ou PAD ≥110 mmHg",
+              "value": "has_estagio3"
+            }
+          ]
+        },
+        {
+          "name": "medicamento",
+          "description": "Medicamento para pressão arterial",
+          "type": "text",
+          "label": "Medicamento",
+          "validations": {
+            "required": false
+          },
+          "order": 2,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "peso",
+          "description": "Peso em quilogramas",
+          "type": "number",
+          "label": "Peso (Kg)",
+          "validations": {
+            "required": true
+          },
+          "order": 3,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "altura",
+          "description": "Altura em metros",
+          "type": "number",
+          "label": "Altura (m)",
+          "validations": {
+            "required": true
+          },
+          "order": 4,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "circunferencia_abdominal",
+          "description": "Circunferência abdominal em centímetros",
+          "type": "number",
+          "label": "Circunferência Abdominal (cm)",
+          "validations": {
+            "required": true
+          },
+          "order": 5,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "fc",
+          "description": "Frequência cardíaca em batimentos por minuto",
+          "type": "number",
+          "label": "FC (batimentos por minuto)",
+          "validations": {
+            "required": true
+          },
+          "order": 6,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "valor_imc",
+          "description": "Valor do Índice de Massa Corporal",
+          "type": "number",
+          "label": "Valor do IMC (Kg/m²)",
+          "validations": {
+            "required": true
+          },
+          "order": 7,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "classificacao_imc",
+          "description": "Classificação do IMC",
+          "type": "radio",
+          "label": "Classificação do IMC",
+          "validations": {
+            "required": true
+          },
+          "order": 8,
+          "metadata": [],
+          "options": [
+            {
+              "label": "Baixo Peso – IMC < 18,5 Kg/m²",
+              "value": "baixo_peso"
+            },
+            {
+              "label": "Peso Normal – IMC entre 18,5 Kg/m² e 24,9 Kg/m²",
+              "value": "peso_normal"
+            },
+            {
+              "label": "Excesso de Peso – IMC entre 25,0 Kg/m² e 29,9 Kg/m²",
+              "value": "excesso_peso"
+            },
+            {
+              "label": "Obesidade grau I – IMC entre 30,0 Kg/m² e 34,9 Kg/m²",
+              "value": "obesidade_grau1"
+            },
+            {
+              "label": "Obesidade grau II – IMC entre 35,0 Kg/m² e 39,9 Kg/m²",
+              "value": "obesidade_grau2"
+            },
+            {
+              "label": "Obesidade grau III – IMC > 40,0 Kg/m²",
+              "value": "obesidade_grau3"
+            }
+          ]
+        },
+        {
+          "name": "pratica_atividade_fisica",
+          "description": "Se o militar pratica atividade física",
+          "type": "radio",
+          "label": "O militar pratica alguma atividade física?",
+          "validations": {
+            "required": true
+          },
+          "order": 9,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "n_vezes_semana",
+          "description": "Número de vezes que pratica atividade física por semana",
+          "type": "number",
+          "label": "Nº de vezes de atividade por semana",
+          "validations": {
+            "required": false
+          },
+          "order": 10,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "tempo_atividade",
+          "description": "Tempo de duração da atividade física em minutos",
+          "type": "number",
+          "label": "Tempo da atividade (min.)",
+          "validations": {
+            "required": false
+          },
+          "order": 11,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "tipo_atividade",
+          "description": "Tipo de atividade física praticada",
+          "type": "text",
+          "label": "Tipo de atividade",
+          "validations": {
+            "required": false
+          },
+          "order": 12,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "dieta_saudavel",
+          "description": "Se o militar segue uma dieta saudável",
+          "type": "radio",
+          "label": "O militar segue uma dieta saudável? (Consumo de frutas, verduras, legumes, cereais, aves, peixes, leite e derivados, e menor quantidade de gordura e sal)",
+          "validations": {
+            "required": true
+          },
+          "order": 13,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Fator de Risco (Perguntas)",
+      "fields": [
+        {
+          "name": "homem_mais_55",
+          "description": "Se o militar é homem com mais de 55 anos",
+          "type": "radio",
+          "label": "O militar é homem com mais de 55 anos?",
+          "validations": {
+            "required": true
+          },
+          "order": 0,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "mulher_mais_65",
+          "description": "Se o militar é mulher com mais de 65 anos",
+          "type": "radio",
+          "label": "O militar é mulher com mais de 65 anos?",
+          "validations": {
+            "required": true
+          },
+          "order": 1,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "historico_dcv",
+          "description": "Se o militar apresenta histórico de Doença Cardiovascular prematura em parentes de 1º grau",
+          "type": "radio",
+          "label": "O militar apresenta histórico Doença Cardiovascular (DCV) prematura em parentes de 1º grau (pais e irmãos)?",
+          "validations": {
+            "required": true
+          },
+          "order": 2,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "fumante",
+          "description": "Se o militar é fumante ou fumou nos últimos 6 meses",
+          "type": "radio",
+          "label": "O militar é fumante (fumou nos últimos 6 meses)?",
+          "validations": {
+            "required": true
+          },
+          "order": 3,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "n_cigarros",
+          "description": "Número de cigarros por dia",
+          "type": "number",
+          "label": "Nº de cigarros p/dia",
+          "validations": {
+            "required": false
+          },
+          "order": 4,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "diagnostico_diabetes",
+          "description": "Se o militar tem diagnóstico de Diabetes Mellitus",
+          "type": "radio",
+          "label": "O militar tem diagnóstico de Diabetes Mellitus (DM)?",
+          "validations": {
+            "required": true
+          },
+          "order": 5,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "medicamento_diabetes",
+          "description": "Medicamento para diabetes",
+          "type": "text",
+          "label": "Medicamento",
+          "validations": {
+            "required": false
+          },
+          "order": 6,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "imc_maior_30",
+          "description": "Se o militar apresenta IMC ≥ 30 Kg/m²",
+          "type": "radio",
+          "label": "O militar apresenta IMC ≥ 30 Kg/m²?",
+          "validations": {
+            "required": true
+          },
+          "order": 7,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "homem_circ_abdominal",
+          "description": "Se o militar, sendo homem, apresenta circunferência abdominal > 94cm",
+          "type": "radio",
+          "label": "O militar, se homem, apresenta circunferência abdominal > 94cm?",
+          "validations": {
+            "required": false
+          },
+          "order": 8,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "mulher_circ_abdominal",
+          "description": "Se o militar, sendo mulher, apresenta circunferência abdominal > 80cm",
+          "type": "radio",
+          "label": "O militar, se mulher, apresenta circunferência abdominal > 80cm?",
+          "validations": {
+            "required": false
+          },
+          "order": 9,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "dislipidemia",
+          "description": "Se o militar possui Dislipidemia",
+          "type": "radio",
+          "label": "O militar possui Dislipidemia apresentando LDL-colesterol ≥100mg/dl e/ou não HDL-colesterol 130 mg/dl e/ou HDL-colesterol ≤ 40mg/dl no homem e ≤ 46mg/dl na mulher e/ou TG >150 mg/dl?",
+          "validations": {
+            "required": true
+          },
+          "order": 10,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Doença Cardiovascular (DCV) e Renal",
+      "fields": [
+        {
+          "name": "angina",
+          "description": "Se o militar apresenta angina",
+          "type": "radio",
+          "label": "O militar apresenta angina?",
+          "validations": {
+            "required": true
+          },
+          "order": 0,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "infarto_miocardio",
+          "description": "Se o militar tem história de infarto do miocárdio",
+          "type": "radio",
+          "label": "O militar tem história de infarto do miocárdio?",
+          "validations": {
+            "required": true
+          },
+          "order": 1,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "isquemia_miocardica",
+          "description": "Se o militar tem história de isquemia miocárdica silenciosa",
+          "type": "radio",
+          "label": "O militar tem história de isquemia miocárdica silenciosa?",
+          "validations": {
+            "required": true
+          },
+          "order": 2,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "doenca_aorta",
+          "description": "Se o militar tem história de doença de aorta",
+          "type": "radio",
+          "label": "O militar tem história de doença de aorta relacionada com aneurismas, hematomas ou ulcerações?",
+          "validations": {
+            "required": true
+          },
+          "order": 3,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "revascularizacao_miocardio",
+          "description": "Se o militar tem história de revascularização do miocárdio",
+          "type": "radio",
+          "label": "O militar tem história de revascularização do miocárdio percutânea (angioplastia) ou cirúrgica?",
+          "validations": {
+            "required": true
+          },
+          "order": 4,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "insuficiencia_cardiaca",
+          "description": "Se o militar apresenta insuficiência cardíaca",
+          "type": "radio",
+          "label": "O militar apresenta insuficiência cardíaca?",
+          "validations": {
+            "required": true
+          },
+          "order": 5,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "fibrilacao_atrial",
+          "description": "Se o militar apresenta presença de fibrilação atrial",
+          "type": "radio",
+          "label": "O militar apresenta presença de fibrilação atrial?",
+          "validations": {
+            "required": true
+          },
+          "order": 6,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "doenca_arterial_periferica",
+          "description": "Se o militar apresenta doença arterial periférica",
+          "type": "radio",
+          "label": "O militar apresenta doença arterial periférica sintomática dos membros inferiores?",
+          "validations": {
+            "required": true
+          },
+          "order": 7,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "avc_isquemico",
+          "description": "Se o militar apresenta história de AVC isquêmico",
+          "type": "radio",
+          "label": "O militar apresenta história de Acidente Vascular Cerebral (AVC) isquêmico?",
+          "validations": {
+            "required": true
+          },
+          "order": 8,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "hemorragia_cerebral",
+          "description": "Se o militar apresenta história de hemorragia cerebral",
+          "type": "radio",
+          "label": "O militar apresenta história de hemorragia cerebral?",
+          "validations": {
+            "required": true
+          },
+          "order": 9,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "ataque_isquemico",
+          "description": "Se o militar apresenta história de ataques isquêmico transitório",
+          "type": "radio",
+          "label": "O militar apresenta história de ataques isquêmico transitório?",
+          "validations": {
+            "required": true
+          },
+          "order": 10,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "doenca_renal_cronica",
+          "description": "Se o militar possui Doença Renal Crônica",
+          "type": "radio",
+          "label": "O militar possui Doença Renal Crônica (estágio IV e V) com clearance <30 ml/min/1,73 m² ou proteinúria > 300 mg/24h?",
+          "validations": {
+            "required": true
+          },
+          "order": 11,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cálculo de Risco",
+      "fields": [
+        {
+          "name": "quantidade_fatores_risco",
+          "description": "Quantidade total de fatores de risco identificados nas seções anteriores",
+          "type": "number",
+          "label": "Insira a quantidade de fatores de risco identificados (igual ao total de respostas 'SIM' acima)",
+          "validations": {
+            "required": true
+          },
+          "order": 0,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "classificacao_risco",
+          "description": "Classificação do nível de risco do militar baseado na pressão arterial e fatores de risco",
+          "type": "radio",
+          "label": "Classificação de risco do paciente",
+          "validations": {
+            "required": true
+          },
+          "order": 1,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SEM RISCO",
+              "value": "sem_risco"
+            },
+            {
+              "label": "RISCO BAIXO",
+              "value": "risco_baixo"
+            },
+            {
+              "label": "RISCO MODERADO",
+              "value": "risco_moderado"
+            },
+            {
+              "label": "RISCO ALTO",
+              "value": "risco_alto"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Imunização",
+      "fields": [
+        {
+          "name": "covid_dose1",
+          "description": "Data da primeira dose da vacina contra COVID-19",
+          "type": "date",
+          "label": "COVID - 1ª Dose",
+          "validations": {
+            "required": false
+          },
+          "order": 0,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "covid_dose2",
+          "description": "Data da segunda dose da vacina contra COVID-19",
+          "type": "date",
+          "label": "COVID - 2ª Dose",
+          "validations": {
+            "required": false
+          },
+          "order": 1,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "covid_dose3",
+          "description": "Data da terceira dose da vacina contra COVID-19",
+          "type": "date",
+          "label": "COVID - 3ª Dose",
+          "validations": {
+            "required": false
+          },
+          "order": 2,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "covid_reforco",
+          "description": "Data da dose de reforço da vacina contra COVID-19",
+          "type": "date",
+          "label": "COVID - Reforço",
+          "validations": {
+            "required": false
+          },
+          "order": 3,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "dt_dose1",
+          "description": "Data da primeira dose da vacina dT (adulto)",
+          "type": "date",
+          "label": "dT (adulto) - 1ª Dose",
+          "validations": {
+            "required": false
+          },
+          "order": 4,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "dt_dose2",
+          "description": "Data da segunda dose da vacina dT (adulto)",
+          "type": "date",
+          "label": "dT (adulto) - 2ª Dose",
+          "validations": {
+            "required": false
+          },
+          "order": 5,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "dt_dose3",
+          "description": "Data da terceira dose da vacina dT (adulto)",
+          "type": "date",
+          "label": "dT (adulto) - 3ª Dose",
+          "validations": {
+            "required": false
+          },
+          "order": 6,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "dt_reforco",
+          "description": "Data da dose de reforço da vacina dT (adulto)",
+          "type": "date",
+          "label": "dT (adulto) - Reforço",
+          "validations": {
+            "required": false
+          },
+          "order": 7,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "hepatiteb_dose1",
+          "description": "Data da primeira dose da vacina Hepatite B recombinante",
+          "type": "date",
+          "label": "Hepatite B recombinante - 1ª Dose",
+          "validations": {
+            "required": false
+          },
+          "order": 8,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "hepatiteb_dose2",
+          "description": "Data da segunda dose da vacina Hepatite B recombinante",
+          "type": "date",
+          "label": "Hepatite B recombinante - 2ª Dose",
+          "validations": {
+            "required": false
+          },
+          "order": 9,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "hepatiteb_dose3",
+          "description": "Data da terceira dose da vacina Hepatite B recombinante",
+          "type": "date",
+          "label": "Hepatite B recombinante - 3ª Dose",
+          "validations": {
+            "required": false
+          },
+          "order": 10,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "hepatiteb_reforco",
+          "description": "Data da dose de reforço da vacina Hepatite B recombinante",
+          "type": "date",
+          "label": "Hepatite B recombinante - Reforço",
+          "validations": {
+            "required": false
+          },
+          "order": 11,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "triplice_dose1",
+          "description": "Data da primeira dose da vacina Tríplice Viral",
+          "type": "date",
+          "label": "Tríplice Viral - 1ª Dose",
+          "validations": {
+            "required": false
+          },
+          "order": 12,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "triplice_dose2",
+          "description": "Data da segunda dose da vacina Tríplice Viral",
+          "type": "date",
+          "label": "Tríplice Viral - 2ª Dose",
+          "validations": {
+            "required": false
+          },
+          "order": 13,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "triplice_dose3",
+          "description": "Data da terceira dose da vacina Tríplice Viral",
+          "type": "date",
+          "label": "Tríplice Viral - 3ª Dose",
+          "validations": {
+            "required": false
+          },
+          "order": 14,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "triplice_reforco",
+          "description": "Data da dose de reforço da vacina Tríplice Viral",
+          "type": "date",
+          "label": "Tríplice Viral - Reforço",
+          "validations": {
+            "required": false
+          },
+          "order": 15,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "influenza_dose1",
+          "description": "Data da primeira dose da vacina Influenza",
+          "type": "date",
+          "label": "Influenza - 1ª Dose",
+          "validations": {
+            "required": false
+          },
+          "order": 16,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "influenza_dose2",
+          "description": "Data da segunda dose da vacina Influenza",
+          "type": "date",
+          "label": "Influenza - 2ª Dose",
+          "validations": {
+            "required": false
+          },
+          "order": 17,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "influenza_dose3",
+          "description": "Data da terceira dose da vacina Influenza",
+          "type": "date",
+          "label": "Influenza - 3ª Dose",
+          "validations": {
+            "required": false
+          },
+          "order": 18,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "influenza_reforco",
+          "description": "Data da dose de reforço da vacina Influenza",
+          "type": "date",
+          "label": "Influenza - Reforço",
+          "validations": {
+            "required": false
+          },
+          "order": 19,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "febre_amarela_dose1",
+          "description": "Data da primeira dose da vacina Febre Amarela",
+          "type": "date",
+          "label": "Febre Amarela - 1ª Dose",
+          "validations": {
+            "required": false
+          },
+          "order": 20,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "febre_amarela_dose2",
+          "description": "Data da segunda dose da vacina Febre Amarela",
+          "type": "date",
+          "label": "Febre Amarela - 2ª Dose",
+          "validations": {
+            "required": false
+          },
+          "order": 21,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "febre_amarela_dose3",
+          "description": "Data da terceira dose da vacina Febre Amarela",
+          "type": "date",
+          "label": "Febre Amarela - 3ª Dose",
+          "validations": {
+            "required": false
+          },
+          "order": 22,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "febre_amarela_reforco",
+          "description": "Data da dose de reforço da vacina Febre Amarela",
+          "type": "date",
+          "label": "Febre Amarela - Reforço",
+          "validations": {
+            "required": false
+          },
+          "order": 23,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "dtpa_dose1",
+          "description": "Data da primeira dose da vacina dTpa",
+          "type": "date",
+          "label": "dTpa - 1ª Dose",
+          "validations": {
+            "required": false
+          },
+          "order": 24,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "dtpa_dose2",
+          "description": "Data da segunda dose da vacina dTpa",
+          "type": "date",
+          "label": "dTpa - 2ª Dose",
+          "validations": {
+            "required": false
+          },
+          "order": 25,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "dtpa_dose3",
+          "description": "Data da terceira dose da vacina dTpa",
+          "type": "date",
+          "label": "dTpa - 3ª Dose",
+          "validations": {
+            "required": false
+          },
+          "order": 26,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "dtpa_reforco",
+          "description": "Data da dose de reforço da vacina dTpa",
+          "type": "date",
+          "label": "dTpa - Reforço",
+          "validations": {
+            "required": false
+          },
+          "order": 27,
+          "metadata": [],
+          "options": []
+        }
+      ]
+    },
+    {
+      "name": "Outros",
+      "fields": [
+        {
+          "name": "doador_sangue",
+          "description": "Se o militar é doador de sangue",
+          "type": "radio",
+          "label": "O militar é doador de sangue?",
+          "validations": {
+            "required": true
+          },
+          "order": 0,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "tempo_doacao",
+          "description": "Tempo da última doação de sangue",
+          "type": "radio",
+          "label": "Tempo desde a última doação",
+          "validations": {
+            "required": false
+          },
+          "order": 1,
+          "metadata": [],
+          "options": [
+            {
+              "label": "Mais de 1 ano",
+              "value": "mais_1_ano"
+            },
+            {
+              "label": "Menos de 1 ano",
+              "value": "menos_1_ano"
+            }
+          ]
+        },
+        {
+          "name": "doador_orgao",
+          "description": "Se o militar é doador de órgão",
+          "type": "radio",
+          "label": "O militar é doador de órgão?",
+          "validations": {
+            "required": true
+          },
+          "order": 2,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "cartao_vacina",
+          "description": "Se o militar possui cartão de vacina",
+          "type": "radio",
+          "label": "O militar tem Cartão de vacina?",
+          "validations": {
+            "required": true
+          },
+          "order": 3,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "tristeza_desanimo",
+          "description": "Se o militar tem sentido tristeza profunda ou desânimo nos últimos 6 meses",
+          "type": "radio",
+          "label": "1. Nos últimos 6 meses, você tem sentido tristeza profunda ou desânimo?",
+          "validations": {
+            "required": true
+          },
+          "order": 4,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "transtorno_psicologico",
+          "description": "Se o militar já foi diagnosticado com algum transtorno psicológico ou mental",
+          "type": "radio",
+          "label": "2. Você já foi diagnosticado com algum transtorno psicológico ou mental?",
+          "validations": {
+            "required": true
+          },
+          "order": 5,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "pensamentos_suicidas",
+          "description": "Se o militar já teve pensamentos suicidas",
+          "type": "radio",
+          "label": "3. Você já teve pensamentos suicidas?",
+          "validations": {
+            "required": true
+          },
+          "order": 6,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "frequencia_pensamentos",
+          "description": "Frequência dos pensamentos suicidas",
+          "type": "radio",
+          "label": "3.1 Se sim, com que frequência?",
+          "validations": {
+            "required": false
+          },
+          "order": 7,
+          "metadata": [],
+          "options": [
+            {
+              "label": "Poucas vezes",
+              "value": "poucas_vezes"
+            },
+            {
+              "label": "Algumas vezes",
+              "value": "algumas_vezes"
+            },
+            {
+              "label": "Frequentemente",
+              "value": "frequentemente"
+            },
+            {
+              "label": "Quase sempre",
+              "value": "quase_sempre"
+            }
+          ]
+        },
+        {
+          "name": "ajuda_profissional",
+          "description": "Se o militar já procurou ajuda profissional para questões emocionais",
+          "type": "radio",
+          "label": "4. Você já procurou ajuda profissional para lidar com questões emocionais ou psicológicas?",
+          "validations": {
+            "required": true
+          },
+          "order": 8,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "tempo_lazer",
+          "description": "Se o militar sente que tem tempo suficiente para lazer",
+          "type": "radio",
+          "label": "5. Você sente que tem tempo suficiente para lazer e descanso?",
+          "validations": {
+            "required": true
+          },
+          "order": 9,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "razao_falta_tempo",
+          "description": "Principal razão da falta de tempo para lazer",
+          "type": "text",
+          "label": "5.1 Se não, qual a principal razão?",
+          "validations": {
+            "required": false
+          },
+          "order": 10,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "consumo_alcool",
+          "description": "Frequência de consumo de álcool",
+          "type": "radio",
+          "label": "6. Com que frequência você consome álcool?",
+          "validations": {
+            "required": true
+          },
+          "order": 11,
+          "metadata": [],
+          "options": [
+            {
+              "label": "Nunca",
+              "value": "nunca"
+            },
+            {
+              "label": "Raramente",
+              "value": "raramente"
+            },
+            {
+              "label": "Às vezes",
+              "value": "as_vezes"
+            },
+            {
+              "label": "Frequentemente",
+              "value": "frequentemente"
+            },
+            {
+              "label": "Diariamente",
+              "value": "diariamente"
+            }
+          ]
+        },
+        {
+          "name": "uso_drogas",
+          "description": "Se o militar já usou outras substâncias para lidar com situações emocionais",
+          "type": "radio",
+          "label": "7. Você já usou outras substâncias (drogas) para lidar com situações emocionais difíceis?",
+          "validations": {
+            "required": true
+          },
+          "order": 12,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "dificuldades_financeiras",
+          "description": "Se o militar tem enfrentado dificuldades financeiras que afetam sua saúde mental",
+          "type": "radio",
+          "label": "8. Você tem enfrentado dificuldades financeiras que afetam sua saúde mental?",
+          "validations": {
+            "required": true
+          },
+          "order": 13,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "rede_apoio",
+          "description": "Se o militar possui rede de apoio",
+          "type": "radio",
+          "label": "9. Você tem uma rede de apoio (familiares, amigos, colegas de trabalho)?",
+          "validations": {
+            "required": true
+          },
+          "order": 14,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "contar_rede_apoio",
+          "description": "Se o militar sente que pode contar com sua rede de apoio",
+          "type": "radio",
+          "label": "9.1 Se sim, você sente que pode contar com eles em momentos difíceis?",
+          "validations": {
+            "required": false
+          },
+          "order": 15,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "frequencia_apoio",
+          "description": "Frequência com que pode contar com a rede de apoio",
+          "type": "radio",
+          "label": "9.2 Se sim, com que frequência?",
+          "validations": {
+            "required": false
+          },
+          "order": 16,
+          "metadata": [],
+          "options": [
+            {
+              "label": "Poucas vezes",
+              "value": "poucas_vezes"
+            },
+            {
+              "label": "Algumas vezes",
+              "value": "algumas_vezes"
+            },
+            {
+              "label": "Frequente",
+              "value": "frequente"
+            },
+            {
+              "label": "Quase sempre",
+              "value": "quase_sempre"
+            }
+          ]
+        },
+        {
+          "name": "equilibrio_demandas",
+          "description": "Se o militar já sentiu dificuldades em equilibrar trabalho e família",
+          "type": "radio",
+          "label": "10. Você já sentiu dificuldades em equilibrar as demandas do trabalho e as exigências familiares?",
+          "validations": {
+            "required": true
+          },
+          "order": 17,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "religiao",
+          "description": "Se o militar segue alguma religião",
+          "type": "radio",
+          "label": "11. Você segue alguma religião?",
+          "validations": {
+            "required": true
+          },
+          "order": 18,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "qual_religiao",
+          "description": "Qual religião o militar segue",
+          "type": "text",
+          "label": "Qual?",
+          "validations": {
+            "required": false
+          },
+          "order": 19,
+          "metadata": [],
+          "options": []
+        },
+        {
+          "name": "compartilhar_saude",
+          "description": "Se há algo mais que o militar gostaria de compartilhar sobre sua saúde",
+          "type": "radio",
+          "label": "12. Há algo mais que você gostaria de compartilhar sobre sua saúde mental, emocional ou física?",
+          "validations": {
+            "required": true
+          },
+          "order": 20,
+          "metadata": [],
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            }
+          ]
+        },
+        {
+          "name": "comentarios_adicionais",
+          "description": "Comentários adicionais sobre saúde mental, emocional ou física",
+          "type": "textarea",
+          "label": "Comentários adicionais",
+          "validations": {
+            "required": false
+          },
+          "order": 21,
+          "metadata": [],
+          "options": []
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "title": "Formulário de Avaliação de Saúde Mental",
+    "description": "Formulário para avaliação da saúde mental, emocional e física do militar.",
+    "version": "1.0",
+    "created_at": "2023-10-01",
+    "updated_at": "2023-10-01"
+  }
+}

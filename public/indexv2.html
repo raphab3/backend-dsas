@@ -1,0 +1,1134 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formulário de Coleta de Dados do Policial Militar</title>
+    <meta
+      name="description"
+      content="Formulário ABNT para coleta de dados do policial militar"
+    />
+    <style>
+      @page {
+        size: A4 portrait;
+        margin: 1.5cm;
+        scale: 90%;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        font-size: 12pt; /* Reduzido de 14pt */
+        line-height: 1.3; /* Reduzido de 1.5 */
+        color: #000;
+        margin: 0;
+        padding: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 15px; /* Reduzido de 20px */
+      }
+      .header img {
+        height: 60px;
+        margin: 0 10px;
+      }
+      h1,
+      h2,
+      h3 {
+        font-family: Arial, sans-serif;
+        margin-top: 1em; /* Reduzido de 1.5em */
+        margin-bottom: 0.5em; /* Reduzido de 0.8em */
+      }
+      h1 {
+        font-size: 16pt;
+        text-transform: uppercase;
+        text-align: center;
+        font-weight: bold;
+      }
+      h2 {
+        font-size: 14pt;
+        border-bottom: 1px solid #000;
+        padding-bottom: 5px;
+      }
+      h3 {
+        font-size: 12pt;
+        font-weight: bold;
+      }
+      .caso-info {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px;
+        margin: 20px 0;
+        font-weight: bold;
+        border: 2px solid #000;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 10px; /* Reduzido de 15px */
+        table-layout: fixed;
+        page-break-inside: avoid;
+      }
+      table,
+      th,
+      td {
+        border: 2px solid #000;
+      }
+      th,
+      td {
+        padding: 5px; /* Reduzido de 8px */
+        text-align: left;
+        vertical-align: top;
+        word-wrap: break-word;
+      }
+      th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+      }
+      .full-row {
+        font-weight: bold;
+      }
+      .checkbox {
+        margin-right: 5px;
+      }
+      .multi-line {
+        line-height: 1.8;
+      }
+      .legend {
+        margin-top: 20px;
+        padding: 10px;
+        border: 1px solid #000;
+        background-color: #f9f9f9;
+      }
+      .signature {
+        margin-top: 30px;
+        font-weight: bold;
+      }
+      .risk-table td {
+        text-align: center;
+      }
+      .indent {
+        padding-left: 20px;
+      }
+      .radio-group {
+        margin: 5px 0;
+        line-height: 1.2; /* Reduzido de 1.8 */
+      }
+      @media print {
+        body {
+          font-size: 10pt; /* Reduzido de 12pt */
+          margin: 0;
+          padding: 0;
+          width: 100%;
+        }
+        h1 {
+          font-size: 16pt;
+        }
+        h2 {
+          font-size: 14pt;
+        }
+        .page-break {
+          page-break-before: always;
+        }
+        /* Garante que elementos não sejam cortados entre páginas */
+        table {
+          page-break-inside: avoid;
+          width: 100% !important;
+          max-width: 100% !important;
+        }
+        tr,
+        td,
+        th {
+          page-break-inside: avoid;
+        }
+        /* Evita que cabeçalhos fiquem sozinhos no final da página */
+        h1,
+        h2,
+        h3 {
+          page-break-after: avoid;
+        }
+        /* Garantir que as bordas das tabelas sejam visíveis */
+        table,
+        th,
+        td {
+          border: 2px solid #000 !important;
+          border-collapse: collapse !important;
+        }
+        input[type='checkbox'] {
+          -webkit-appearance: none;
+          border: 1px solid black;
+          width: 15px;
+          height: 15px;
+          display: inline-block;
+        }
+        /* Aumentar o tamanho das caixas de seleção */
+        .checkbox {
+          width: 10px; /* Reduzido de 15px */
+          height: 10px; /* Reduzido de 15px */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <img src="./imagens/dsas.png" alt="Brasão da Polícia Militar" />
+      <img src="./imagens/pmpb.png" alt="Brasão do Estado da Paraíba" />
+      <h1>POLÍCIA MILITAR DA PARAÍBA</h1>
+      <h2
+        style="
+          border: none;
+          text-align: center;
+          font-size: 14pt;
+          margin-top: 5px;
+        "
+      >
+        DIRETORIA DE SAÚDE E ASSISTÊNCIA SOCIAL
+      </h2>
+      <h3 style="text-align: center; margin-top: 5px">NÚCLEO DE ENFERMAGEM</h3>
+      <h1 style="margin-top: 20px">COLETA DE DADOS DO POLICIAL MILITAR</h1>
+    </div>
+
+    <div class="caso-info">
+      <div class="caso-info-left">
+        <p>CASO N° (ID):________________</p>
+        <p>BATALHÃO:____________________</p>
+      </div>
+
+      <p>DATA: ____/____/_______</p>
+    </div>
+
+    <h2>1. IDENTIFICAÇÃO DO MILITAR</h2>
+    <table>
+      <tr>
+        <td>
+          <strong>MATRÍCULA:</strong> ________________________
+          <strong>GRADUAÇÃO:</strong> ________________________
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <strong>NOME DO MILITAR (completo):</strong> _____________________________________________
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <strong>DATA DE NASCIMENTO:</strong> _____/_____/______ 
+          <strong>IDADE:</strong> ________ anos
+        </td>
+      </tr>
+    </table>
+
+    <table border="1" style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+      <tr>
+        <td style="width: 50%; padding: 10px; vertical-align: top;">
+          <h2>2. DADOS VITAIS E ANTROPOMÉTRICOS</h2>
+          <div style="margin: 5px 0">
+            <strong>Peso:</strong>_______ Kg &nbsp;&nbsp;
+            <strong>Altura:</strong>_______ m
+          </div>
+          <div style="margin: 5px 0">
+            <strong>Você é hipertenso?</strong>
+            <label><input type="checkbox" class="checkbox" /> SIM</label>
+            <label><input type="checkbox" class="checkbox" /> NÃO</label>
+          </div>
+          <div style="margin: 5px 0">
+            <strong>Se sim, valor da última aferição:</strong> ______/______ mmHg
+          </div>
+          <div style="margin: 5px 0">
+            <strong>Você toma algum medicamento regularmente?</strong>
+            <label><input type="checkbox" class="checkbox" /> SIM</label>
+            <label><input type="checkbox" class="checkbox" /> NÃO</label>
+          </div>
+          <div style="margin: 5px 0">
+            <strong>Se sim, quais?</strong> ___________________________________________________
+          </div>
+          <div style="margin: 5px 0">
+            <strong>FC:</strong>_____________ BPM (batimentos por minuto)
+          </div>
+        </td>
+        <td style="width: 50%; padding: 10px; vertical-align: top;">
+          <h2>3. HÁBITOS DE VIDA</h2>
+          <div style="margin: 5px 0">
+            <strong>Pratica atividade física?</strong>
+            <label><input type="checkbox" class="checkbox" /> SIM</label>
+            <label><input type="checkbox" class="checkbox" /> NÃO</label>
+          </div>
+          <div style="margin: 5px 0">
+            <strong>Frequência:</strong><br>
+            <label><input type="checkbox" class="checkbox" /> 1-2x/semana</label>
+            <label><input type="checkbox" class="checkbox" /> 3-4x/semana</label>
+            <label><input type="checkbox" class="checkbox" /> 5+x/semana</label>
+          </div>
+          <div style="margin: 5px 0">
+            <strong>Tipo:</strong> _______________________________________________________
+          </div>
+          <div style="margin: 5px 0">
+            <strong>É fumante?</strong>
+            <label><input type="checkbox" class="checkbox" /> SIM</label>
+            <label><input type="checkbox" class="checkbox" /> NÃO</label>
+            <label><input type="checkbox" class="checkbox" /> EX-FUMANTE</label>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <style>
+      .grid-container {
+        margin: 10px 0;
+      }
+      .grid-item {
+        padding: 10px;
+      }
+      .checkbox {
+        margin: 0 5px;
+      }
+    </style>
+
+    <div style="margin: 15px 0">
+      <strong>FC:_____________ BPM (batimentos por minuto)</strong>
+    </div>
+
+    <table>
+      <tr>
+        <th style="width: 25%">Valor do IMC (Kg/m²)</th>
+        <th colspan="2">CLASSIFICAÇÃO DO IMC</th>
+      </tr>
+      <tr>
+        <td rowspan="3"></td>
+        <td>
+          <label
+            ><input type="checkbox" class="checkbox" />
+            <strong>Baixo Peso</strong> – IMC < 18,5 Kg/m²</label
+          >
+        </td>
+        <td>
+          <label
+            ><input type="checkbox" class="checkbox" />
+            <strong>Obesidade grau I</strong> – IMC entre 30,0 Kg/m² e 34,9
+            Kg/m²</label
+          >
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label
+            ><input type="checkbox" class="checkbox" />
+            <strong>Peso Normal</strong> – IMC entre 18,5 Kg/m² e 24,9
+            Kg/m²</label
+          >
+        </td>
+        <td>
+          <label
+            ><input type="checkbox" class="checkbox" />
+            <strong>Obesidade grau II</strong> – IMC entre 35,0 Kg/m² e 39,9
+            Kg/m²</label
+          >
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label
+            ><input type="checkbox" class="checkbox" />
+            <strong>Excesso de Peso</strong> – IMC entre 25,0 Kg/m² e 29,9
+            Kg/m²</label
+          >
+        </td>
+        <td>
+          <label
+            ><input type="checkbox" class="checkbox" />
+            <strong>Obesidade grau III</strong> – IMC > 40,0 Kg/m²</label
+          >
+        </td>
+      </tr>
+    </table>
+
+    <div style="margin: 15px 0" class="multi-line">
+      O militar pratica alguma <strong>atividade física</strong>?
+      <label><input type="checkbox" class="checkbox" /> SIM</label>
+      <label><input type="checkbox" class="checkbox" /> NÃO</label><br />
+      Nº de vezes de atividade por semana? __________;<br />
+      Tempo da ativ. (min.): __________;<br />
+      Tipo de atividade: _____________________________________________________
+    </div>
+
+    <div style="margin: 15px 0">
+      O militar segue uma <strong>dieta saudável</strong>? (Consumo de frutas,
+      verduras, legumes, cereais, aves, peixes, leite e derivados, e menor
+      quantidade de gordura e sal).
+      <label><input type="checkbox" class="checkbox" /> SIM</label>
+      <label><input type="checkbox" class="checkbox" /> NÃO</label>
+    </div>
+
+    <h2>3. FATOR DE RISCO (PERGUNTAS)</h2>
+
+    <table>
+      <tr>
+        <th style="width: 70%">PERGUNTA</th>
+        <th style="width: 15%">SIM</th>
+        <th style="width: 15%">NÃO</th>
+      </tr>
+      <tr>
+        <td>O militar é <strong>homem com mais de 55 anos</strong>?</td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>O militar é <strong>mulher com mais de 65 anos</strong>?</td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          O militar apresenta histórico
+          <strong>Doença Cardiovascular</strong> (DCV) prematura em parentes de
+          1º grau (pais e irmãos)?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          O militar é <strong>fumante (fumou nos últimos 6 meses)</strong>?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>Nº de cigarros p/dia:</td>
+        <td colspan="2"></td>
+      </tr>
+      <tr>
+        <td>
+          O militar tem diagnóstico de <strong>Diabetes Mellitus</strong> (DM)?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>Medicamento:</td>
+        <td colspan="2"></td>
+      </tr>
+      <tr>
+        <td>
+          O militar apresenta <strong>IMC</strong> ≥ <strong>30 Kg/m²</strong>?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          O militar,
+          <strong>se homem, apresenta circunferência abdominal > 94cm</strong>?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          O militar,
+          <strong>se mulher, apresenta circunferência abdominal > 80cm</strong>?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          O militar possui <strong>Dislipidemia</strong> apresentando
+          LDL-colesterol ≥100mg/dl e/ou não HDL-colesterol 130 mg/dl e/ou
+          HDL-colesterol ≤ 40mg/dl no homem e ≤ 46mg/dl na mulher e/ou TG >150
+          mg/dl?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+    </table>
+
+    <div class="page-break"></div>
+
+    <h2>4. DOENÇA CARDIOVASCULAR (DCV) E RENAL</h2>
+
+    <table>
+      <tr>
+        <th style="width: 70%">DOENÇA CARDIOVASCULAR (DCV) E RENAL</th>
+        <th style="width: 15%">SIM</th>
+        <th style="width: 15%">NÃO</th>
+      </tr>
+      <tr>
+        <td>O militar apresenta <strong>angina</strong>?</td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          O militar tem história de <strong>infarto do miocárdio</strong>?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          O militar tem história de
+          <strong>isquemia miocárdica silenciosa</strong>?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          O militar tem história de <strong>doença de aorta</strong> relacionada
+          com aneurismas, hematomas ou ulcerações?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          O militar tem história de
+          <strong>revascularização do miocárdio</strong> percutânea
+          (angioplastia) ou cirúrgica?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>O militar apresenta <strong>insuficiência cardíaca</strong>?</td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          O militar apresenta presença de <strong>fibrilação atrial</strong>?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          O militar apresenta
+          <strong>doença arterial periférica</strong> sintomática dos membros
+          inferiores?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          O militar apresenta história de
+          <strong>Acidente Vascular Cerebral (AVC) isquêmico</strong>?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          O militar apresenta história de <strong>hemorragia cerebral</strong>?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          O militar apresenta história de
+          <strong>ataques isquêmico transitório</strong>?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          O militar possui <strong>Doença Renal Crônica</strong> (estágio IV e
+          V) com <em>clearance</em> <30 ml/min/1,73 m² ou proteinúria > 300
+          mg/24h?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+    </table>
+
+    <h2>5. CÁLCULO DE RISCO</h2>
+
+    <p>
+      Insira a
+      <strong>quantidade de fatores de risco identificados</strong> (igual ao
+      total de respostas "SIM" acima)
+    </p>
+
+    <table class="risk-table">
+      <tr>
+        <th style="width: 25%"></th>
+        <th style="width: 20%">PAS 130-139 mmHg ou<br />PAD 85-89mmHg</th>
+        <th style="width: 20%">
+          HAS ESTÁGIO 1<br />PAS 140-159 mmHg ou<br />PAD 90-99 mmHg
+        </th>
+        <th style="width: 20%">
+          HAS ESTÁGIO II<br />PAS 160-179 mmHg ou<br />PAD 100-109mmHg
+        </th>
+        <th style="width: 20%">
+          HAS ESTÁGIO III<br />PAS > 180 mmHg ou<br />PAD > 110mmHg
+        </th>
+      </tr>
+      <tr>
+        <td><strong>Sem fator de risco</strong></td>
+        <td style="background-color: #5efa5e">
+          <strong>SEM RISCO ADICIONAL</strong>
+        </td>
+        <td style="background-color: #5efa5e"><strong>RISCO BAIXO</strong></td>
+        <td style="background-color: #fdea38">
+          <strong>RISCO MODERADO</strong>
+        </td>
+        <td style="background-color: #ff8383"><strong>RISCO ALTO</strong></td>
+      </tr>
+      <tr>
+        <td><strong>1 a 2 fatores de risco</strong></td>
+        <td style="background-color: #5efa5e"><strong>RISCO BAIXO</strong></td>
+        <td style="background-color: #fdea38">
+          <strong>RISCO MODERADO</strong>
+        </td>
+        <td style="background-color: #ff8383"><strong>RISCO ALTO</strong></td>
+        <td style="background-color: #ff8383"><strong>RISCO ALTO</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Mais de 3 fatores</strong></td>
+        <td style="background-color: #fdea38">
+          <strong>RISCO MODERADO</strong>
+        </td>
+        <td style="background-color: #ff8383"><strong>RISCO ALTO</strong></td>
+        <td style="background-color: #ff8383"><strong>RISCO ALTO</strong></td>
+        <td style="background-color: #ff8383"><strong>RISCO ALTO</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Presença de DCV, ou DM</strong></td>
+        <td style="background-color: #ff8383"><strong>RISCO ALTO</strong></td>
+        <td style="background-color: #ff8383"><strong>RISCO ALTO</strong></td>
+        <td style="background-color: #ff8383"><strong>RISCO ALTO</strong></td>
+        <td style="background-color: #ff8383"><strong>RISCO ALTO</strong></td>
+      </tr>
+    </table>
+
+    <p>
+      A partir da pressão aferida no passo 1 e a quantidade de risco
+      identificados acima, <strong>selecione o risco do paciente</strong>,
+      utilizando a tabela acima como referência
+    </p>
+
+    <table class="risk-table">
+      <tr>
+        <td style="width: 25%"><strong>LEGENDAS</strong></td>
+        <td style="width: 20%; background-color: #5efa5e">
+          <strong>SEM RISCO</strong>
+        </td>
+        <td style="width: 20%; background-color: #5efa5e">
+          <strong>RISCO BAIXO</strong>
+        </td>
+        <td style="width: 20%; background-color: #fdea38">
+          <strong>RISCO MODERADO</strong>
+        </td>
+        <td style="width: 20%; background-color: #ff8383">
+          <strong>RISCO ALTO</strong>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>CLASSIFICAÇÃO</strong></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+
+    <div class="page-break"></div>
+
+    <h2>6. IMUNIZAÇÃO:</h2>
+
+    <table>
+      <tr>
+        <th style="width: 30%">VACINAS:</th>
+        <th style="width: 17.5%">1ª DOSE</th>
+        <th style="width: 17.5%">2ª DOSE</th>
+        <th style="width: 17.5%">3ª DOSE</th>
+        <th style="width: 17.5%">REFORÇO</th>
+      </tr>
+      <tr>
+        <td>COVID</td>
+        <td>___/___/___</td>
+        <td>___/___/___</td>
+        <td>___/___/___</td>
+        <td>___/___/___</td>
+      </tr>
+      <tr>
+        <td>dT (adulto)</td>
+        <td>___/___/___</td>
+        <td>___/___/___</td>
+        <td>___/___/___</td>
+        <td>___/___/___</td>
+      </tr>
+      <tr>
+        <td>Hepatite B recombinante</td>
+        <td>___/___/___</td>
+        <td>___/___/___</td>
+        <td>___/___/___</td>
+        <td>___/___/___</td>
+      </tr>
+      <tr>
+        <td>Tríplice Viral (Sarampo, Caxumba e Rubéola(SCR))</td>
+        <td>___/___/___</td>
+        <td>___/___/___</td>
+        <td>___/___/___</td>
+        <td>___/___/___</td>
+      </tr>
+      <tr>
+        <td>Influenza</td>
+        <td>___/___/___</td>
+        <td>___/___/___</td>
+        <td>___/___/___</td>
+        <td>___/___/___</td>
+      </tr>
+      <tr>
+        <td>Febre Amarela</td>
+        <td>___/___/___</td>
+        <td>___/___/___</td>
+        <td>___/___/___</td>
+        <td>___/___/___</td>
+      </tr>
+      <tr>
+        <td>Difteria, Tétano e Pertussis acelular (dTpa)<br />GESTANTE</td>
+        <td>___/___/___</td>
+        <td>___/___/___</td>
+        <td>___/___/___</td>
+        <td>___/___/___</td>
+      </tr>
+    </table>
+
+    <h2>7. OUTROS:</h2>
+
+    <table>
+      <tr>
+        <th style="width: 70%">PERGUNTA</th>
+        <th style="width: 15%">SIM</th>
+        <th style="width: 15%">NÃO</th>
+      </tr>
+      <tr>
+        <td><strong>O militar é doador de sangue?</strong></td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label
+            ><input type="checkbox" class="checkbox" /> Mais de 1 ano</label
+          >
+          <label
+            ><input type="checkbox" class="checkbox" /> Menos de 1 ano</label
+          >
+        </td>
+        <td colspan="2"></td>
+      </tr>
+      <tr>
+        <td><strong>O militar é doador de orgão?</strong></td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td><strong>O militar tem Cartão de vacina?</strong></td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <th style="width: 80%">PERGUNTA</th>
+        <th style="width: 10%">SIM</th>
+        <th style="width: 10%">NÃO</th>
+      </tr>
+      <tr>
+        <td>Você tem dificuldade para dormir?</td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3" style="padding-left: 20px; background-color: #f9f9f9">
+          <div style="font-weight: bold">Se sim, há quanto tempo?</div>
+          <div style="margin-top: 5px">
+            <label><input type="checkbox" class="checkbox" /> Mais de uma semana</label>
+            <label><input type="checkbox" class="checkbox" /> Mais de 2 meses</label>
+            <label><input type="checkbox" class="checkbox" /> Mais de 3 meses</label>
+            <label><input type="checkbox" class="checkbox" /> Mais de 6 meses</label>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Consome bebidas alcoólicas?</td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3" style="padding-left: 20px; background-color: #f9f9f9">
+          <div style="font-weight: bold">Se sim, com que frequência?</div>
+          <div style="margin-top: 5px">
+            <label><input type="checkbox" class="checkbox" /> Mensalmente</label>
+            <label><input type="checkbox" class="checkbox" /> Raramente quando em eventos</label>
+            <label><input type="checkbox" class="checkbox" /> Semanalmente</label>
+            <label><input type="checkbox" class="checkbox" /> Diariamente</label>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <th style="width: 70%">PERGUNTA</th>
+        <th style="width: 15%">SIM</th>
+        <th style="width: 15%">NÃO</th>
+      </tr>
+      <tr>
+        <td>
+          <strong
+            >1. Nos últimos 6 meses, você tem sentido tristeza profunda ou
+            desânimo</strong
+          >?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <strong
+            >2. Você já foi diagnosticado com algum transtorno psicológico ou
+            mental</strong
+          >?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td><strong>3. Você já teve pensamentos suicidas</strong>?</td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <strong>3.1 Se sim, com que frequência</strong>?<br />
+          <div class="radio-group">
+            <label
+              ><input type="checkbox" class="checkbox" /> Poucas vezes</label
+            >
+            <label
+              ><input type="checkbox" class="checkbox" /> Algumas vezes</label
+            >
+            <label
+              ><input type="checkbox" class="checkbox" /> Frequentemente</label
+            >
+            <label
+              ><input type="checkbox" class="checkbox" /> Quase sempre</label
+            >
+          </div>
+        </td>
+        <td colspan="2"></td>
+      </tr>
+      <tr>
+        <td>
+          <strong
+            >4. Você já procurou ajuda profissional para lidar com questões
+            emocionais ou psicológicas?</strong
+          >
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <strong
+            >5. Você sente que tem tempo suficiente para lazer e
+            descanso?</strong
+          >
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td><strong>5.1 Se não, qual a principal razão</strong>?</td>
+        <td colspan="2"></td>
+      </tr>
+      <tr>
+        <td>
+          <strong>6. Com que frequência você consome álcool?</strong><br />
+          <div class="radio-group">
+            <label><input type="checkbox" class="checkbox" /> Nunca</label>
+            <label><input type="checkbox" class="checkbox" /> Raramente</label>
+            <label><input type="checkbox" class="checkbox" /> Às vezes</label>
+            <label
+              ><input type="checkbox" class="checkbox" /> Frequentemente</label
+            >
+            <label
+              ><input type="checkbox" class="checkbox" /> Diariamente</label
+            >
+          </div>
+        </td>
+        <td colspan="2"></td>
+      </tr>
+      <tr>
+        <td>
+          <strong
+            >7. Você já usou outras substâncias (drogas) para lidar com
+            situações emocionais difíceis?</strong
+          >
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <strong
+            >8. Você tem enfrentado dificuldades financeiras que afetam sua
+            saúde mental?</strong
+          >
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <strong
+            >9. Você tem uma rede de apoio (familiares, amigos, colegas de
+            trabalho)</strong
+          >?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <strong
+            >9.1 Se sim, você sente que pode contar com eles em momentos
+            difíceis?</strong
+          >
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <strong>9.2 Se sim, com que frequência?</strong><br />
+          <div class="radio-group">
+            <label
+              ><input type="checkbox" class="checkbox" /> Poucas vezes</label
+            >
+            <label
+              ><input type="checkbox" class="checkbox" /> Algumas vezes</label
+            >
+            <label><input type="checkbox" class="checkbox" /> Frequente</label>
+            <label
+              ><input type="checkbox" class="checkbox" /> Quase sempre</label
+            >
+          </div>
+        </td>
+        <td colspan="2"></td>
+      </tr>
+      <tr>
+        <td>
+          <strong
+            >10. Você já sentiu dificuldades em equilibrar as demandas do
+            trabalho e as exigências familiares?</strong
+          >
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <strong>11. Você segue alguma religião?</strong><br />
+          <strong
+            >Qual?____________________________________________________________</strong
+          >
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <strong
+            >12. Há algo mais que você gostaria de compartilhar sobre sua saúde
+            mental, emocional ou física?</strong
+          >
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+    </table>
+
+    <div style="margin-top: 30px; display: flex; justify-content: space-between;">
+      <div style="flex: 1; text-align: center;">
+        <div>_________________________________________________</div>
+        <div style="margin-top: 5px;">
+          <strong>Assinatura do Militar</strong>
+        </div>
+      </div>
+
+      <div style="flex: 1; text-align: center;">
+        <div>_________________________________________________</div>
+        <div style="margin-top: 5px;">
+          <strong>Assinatura e Carimbo do Profissional</strong><br>
+          <span style="font-size: 10pt;">CRM/CRP/COREN: _________________</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 20px; text-align: center;">
+      <strong>Data: _____/_____/_______</strong>
+    </div>
+  </body>
+</html>

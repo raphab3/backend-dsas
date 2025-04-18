@@ -5,6 +5,9 @@ import { Attendance } from '../entities/attendance.entity';
 import { QueryAttendanceDto } from '../dto/query-attendance.dto';
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
 import { paginate } from '@shared/utils/Pagination';
+import { VitalSigns } from '@modules/VitalSigns/entities/VitalSigns.entity';
+import { AttendanceAttachment } from '../entities/attendanceAttachment.entity';
+import { S3Provider } from '@shared/providers/StorageProvider/services/S3StorageProvider';
 
 interface IPatientInfo {
   id: string;
@@ -18,18 +21,39 @@ interface IPatientInfo {
   tipo_servidor?: string;
 }
 
-interface IResponse {
+interface IAttachmentInfo {
+  id: string;
+  uuid: string;
+  filename: string;
+  originalname: string;
+  mimetype: string;
+  size: number;
+  createdAt: Date;
+  file_url: string;
+  uploadedBy?: {
+    id: string;
+    nome?: string;
+    matricula?: string;
+  } | null;
+}
+
+export interface IResponse {
   id: string;
   professional_name: string | null;
+  professional_id: string | null;
+  specialty_name: string | null;
+  location_name: string | null;
   status: string;
   formResponseIds: string[];
   appointment_id: string | null;
   appointment_status: string | null;
-  startAttendance: string;
-  endAttendance: string;
+  startAttendance: string | Date;
+  endAttendance: string | Date | null;
   patient: IPatientInfo;
-  created_at: string;
-  updated_at: string;
+  vitalSigns: VitalSigns;
+  attachments: IAttachmentInfo[];
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }
 
 @Injectable()
@@ -37,6 +61,7 @@ export class FindAllAttendanceService {
   constructor(
     @InjectRepository(Attendance)
     private attendanceRepository: Repository<Attendance>,
+    private storageProvider: S3Provider,
   ) {}
 
   async findAll(
@@ -52,9 +77,23 @@ export class FindAllAttendanceService {
       .leftJoinAndSelect('attendance.patient', 'patient')
       .leftJoinAndSelect('patient.dependent', 'dependent')
       .leftJoinAndSelect('patient.person_sig', 'person_sig')
-      .leftJoinAndSelect('attendance.appointment', 'appointment');
+      .leftJoinAndSelect('attendance.vitalSigns', 'vitalSigns')
+      .leftJoinAndSelect('attendance.appointment', 'appointment')
+      .leftJoinAndSelect('appointment.schedule', 'schedule')
+      .leftJoinAndSelect('schedule.specialty', 'schedule_specialty')
+      .leftJoinAndSelect('schedule.location', 'location')
+      .leftJoinAndSelect('attendance.specialty', 'specialty')
+      .leftJoinAndSelect('attendance.location', 'attendance_location')
+      .leftJoinAndSelect(
+        'attendance.attendanceAttachments',
+        'attendanceAttachments',
+      )
+      .leftJoinAndSelect('attendanceAttachments.attachment', 'attachment')
+      .leftJoinAndSelect('attendanceAttachments.uploadedBy', 'uploadedBy');
 
-    baseQueryBuilder.orderBy('attendance.startAttendance', 'DESC');
+    baseQueryBuilder
+      .orderBy('attendance.startAttendance', 'DESC')
+      .addOrderBy('attendance.updatedAt', 'DESC');
 
     if (query.status) {
       baseQueryBuilder.andWhere('attendance.status = :status', {
@@ -85,21 +124,45 @@ export class FindAllAttendanceService {
       perPage,
     });
 
-    const formattedData: IResponse[] = result.data.map((data) => ({
-      id: data.id,
-      professional_name: data?.professional?.person_sig?.nome ?? null,
-      status: data.status,
-      formResponseIds: data.formResponseIds || [],
-      appointment_id: data.appointment?.id ?? null,
-      appointment_status: data.appointment?.status ?? null,
-      startAttendance: data.startAttendance,
-      endAttendance: data.endAttendance,
-      patient: this.getPatientInfo(data.patient),
-      created_at: data.created_at,
-      updated_at: data.updated_at,
-    }));
+    const formattedData: IResponse[] = await Promise.all(
+      result.data.map(async (data) => {
+        // Process attachments and generate presigned URLs
+        const attachments = await this.processAttachments(
+          data.attendanceAttachments,
+        );
 
-    return { data: formattedData, pagination: result.pagination };
+        return {
+          id: data.id,
+          code: data.code,
+          professional_name: data?.professional?.person_sig?.nome ?? null,
+          professional_id: data?.professional?.id ?? null,
+          specialty_name:
+            data?.specialty?.name ??
+            data?.appointment?.schedule?.specialty?.name ??
+            null,
+          location_name:
+            data?.location?.name ??
+            data?.appointment?.schedule?.location?.name ??
+            null,
+          status: data.status,
+          formResponseIds: data.formResponseIds || [],
+          appointment_id: data.appointment?.id ?? null,
+          appointment_status: data.appointment?.status ?? null,
+          startAttendance: data.startAttendance,
+          endAttendance: data.endAttendance,
+          patient: this.getPatientInfo(data.patient),
+          vitalSigns: data.vitalSigns,
+          attachments,
+          createdAt: data.createdAt,
+          updatedAt: data.updatedAt,
+        };
+      }),
+    );
+
+    return {
+      data: formattedData,
+      pagination: result.pagination,
+    };
   }
 
   private getPatientInfo(patient: any): IPatientInfo {
@@ -142,5 +205,41 @@ export class FindAllAttendanceService {
         is_dependent: false,
       };
     }
+  }
+
+  private async processAttachments(
+    attendanceAttachments: AttendanceAttachment[],
+  ): Promise<IAttachmentInfo[]> {
+    if (!attendanceAttachments || attendanceAttachments.length === 0) {
+      return [];
+    }
+
+    return Promise.all(
+      attendanceAttachments.map(async (attendanceAttachment) => {
+        const attachment = attendanceAttachment.attachment;
+        const presignedUrl = await this.storageProvider.getSignedUrl(
+          attachment.path,
+          12 * 60 * 60, // 12 hours expiration
+        );
+
+        return {
+          id: attachment.id,
+          uuid: attachment.uuid,
+          filename: attachment.filename,
+          originalname: attachment.originalname,
+          mimetype: attachment.mimetype,
+          size: attachment.size,
+          createdAt: attendanceAttachment.createdAt,
+          file_url: presignedUrl,
+          uploadedBy: attendanceAttachment.uploadedBy
+            ? {
+                id: attendanceAttachment.uploadedBy.id,
+                nome: attendanceAttachment.uploadedBy.nome,
+                matricula: attendanceAttachment.uploadedBy.matricula,
+              }
+            : null,
+        };
+      }),
+    );
   }
 }

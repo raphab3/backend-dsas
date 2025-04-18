@@ -1,0 +1,1396 @@
+{
+  "name": "Avaliação Médica",
+  "category": "anamnesis",
+  "sessions": [
+    {
+      "_id": "67ff314ac18b451cb2414587",
+      "name": "Avaliação Médica - Anamnese",
+      "fields": [
+        {
+          "_id": "67ff314ac18b451cb2414588",
+          "name": "alimentacao",
+          "description": "Hábitos alimentares do paciente",
+          "type": "textarea",
+          "label": "Alimentação",
+          "validations": {
+            "required": false
+          },
+          "options": [],
+          "order": 0,
+          "metadata": []
+        },
+        {
+          "_id": "67ff314ac18b451cb2414589",
+          "name": "atividade_fisica",
+          "description": "Informações sobre atividade física do paciente",
+          "type": "textarea",
+          "label": "Atividade Física",
+          "validations": {
+            "required": false
+          },
+          "options": [],
+          "order": 1,
+          "metadata": []
+        },
+        {
+          "_id": "67ff314ac18b451cb241458a",
+          "name": "lazer",
+          "description": "Atividades de lazer do paciente",
+          "type": "textarea",
+          "label": "Lazer",
+          "validations": {
+            "required": false
+          },
+          "options": [],
+          "order": 2,
+          "metadata": []
+        },
+        {
+          "_id": "67ff314ac18b451cb241458b",
+          "name": "sono",
+          "description": "Padrão de sono do paciente",
+          "type": "textarea",
+          "label": "Sono",
+          "validations": {
+            "required": false
+          },
+          "options": [],
+          "order": 3,
+          "metadata": []
+        }
+      ]
+    },
+    {
+      "name": "Antecedentes Pessoais",
+      "fields": [
+        {
+          "name": "hipertensao",
+          "description": "Presença de hipertensão arterial",
+          "type": "radio",
+          "label": "Hipertensão",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 0,
+          "metadata": []
+        },
+        {
+          "name": "diabetes",
+          "description": "Presença de diabetes",
+          "type": "radio",
+          "label": "Diabetes",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 1,
+          "metadata": []
+        },
+        {
+          "name": "asma",
+          "description": "Presença de asma",
+          "type": "radio",
+          "label": "Asma",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 2,
+          "metadata": []
+        },
+        {
+          "name": "neoplasias",
+          "description": "Histórico de neoplasias",
+          "type": "radio",
+          "label": "Neoplasias",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 3,
+          "metadata": []
+        },
+        {
+          "name": "alergias",
+          "description": "Presença de alergias",
+          "type": "radio",
+          "label": "Alergias",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 4,
+          "metadata": []
+        },
+        {
+          "name": "cardiopatia",
+          "description": "Presença de cardiopatia",
+          "type": "radio",
+          "label": "Cardiopatia",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 5,
+          "metadata": []
+        },
+        {
+          "name": "avc",
+          "description": "Histórico de AVC",
+          "type": "radio",
+          "label": "AVC",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 6,
+          "metadata": []
+        },
+        {
+          "name": "obesidade",
+          "description": "Presença de obesidade",
+          "type": "radio",
+          "label": "Obesidade",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 7,
+          "metadata": []
+        },
+        {
+          "name": "dislipidemia",
+          "description": "Presença de dislipidemia",
+          "type": "radio",
+          "label": "Dislipidemia",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 8,
+          "metadata": []
+        },
+        {
+          "name": "alcoolismo",
+          "description": "Presença de alcoolismo",
+          "type": "radio",
+          "label": "Alcoolismo",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 9,
+          "metadata": []
+        },
+        {
+          "name": "tabagismo",
+          "description": "Presença de tabagismo",
+          "type": "radio",
+          "label": "Tabagismo",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 10,
+          "metadata": []
+        },
+        {
+          "name": "sedentarismo",
+          "description": "Presença de sedentarismo",
+          "type": "radio",
+          "label": "Sedentarismo",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 11,
+          "metadata": []
+        },
+        {
+          "name": "covid",
+          "description": "Histórico de COVID-19",
+          "type": "radio",
+          "label": "COVID",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 12,
+          "metadata": []
+        },
+        {
+          "name": "vacina_covid",
+          "description": "Vacinação contra COVID-19",
+          "type": "radio",
+          "label": "Vacina COVID",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 13,
+          "metadata": []
+        },
+        {
+          "name": "outros",
+          "description": "Outros antecedentes pessoais relevantes",
+          "type": "text",
+          "label": "Outros",
+          "validations": {
+            "required": false
+          },
+          "options": [],
+          "order": 14,
+          "metadata": []
+        }
+      ]
+    },
+    {
+      "name": "Antecedentes Familiares",
+      "fields": [
+        {
+          "name": "hipertensao_familiar",
+          "description": "Histórico familiar de hipertensão arterial",
+          "type": "radio",
+          "label": "Hipertensão",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 0,
+          "metadata": []
+        },
+        {
+          "name": "diabetes_familiar",
+          "description": "Histórico familiar de diabetes",
+          "type": "radio",
+          "label": "Diabetes",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 1,
+          "metadata": []
+        },
+        {
+          "name": "asma_familiar",
+          "description": "Histórico familiar de asma",
+          "type": "radio",
+          "label": "Asma",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 2,
+          "metadata": []
+        },
+        {
+          "name": "neoplasias_familiar",
+          "description": "Histórico familiar de neoplasias",
+          "type": "radio",
+          "label": "Neoplasias",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 3,
+          "metadata": []
+        },
+        {
+          "name": "alergias_familiar",
+          "description": "Histórico familiar de alergias",
+          "type": "radio",
+          "label": "Alergias",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 4,
+          "metadata": []
+        },
+        {
+          "name": "cardiopatia_familiar",
+          "description": "Histórico familiar de cardiopatia",
+          "type": "radio",
+          "label": "Cardiopatia",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 5,
+          "metadata": []
+        },
+        {
+          "name": "avc_familiar",
+          "description": "Histórico familiar de AVC",
+          "type": "radio",
+          "label": "AVC",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 6,
+          "metadata": []
+        },
+        {
+          "name": "tabagismo_familiar",
+          "description": "Histórico familiar de tabagismo",
+          "type": "radio",
+          "label": "Tabagismo",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 7,
+          "metadata": []
+        },
+        {
+          "name": "alcoolismo_familiar",
+          "description": "Histórico familiar de alcoolismo",
+          "type": "radio",
+          "label": "Alcoolismo",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 8,
+          "metadata": []
+        },
+        {
+          "name": "sedentarismo_familiar",
+          "description": "Histórico familiar de sedentarismo",
+          "type": "radio",
+          "label": "Sedentarismo",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 9,
+          "metadata": []
+        },
+        {
+          "name": "outros_familiar",
+          "description": "Outros antecedentes familiares relevantes",
+          "type": "text",
+          "label": "Outros",
+          "validations": {
+            "required": false
+          },
+          "options": [],
+          "order": 10,
+          "metadata": []
+        }
+      ]
+    },
+    {
+      "name": "Hábitos e Costumes",
+      "fields": [
+        {
+          "name": "etilismo_social",
+          "description": "Consumo social de bebidas alcoólicas",
+          "type": "radio",
+          "label": "Etilismo Social",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 0,
+          "metadata": []
+        },
+        {
+          "name": "etilismo_cronico",
+          "description": "Consumo crônico de bebidas alcoólicas",
+          "type": "radio",
+          "label": "Etilismo Crônico",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 1,
+          "metadata": []
+        },
+        {
+          "name": "tabagismo_habitos",
+          "description": "Hábito de fumar",
+          "type": "radio",
+          "label": "Tabagismo",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 2,
+          "metadata": []
+        },
+        {
+          "name": "uso_drogas_ilicitas",
+          "description": "Uso de drogas ilícitas",
+          "type": "radio",
+          "label": "Uso de Drogas Ilícitas",
+          "validations": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "SIM",
+              "value": "sim"
+            },
+            {
+              "label": "NÃO",
+              "value": "nao"
+            },
+            {
+              "label": "NÃO SABE INFORMAR",
+              "value": "nao_sabe"
+            }
+          ],
+          "order": 3,
+          "metadata": []
+        },
+        {
+          "name": "observacoes_habitos",
+          "description": "Observações adicionais sobre hábitos e costumes",
+          "type": "textarea",
+          "label": "Observações",
+          "validations": {
+            "required": false
+          },
+          "options": [],
+          "order": 4,
+          "metadata": []
+        }
+      ]
+    },
+    {
+      "name": "Exame Físico",
+      "fields": [
+        {
+          "name": "aparelho_respiratorio",
+          "description": "Exame do aparelho respiratório",
+          "type": "textarea",
+          "label": "Aparelho Respiratório (AR)",
+          "validations": {
+            "required": false
+          },
+          "options": [],
+          "order": 0,
+          "metadata": []
+        },
+        {
+          "name": "aparelho_cardiovascular",
+          "description": "Exame do aparelho cardiovascular",
+          "type": "textarea",
+          "label": "Aparelho Cardiovascular (ACV)",
+          "validations": {
+            "required": false
+          },
+          "options": [],
+          "order": 1,
+          "metadata": []
+        },
+        {
+          "name": "abdomen",
+          "description": "Exame do abdômen",
+          "type": "textarea",
+          "label": "Abdômen",
+          "validations": {
+            "required": false
+          },
+          "options": [],
+          "order": 2,
+          "metadata": []
+        },
+        {
+          "name": "aparelho_osteolocomotor",
+          "description": "Exame do aparelho osteolocomotor",
+          "type": "textarea",
+          "label": "Aparelho Osteolocomotor (AOL)",
+          "validations": {
+            "required": false
+          },
+          "options": [],
+          "order": 3,
+          "metadata": []
+        },
+        {
+          "name": "membros_superiores",
+          "description": "Exame dos membros superiores",
+          "type": "textarea",
+          "label": "Membros Superiores (MMSS)",
+          "validations": {
+            "required": false
+          },
+          "options": [],
+          "order": 4,
+          "metadata": []
+        },
+        {
+          "name": "membros_inferiores",
+          "description": "Exame dos membros inferiores",
+          "type": "textarea",
+          "label": "Membros Inferiores (MMII)",
+          "validations": {
+            "required": false
+          },
+          "options": [],
+          "order": 5,
+          "metadata": []
+        },
+        {
+          "name": "observacoes_exame_fisico",
+          "description": "Observações adicionais sobre o exame físico",
+          "type": "textarea",
+          "label": "Observações Gerais",
+          "validations": {
+            "required": false
+          },
+          "options": [],
+          "order": 6,
+          "metadata": []
+        }
+      ]
+    },
+    {
+      "name": "Exames Solicitados",
+      "fields": [
+        {
+          "name": "hemograma",
+          "description": "Solicitação de hemograma",
+          "type": "radio",
+          "label": "Hemograma",
+          "validations": {
+            "required": false
+          },
+          "options": [
+            {
+              "label": "SOLICITAR",
+              "value": "solicitar"
+            },
+            {
+              "label": "JÁ REALIZADO",
+              "value": "ja_realizado"
+            }
+          ],
+          "order": 0,
+          "metadata": []
+        },
+        {
+          "name": "glicemia",
+          "description": "Solicitação de glicemia",
+          "type": "radio",
+          "label": "Glicemia",
+          "validations": {
+            "required": false
+          },
+          "options": [
+            {
+              "label": "SOLICITAR",
+              "value": "solicitar"
+            },
+            {
+              "label": "JÁ REALIZADO",
+              "value": "ja_realizado"
+            }
+          ],
+          "order": 1,
+          "metadata": []
+        },
+        {
+          "name": "hemoglobina_glicada",
+          "description": "Solicitação de hemoglobina glicada",
+          "type": "radio",
+          "label": "Hg glicada",
+          "validations": {
+            "required": false
+          },
+          "options": [
+            {
+              "label": "SOLICITAR",
+              "value": "solicitar"
+            },
+            {
+              "label": "JÁ REALIZADO",
+              "value": "ja_realizado"
+            }
+          ],
+          "order": 2,
+          "metadata": []
+        },
+        {
+          "name": "colesterol_total_fracoes",
+          "description": "Solicitação de colesterol total e frações",
+          "type": "radio",
+          "label": "Colesterol Total e Frações",
+          "validations": {
+            "required": false
+          },
+          "options": [
+            {
+              "label": "SOLICITAR",
+              "value": "solicitar"
+            },
+            {
+              "label": "JÁ REALIZADO",
+              "value": "ja_realizado"
+            }
+          ],
+          "order": 3,
+          "metadata": []
+        },
+        {
+          "name": "triglicerideos",
+          "description": "Solicitação de triglicerídeos",
+          "type": "radio",
+          "label": "Triglicerídeos",
+          "validations": {
+            "required": false
+          },
+          "options": [
+            {
+              "label": "SOLICITAR",
+              "value": "solicitar"
+            },
+            {
+              "label": "JÁ REALIZADO",
+              "value": "ja_realizado"
+            }
+          ],
+          "order": 4,
+          "metadata": []
+        },
+        {
+          "name": "pcr",
+          "description": "Solicitação de proteína C reativa",
+          "type": "radio",
+          "label": "PCR",
+          "validations": {
+            "required": false
+          },
+          "options": [
+            {
+              "label": "SOLICITAR",
+              "value": "solicitar"
+            },
+            {
+              "label": "JÁ REALIZADO",
+              "value": "ja_realizado"
+            }
+          ],
+          "order": 5,
+          "metadata": []
+        },
+        {
+          "name": "tgo",
+          "description": "Solicitação de TGO",
+          "type": "radio",
+          "label": "TGO",
+          "validations": {
+            "required": false
+          },
+          "options": [
+            {
+              "label": "SOLICITAR",
+              "value": "solicitar"
+            },
+            {
+              "label": "JÁ REALIZADO",
+              "value": "ja_realizado"
+            }
+          ],
+          "order": 6,
+          "metadata": []
+        },
+        {
+          "name": "tgp",
+          "description": "Solicitação de TGP",
+          "type": "radio",
+          "label": "TGP",
+          "validations": {
+            "required": false
+          },
+          "options": [
+            {
+              "label": "SOLICITAR",
+              "value": "solicitar"
+            },
+            {
+              "label": "JÁ REALIZADO",
+              "value": "ja_realizado"
+            }
+          ],
+          "order": 7,
+          "metadata": []
+        },
+        {
+          "name": "gama_gt",
+          "description": "Solicitação de GAMA GT",
+          "type": "radio",
+          "label": "GAMA GT",
+          "validations": {
+            "required": false
+          },
+          "options": [
+            {
+              "label": "SOLICITAR",
+              "value": "solicitar"
+            },
+            {
+              "label": "JÁ REALIZADO",
+              "value": "ja_realizado"
+            }
+          ],
+          "order": 8,
+          "metadata": []
+        },
+        {
+          "name": "ureia",
+          "description": "Solicitação de uréia",
+          "type": "radio",
+          "label": "Uréia",
+          "validations": {
+            "required": false
+          },
+          "options": [
+            {
+              "label": "SOLICITAR",
+              "value": "solicitar"
+            },
+            {
+              "label": "JÁ REALIZADO",
+              "value": "ja_realizado"
+            }
+          ],
+          "order": 9,
+          "metadata": []
+        },
+        {
+          "name": "creatinina",
+          "description": "Solicitação de creatinina",
+          "type": "radio",
+          "label": "Creatinina",
+          "validations": {
+            "required": false
+          },
+          "options": [
+            {
+              "label": "SOLICITAR",
+              "value": "solicitar"
+            },
+            {
+              "label": "JÁ REALIZADO",
+              "value": "ja_realizado"
+            }
+          ],
+          "order": 10,
+          "metadata": []
+        },
+        {
+          "name": "acido_urico",
+          "description": "Solicitação de ácido úrico",
+          "type": "radio",
+          "label": "Ácido Úrico",
+          "validations": {
+            "required": false
+          },
+          "options": [
+            {
+              "label": "SOLICITAR",
+              "value": "solicitar"
+            },
+            {
+              "label": "JÁ REALIZADO",
+              "value": "ja_realizado"
+            }
+          ],
+          "order": 11,
+          "metadata": []
+        },
+        {
+          "name": "psa",
+          "description": "Solicitação de PSA",
+          "type": "radio",
+          "label": "PSA",
+          "validations": {
+            "required": false
+          },
+          "options": [
+            {
+              "label": "SOLICITAR",
+              "value": "solicitar"
+            },
+            {
+              "label": "JÁ REALIZADO",
+              "value": "ja_realizado"
+            }
+          ],
+          "order": 12,
+          "metadata": []
+        },
+        {
+          "name": "sumario_urina",
+          "description": "Solicitação de sumário de urina",
+          "type": "radio",
+          "label": "Sumário de Urina",
+          "validations": {
+            "required": false
+          },
+          "options": [
+            {
+              "label": "SOLICITAR",
+              "value": "solicitar"
+            },
+            {
+              "label": "JÁ REALIZADO",
+              "value": "ja_realizado"
+            }
+          ],
+          "order": 13,
+          "metadata": []
+        },
+        {
+          "name": "parasitologico_fezes",
+          "description": "Solicitação de parasitológico de fezes",
+          "type": "radio",
+          "label": "P. de fezes",
+          "validations": {
+            "required": false
+          },
+          "options": [
+            {
+              "label": "SOLICITAR",
+              "value": "solicitar"
+            },
+            {
+              "label": "JÁ REALIZADO",
+              "value": "ja_realizado"
+            }
+          ],
+          "order": 14,
+          "metadata": []
+        },
+        {
+          "name": "ecocardiograma",
+          "description": "Solicitação de ecocardiograma",
+          "type": "radio",
+          "label": "Ecocardiograma",
+          "validations": {
+            "required": false
+          },
+          "options": [
+            {
+              "label": "SOLICITAR",
+              "value": "solicitar"
+            },
+            {
+              "label": "JÁ REALIZADO",
+              "value": "ja_realizado"
+            }
+          ],
+          "order": 15,
+          "metadata": []
+        },
+        {
+          "name": "teste_ergometrico",
+          "description": "Solicitação de teste ergométrico",
+          "type": "radio",
+          "label": "Teste ergométrico",
+          "validations": {
+            "required": false
+          },
+          "options": [
+            {
+              "label": "SOLICITAR",
+              "value": "solicitar"
+            },
+            {
+              "label": "JÁ REALIZADO",
+              "value": "ja_realizado"
+            }
+          ],
+          "order": 16,
+          "metadata": []
+        },
+        {
+          "name": "usg_abdominal",
+          "description": "Solicitação de ultrassonografia abdominal",
+          "type": "radio",
+          "label": "USG Abdominal",
+          "validations": {
+            "required": false
+          },
+          "options": [
+            {
+              "label": "SOLICITAR",
+              "value": "solicitar"
+            },
+            {
+              "label": "JÁ REALIZADO",
+              "value": "ja_realizado"
+            }
+          ],
+          "order": 17,
+          "metadata": []
+        },
+        {
+          "name": "raio_x_torax",
+          "description": "Solicitação de raio X de tórax",
+          "type": "radio",
+          "label": "Raio X de Tórax",
+          "validations": {
+            "required": false
+          },
+          "options": [
+            {
+              "label": "SOLICITAR",
+              "value": "solicitar"
+            },
+            {
+              "label": "JÁ REALIZADO",
+              "value": "ja_realizado"
+            }
+          ],
+          "order": 18,
+          "metadata": []
+        },
+        {
+          "name": "mamografia",
+          "description": "Solicitação de mamografia",
+          "type": "radio",
+          "label": "Mamografia",
+          "validations": {
+            "required": false
+          },
+          "options": [
+            {
+              "label": "SOLICITAR",
+              "value": "solicitar"
+            },
+            {
+              "label": "JÁ REALIZADO",
+              "value": "ja_realizado"
+            }
+          ],
+          "order": 19,
+          "metadata": []
+        },
+        {
+          "name": "outros_exames",
+          "description": "Outros exames solicitados",
+          "type": "text",
+          "label": "Outros",
+          "validations": {
+            "required": false
+          },
+          "options": [],
+          "order": 20,
+          "metadata": []
+        }
+      ]
+    },
+    {
+        "name": "Diagnóstico/Parecer",
+        "fields": [
+          {
+            "name": "diagnostico_texto",
+            "description": "Diagnóstico e parecer médico detalhado",
+            "type": "textarea",
+            "label": "Diagnóstico/Parecer",
+            "validations": {
+              "required": true
+            },
+            "options": [],
+            "order": 0,
+            "metadata": []
+          },
+          {
+            "name": "cid_principal",
+            "description": "Código CID principal",
+            "type": "text",
+            "label": "CID Principal",
+            "validations": {
+              "required": true
+            },
+            "options": [],
+            "order": 1,
+            "metadata": []
+          },
+          {
+            "name": "cid_secundario",
+            "description": "Código CID secundário",
+            "type": "text",
+            "label": "CID Secundário",
+            "validations": {
+              "required": false
+            },
+            "options": [],
+            "order": 2,
+            "metadata": []
+          },
+          {
+            "name": "observacoes_diagnostico",
+            "description": "Observações adicionais sobre o diagnóstico",
+            "type": "textarea",
+            "label": "Observações",
+            "validations": {
+              "required": false
+            },
+            "options": [],
+            "order": 3,
+            "metadata": []
+          }
+        ]
+      }
+  ],
+  "rules": [],
+  "metadata": []
+}

@@ -11,10 +11,11 @@ import {
   Index,
   ManyToMany,
 } from 'typeorm';
-import { FormCategory } from '../types';
+import { FormCategory, TemplateType } from '../types';
+import { Location } from '@modules/locations/typeorm/entities/location.entity';
 
 @Entity('form_templates')
-@Index(['name'], { unique: true })
+@Index(['name'])
 export class FormTemplate {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -32,12 +33,30 @@ export class FormTemplate {
   })
   category: FormCategory;
 
+  @Column({
+    type: 'enum',
+    enum: TemplateType,
+    default: TemplateType.FORM,
+  })
+  type: TemplateType;
+
   @Column()
   @Index()
   mongoTemplateId: string;
 
   @Column({ default: false })
   isPublished: boolean;
+
+  @Column({ default: false })
+  is_global: boolean;
+
+  @Index('form_template_location_id_index')
+  @Column({ nullable: true })
+  location_id: string;
+
+  @ManyToOne(() => Location, { nullable: true })
+  @JoinColumn({ name: 'location_id' })
+  location: Location;
 
   @ManyToMany(() => GroupFormTemplate)
   groups: GroupFormTemplate[];

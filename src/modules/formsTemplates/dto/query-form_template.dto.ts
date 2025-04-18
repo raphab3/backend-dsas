@@ -21,6 +21,20 @@ export class QueryFormTemplateDto extends IQuery {
     type: String,
     required: false,
   })
+  category: string;
+
+  @ApiProperty({
+    description: 'Id do form_template',
+    type: String,
+    required: false,
+  })
+  type: string;
+
+  @ApiProperty({
+    description: 'Id do form_template',
+    type: String,
+    required: false,
+  })
   template_mongo_id: string;
 
   @ApiProperty({
@@ -29,4 +43,18 @@ export class QueryFormTemplateDto extends IQuery {
     required: false,
   })
   user_uuid: string;
+
+  @ApiProperty({
+    description: 'Id do form_template',
+    type: String,
+    required: false,
+  })
+  is_global: boolean;
+
+  @ApiProperty({
+    description: 'Id da localização',
+    type: String,
+    required: false,
+  })
+  location_id: string;
 }

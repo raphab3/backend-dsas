@@ -25,28 +25,54 @@ export class FindAllFormTemplateService {
     let page = 1;
     let perPage = 10;
 
-    const attendanceTemplateCreateQueryBuilder =
-      this.attendanceTemplateRepository
-        .createQueryBuilder('form_templates')
-        .orderBy('form_templates.created_at', 'DESC');
-
-    const whereConditions: string[] = [];
-    const parameters: Record<string, any> = {};
+    const formTemplateQueryBuilder = this.attendanceTemplateRepository
+      .createQueryBuilder('form_templates')
+      .leftJoinAndSelect('form_templates.location', 'location')
+      .orderBy('form_templates.created_at', 'DESC');
 
     if (query.id) {
-      whereConditions.push('form_templates.id = :id');
-      parameters.id = query.id;
+      formTemplateQueryBuilder.where(`form_templates.id = '${query.id}'`);
     }
 
     if (query.name) {
-      whereConditions.push('form_templates.name ILike :name');
-      parameters.name = `%${query.name}%`;
+      formTemplateQueryBuilder.andWhere(
+        `form_templates.name ILIKE '%${query.name}%'`,
+      );
     }
 
-    if (whereConditions.length > 0) {
-      attendanceTemplateCreateQueryBuilder.where(
-        `(${whereConditions.join(' AND ')})`,
-        parameters,
+    if (query.is_published) {
+      formTemplateQueryBuilder.andWhere(
+        `form_templates.is_published = ${query.is_published}`,
+      );
+    }
+
+    if (query.type) {
+      formTemplateQueryBuilder.andWhere(
+        `form_templates.type = '${query.type}'`,
+      );
+    }
+
+    if (query.location_id) {
+      formTemplateQueryBuilder.andWhere(
+        `(form_templates.location_id = :locationId OR form_templates.is_global = true)`,
+        {
+          locationId: query.location_id,
+        },
+      );
+    }
+
+    if (query.category) {
+      formTemplateQueryBuilder.andWhere(
+        `form_templates.category = '${query.category}'`,
+      );
+    }
+
+    if (query.is_global !== undefined) {
+      formTemplateQueryBuilder.andWhere(
+        `form_templates.is_global = :isGlobal`,
+        {
+          isGlobal: query.is_global,
+        },
       );
     }
 
@@ -54,7 +80,7 @@ export class FindAllFormTemplateService {
     if (query.perPage) perPage = query.perPage;
 
     const result: IPaginatedResult<any> = await paginate(
-      attendanceTemplateCreateQueryBuilder,
+      formTemplateQueryBuilder,
       {
         page,
         perPage,

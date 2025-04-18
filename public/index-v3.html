@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formulário de Triagem de Saúde - Policial Militar</title>
+    <style>
+      @page {
+        size: A4 portrait;
+        margin: 1cm;
+        scale: 95%;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        font-size: 11pt;
+        line-height: 1.3;
+        color: #000;
+        margin: 0;
+        padding: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 15px;
+      }
+      .header img {
+        height: 40px;
+        margin: 0 10px;
+      }
+      h1,
+      h2 {
+        font-family: Arial, sans-serif;
+        margin-top: 0.8em;
+        margin-bottom: 0.5em;
+      }
+      h1 {
+        font-size: 14pt;
+        text-transform: uppercase;
+        text-align: center;
+        font-weight: bold;
+      }
+      h2 {
+        font-size: 12pt;
+        border-bottom: 1px solid #000;
+        padding-bottom: 3px;
+      }
+      .caso-info {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 8px;
+        margin: 15px 0;
+        font-weight: bold;
+        border: 1px solid #000;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 10px;
+        table-layout: fixed;
+        page-break-inside: avoid;
+      }
+      table,
+      th,
+      td {
+        border: 1px solid #000;
+      }
+      th,
+      td {
+        padding: 5px;
+        text-align: left;
+        vertical-align: top;
+        word-wrap: break-word;
+        font-size: 10pt;
+      }
+      th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+      }
+      .checkbox {
+        margin-right: 3px;
+      }
+      label {
+        margin-right: 8px;
+      }
+      .grid-container {
+        display: grid;
+        grid-template-columns: auto auto;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .grid-item {
+        padding: 5px;
+        border: 1px solid #000;
+      }
+      .likert-scale {
+        display: grid;
+        grid-template-columns: auto repeat(5, 1fr);
+        align-items: center;
+        margin-bottom: 5px;
+      }
+      .likert-question {
+        padding-right: 10px;
+      }
+      .likert-options {
+        display: flex;
+        justify-content: space-between;
+        text-align: center;
+      }
+      .likert-label {
+        font-size: 9pt;
+        text-align: center;
+      }
+      @media print {
+        body {
+          font-size: 10pt;
+        }
+        h1 {
+          font-size: 14pt;
+        }
+        h2 {
+          font-size: 12pt;
+        }
+        th,
+        td {
+          padding: 3px;
+          font-size: 9pt;
+        }
+        input[type='checkbox'] {
+          -webkit-appearance: none;
+          border: 1px solid black;
+          width: 12px;
+          height: 12px;
+          display: inline-block;
+        }
+        .checkbox {
+          width: 12px;
+          height: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <img src="./imagens/dsas.png" alt="Brasão da Polícia Militar" />
+      <img src="./imagens/pmpb.png" alt="Brasão do Estado da Paraíba" />
+      <h1>POLÍCIA MILITAR DA PARAÍBA</h1>
+      <h2
+        style="
+          border: none;
+          text-align: center;
+          font-size: 12pt;
+          margin-top: 5px;
+        "
+      >
+        DIRETORIA DE SAÚDE E ASSISTÊNCIA SOCIAL
+      </h2>
+      <h1 style="margin-top: 10px">FORMULÁRIO DE TRIAGEM DE SAÚDE</h1>
+    </div>
+
+    <div class="caso-info">
+      <div>
+        <span>CASO N° (ID):_____________</span>
+        <span style="margin-left: 20px">BATALHÃO:_____________</span>
+      </div>
+      <span>DATA: ____/____/_______</span>
+    </div>
+
+    <h2>1. IDENTIFICAÇÃO DO MILITAR</h2>
+    <table>
+      <tr>
+        <td>
+          <strong>MATRÍCULA:</strong>_______________
+          <strong>GRADUAÇÃO:</strong>_______________
+          <strong>IDADE:</strong>_____ anos
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <strong>NOME DO MILITAR:</strong
+          >_______________________________________________
+        </td>
+      </tr>
+    </table>
+
+    <div class="grid-container">
+      <div class="grid-item">
+        <h2>2. DADOS VITAIS E ANTROPOMÉTRICOS</h2>
+        <div style="margin: 5px 0">
+          <strong>Peso:</strong>_______ Kg &nbsp;&nbsp;
+          <strong>Altura:</strong>_______ m
+        </div>
+        <div style="margin: 5px 0">
+          <strong>Você é hipertenso?</strong>
+          <label><input type="checkbox" class="checkbox" /> SIM</label>
+          <label><input type="checkbox" class="checkbox" /> NÃO</label>
+        </div>
+        <div style="margin: 5px 0">
+          <strong>Se sim, valor da última aferição:</strong> ______/______ mmHg
+        </div>
+        <div style="margin: 5px 0">
+          <strong>Você toma algum medicamento regularmente?</strong>
+          <label><input type="checkbox" class="checkbox" /> SIM</label>
+          <label><input type="checkbox" class="checkbox" /> NÃO</label>
+        </div>
+        <div style="margin: 5px 0">
+          <strong>Se sim, quais?</strong>
+          ___________________________________________________
+        </div>
+      </div>
+
+      <div class="grid-item">
+        <h2>3. HÁBITOS DE VIDA</h2>
+        <div style="margin: 5px 0">
+          <strong>Pratica atividade física?</strong>
+          <label><input type="checkbox" class="checkbox" /> SIM</label>
+          <label><input type="checkbox" class="checkbox" /> NÃO</label>
+        </div>
+        <div style="margin: 5px 0">
+          <strong>Frequência:</strong>
+          <label><input type="checkbox" class="checkbox" /> 1-2x/semana</label>
+          <label><input type="checkbox" class="checkbox" /> 3-4x/semana</label>
+          <label><input type="checkbox" class="checkbox" /> 5+x/semana</label>
+        </div>
+        <div style="margin: 5px 0">
+          <strong>Tipo:</strong>
+          _______________________________________________________
+        </div>
+        <div style="margin: 5px 0">
+          <strong>É fumante?</strong>
+          <label><input type="checkbox" class="checkbox" /> SIM</label>
+          <label><input type="checkbox" class="checkbox" /> NÃO</label>
+          <label><input type="checkbox" class="checkbox" /> EX-FUMANTE</label>
+        </div>
+      </div>
+    </div>
+
+    <h2>4. FATORES DE RISCO</h2>
+    <table>
+      <tr>
+        <th style="width: 80%">PERGUNTA</th>
+        <th style="width: 10%">SIM</th>
+        <th style="width: 10%">NÃO</th>
+      </tr>
+      <tr>
+        <td>Você já foi diagnosticado com diabetes?</td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>Você já teve algum problema cardíaco (infarto, angina, etc.)?</td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>Você já teve AVC (derrame)?</td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Você já foi diagnosticado com colesterol ou triglicerídeos altos?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Há casos de doenças cardíacas na sua família antes dos 60 anos (pais,
+          irmãos)?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+    </table>
+
+    <h2>5. STATUS VACINAL</h2>
+    <table>
+      <tr>
+        <th style="width: 70%">PERGUNTA</th>
+        <th style="width: 15%">SIM</th>
+        <th style="width: 15%">NÃO</th>
+      </tr>
+      <tr>
+        <td>Você está com suas vacinas em dia (conforme cartão de vacina)?</td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>Tomou a vacina contra COVID-19?</td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>Tomou a vacina contra gripe no último ano?</td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>Tomou a vacina contra tétano nos últimos 10 anos?</td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+    </table>
+
+    <h2>6. SAÚDE MENTAL E BEM-ESTAR (Questionário PHQ-4)</h2>
+    <p style="font-size: 10pt; margin: 5px 0">
+      Nas últimas 2 semanas, com que frequência você foi incomodado por algum
+      dos problemas abaixo?
+    </p>
+
+    <table>
+      <tr>
+        <th style="width: 50%">PERGUNTA</th>
+        <th style="width: 12.5%">NUNCA</th>
+        <th style="width: 12.5%">ALGUNS DIAS</th>
+        <th style="width: 12.5%">MAIS DA METADE DOS DIAS</th>
+        <th style="width: 12.5%">QUASE TODOS OS DIAS</th>
+      </tr>
+      <tr>
+        <td>1. Sentir-se nervoso, ansioso ou muito tenso</td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>2. Não ser capaz de impedir ou de controlar as preocupações</td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>3. Pouco interesse ou pouco prazer em fazer as coisas</td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>4. Se sentir "para baixo", deprimido ou sem perspectiva</td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+    </table>
+
+    <h2>7. QUALIDADE DE VIDA E SAÚDE OCUPACIONAL</h2>
+
+    <table>
+      <tr>
+        <th style="width: 80%">PERGUNTA</th>
+        <th style="width: 10%">SIM</th>
+        <th style="width: 10%">NÃO</th>
+      </tr>
+      <tr>
+        <td>
+          Você tem dificuldade para dormir ou mantém um sono de boa qualidade?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Você consegue equilibrar sua vida profissional e pessoal de maneira
+          satisfatória?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>Você considera seu consumo de álcool excessivo ou preocupante?</td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Você sente dores constantes que afetam seu desempenho profissional?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Você sente que tem uma rede de apoio (amigos, família) quando precisa?
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+        <td style="text-align: center">
+          <input type="checkbox" class="checkbox" />
+        </td>
+      </tr>
+    </table>
+
+    <h2>8. AUTOAVALIAÇÃO DE SAÚDE</h2>
+    <p style="font-size: 10pt; margin: 5px 0">
+      Como você avalia sua saúde em geral?
+    </p>
+    <div style="display: flex; justify-content: space-between; margin: 10px 0">
+      <div style="text-align: center; width: 18%">
+        <input type="checkbox" class="checkbox" />
+        <div>Muito ruim</div>
+      </div>
+      <div style="text-align: center; width: 18%">
+        <input type="checkbox" class="checkbox" />
+        <div>Ruim</div>
+      </div>
+      <div style="text-align: center; width: 18%">
+        <input type="checkbox" class="checkbox" />
+        <div>Regular</div>
+      </div>
+      <div style="text-align: center; width: 18%">
+        <input type="checkbox" class="checkbox" />
+        <div>Boa</div>
+      </div>
+      <div style="text-align: center; width: 18%">
+        <input type="checkbox" class="checkbox" />
+        <div>Muito boa</div>
+      </div>
+    </div>
+
+    <table>
+      <tr>
+        <td style="border: 1px solid #000; padding: 8px">
+          <strong
+            >Há algo mais sobre sua saúde que você gostaria de informar?</strong
+          ><br />
+          _________________________________________________________________<br />
+          _________________________________________________________________<br />
+          _________________________________________________________________
+        </td>
+      </tr>
+    </table>
+
+    <div
+      style="margin-top: 20px; display: flex; justify-content: space-between"
+    >
+      <div>
+        <strong>Assinatura do Policial</strong><br />
+        ________________________________
+      </div>
+      <div>
+        <strong>Assinatura do Profissional de Saúde</strong><br />
+        ________________________________
+      </div>
+    </div>
+  </body>
+</html>

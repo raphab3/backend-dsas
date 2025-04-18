@@ -14,8 +14,13 @@ import {
 } from './schemas/forms_template.schema';
 import { UpdateFormTemplateService } from './services/UpdateFormTemplate.service';
 import { GetFormTemplateByIdService } from './services/GetFormTemplateById.service';
+import { Location } from '@modules/locations/typeorm/entities/location.entity';
 
-const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([FormTemplate, User]);
+const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([
+  FormTemplate,
+  User,
+  Location,
+]);
 const SCHEMA_TEMPLATES = MongooseModule.forFeature([
   { name: FormTemplateMongo.name, schema: FormTemplateMongoSchema },
 ]);

@@ -22,6 +22,7 @@ interface IPatientInfo {
 interface IResponse {
   id: string;
   professional_name: string;
+  professional_id: string;
   status: StatusAppointmentEnum;
   schedule_id: string;
   schedule_specialty_id: string;
@@ -118,6 +119,7 @@ export class FindAlAppointmentsV2Service {
     const formattedData: IResponse[] = result.data.map((data) => ({
       id: data.id,
       professional_name: data?.schedule?.professional?.person_sig?.nome,
+      professional_id: data?.schedule?.professional?.id,
       status: data.status,
       schedule_id: data?.schedule?.id,
       schedule_specialty_id: data?.schedule?.specialty?.id,

@@ -33,13 +33,6 @@ export interface IPersonSig {
   tipo_servidor: OriginType;
 }
 
-// export enum Origin {
-//   PMPB = 'POLICIAL MILITAR ESTADUAL DA PARAÍBA (PMPB)',
-//   CBMPB = 'BOMBEIRO MILITAR ESTADUAL DA PARAÍBA (CBMPB)',
-//   FUNCIONARIO_CIVIL = 'FUNCIONARIO CIVIL PMPB',
-//   CIVIL = 'CIVIL',
-// }
-
 export type OriginType = 'PMPB' | 'CBMPB' | 'FUNCIONARIO_CIVIL' | 'CIVIL';
 
 export const Origin = {

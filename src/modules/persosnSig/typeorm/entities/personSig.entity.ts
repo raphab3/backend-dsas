@@ -1,10 +1,12 @@
 import { Dependent } from '@modules/dependents/typeorm/entities/dependent.entity';
 import { Location } from '@modules/locations/typeorm/entities/location.entity';
+import { Patient } from '@modules/patients/typeorm/entities/patient.entity';
 import {
   IPersonSig,
   Origin,
   OriginType,
 } from '@modules/persosnSig/interfaces/IPersonSig';
+import { Professional } from '@modules/professionals/typeorm/entities/professional.entity';
 import { User } from '@modules/users/typeorm/entities/user.entity';
 import {
   BeforeInsert,
@@ -14,6 +16,7 @@ import {
   JoinColumn,
   JoinTable,
   ManyToMany,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -120,12 +123,21 @@ export class PersonSig implements IPersonSig {
   @ManyToMany(() => Dependent, (dependent) => dependent.person_sigs)
   dependents: Dependent[];
 
+  @OneToMany(() => Patient, (patient) => patient.person_sig)
+  patients: Patient[];
+
   @OneToOne(() => User, (user) => user.person_sig, {
     onDelete: 'CASCADE',
     nullable: true,
   })
   @JoinColumn()
   user: User;
+
+  @OneToOne(() => Professional, (professional) => professional.person_sig, {
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
+  professional: Professional;
 
   @ManyToMany(() => Location, (location) => location.person_sigs, {
     onDelete: 'CASCADE',

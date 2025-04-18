@@ -9,6 +9,7 @@ import {
   IsNumber,
   Min,
   Max,
+  IsUUID,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import {
@@ -17,6 +18,7 @@ import {
   OperationType,
   FormCategory,
   RuleType,
+  TemplateType,
 } from '../types';
 import { Types } from 'mongoose';
 
@@ -199,6 +201,10 @@ export class CreateFormTemplateDto {
   category?: FormCategory;
 
   @IsOptional()
+  @IsEnum(TemplateType)
+  type?: TemplateType;
+
+  @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => FormSession)
@@ -222,6 +228,14 @@ export class CreateFormTemplateDto {
   @IsOptional()
   @IsBoolean()
   isPublished?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  is_global?: boolean;
+
+  @IsOptional()
+  @IsUUID()
+  location_id?: string;
 
   @IsOptional()
   @IsArray()

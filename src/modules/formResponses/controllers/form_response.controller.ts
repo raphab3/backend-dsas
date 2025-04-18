@@ -58,7 +58,10 @@ export class FormResponseController {
   @ApiOperation({ summary: 'Update form response by id' })
   update(
     @Param('id') id: string,
-    @Body() updateData: { fieldUpdates: { fieldId: string; value: any }[] },
+    @Body()
+    updateData: {
+      fieldUpdates: { fieldId: string; value: any; content?: string }[];
+    },
   ) {
     return this.updateFormResponseService.execute(id, updateData);
   }

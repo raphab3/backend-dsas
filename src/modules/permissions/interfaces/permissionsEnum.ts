@@ -102,6 +102,28 @@ export enum PermissionsEnum {
   find_one_clinicalMetric = 'find_one_clinicalMetric',
   update_clinicalMetric = 'update_clinicalMetric',
   remove_clinicalMetric = 'remove_clinicalMetric',
+  create_document = 'create_document',
+  find_all_documents = 'find_all_documents',
+  find_one_document = 'find_one_document',
+  update_document = 'update_document',
+  remove_document = 'remove_document',
+  create_VitalSigns = 'create_VitalSigns',
+  find_all_VitalSigns = 'find_all_VitalSigns',
+  find_one_VitalSigns = 'find_one_VitalSigns',
+  remove_VitalSigns = 'remove_VitalSigns',
+  list_ged_folders = 'list_ged_folders',
+  search_ged_documents = 'search_ged_documents',
+  sync_ged_document = 'sync_ged_document',
+  create_ged_folder = 'create_ged_folder',
+  checkout_ged_document = 'checkout_ged_document',
+  checkin_ged_document = 'checkin_ged_document',
+  view_ged_document_metadata = 'view_ged_document_metadata',
+  list_ged_document_versions = 'list_ged_document_versions',
+  create_cid = 'create_cid',
+  find_all_cids = 'find_all_cids',
+  find_one_cid = 'find_one_cid',
+
+  create_form_response = 'create_form_response',
 }
 
 export const PermissionsEnumList: PermissionsEnum[] = Object.keys(
@@ -194,6 +216,9 @@ export const groupsOfPermissions = {
     PermissionsEnum.find_one_schedule,
     PermissionsEnum.update_schedule,
     PermissionsEnum.remove_schedule,
+    PermissionsEnum.find_all_cids,
+    PermissionsEnum.find_one_cid,
+    PermissionsEnum.create_form_response,
   ],
   patient: [
     PermissionsEnum.find_all_appointments,

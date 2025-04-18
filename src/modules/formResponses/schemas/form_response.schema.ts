@@ -196,7 +196,6 @@ export type FormResponseMongoDocument = FormResponseMongo & Document;
 export const FormResponseMongoSchema =
   SchemaFactory.createForClass(FormResponseMongo);
 
-// Índices compostos para melhorar a performance de consultas comuns
 FormResponseMongoSchema.index({ templateId: 1, respondentId: 1 });
 FormResponseMongoSchema.index({ templateId: 1, isCompleted: 1 });
 FormResponseMongoSchema.index({ submittedAt: 1, templateId: 1 });

@@ -19,14 +19,18 @@ export class CreateClinicalMetricService {
       throw new BadRequestException(validationResult.message);
     }
 
-    // Processar o valor baseado no tipo da métrica
     const processedValue = this.processMetricValue(createClinicalMetricDto);
 
-    // Criar a métrica com o valor processado
     const clinicalMetric = this.clinicalMetricRepository.create({
-      patient: createClinicalMetricDto.patient,
-      professional: createClinicalMetricDto.professional,
-      attendance: createClinicalMetricDto.attendance,
+      patient: {
+        id: createClinicalMetricDto.patientId,
+      },
+      professional: {
+        id: createClinicalMetricDto.professionalId,
+      },
+      attendance: {
+        id: createClinicalMetricDto.attendanceId,
+      },
       type: createClinicalMetricDto.type,
       code: createClinicalMetricDto.code,
       name: createClinicalMetricDto.name,
@@ -113,7 +117,6 @@ export class CreateClinicalMetricService {
   private processMetricValue(metric: CreateClinicalMetricDto): any {
     const { type, value, metadata } = metric;
 
-    // Processar valor baseado no tipo
     switch (type) {
       case 'VITAL_SIGN':
         if (metadata?.format === 'systolic/diastolic') {

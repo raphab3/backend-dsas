@@ -1,4 +1,6 @@
 import { Professional } from '@modules/professionals/typeorm/entities/professional.entity';
+import { AttendanceStatusEnum } from '@modules/attendances/types';
+
 export interface IResponseStats {
   schedules: {
     total: number;
@@ -68,5 +70,44 @@ export interface IResponseStats {
   employees: {
     total: number;
     byType: Record<string, number>;
+  };
+}
+
+export interface IAttendanceStatsResponse {
+  attendances: {
+    total: number;
+    monthly: Record<string, number>;
+    byStatus: Record<AttendanceStatusEnum, number>;
+    byStatusByMonth: Record<string, Record<AttendanceStatusEnum, number>>;
+    byLocation: Record<
+      string,
+      {
+        inProgress: number;
+        completed: number;
+        canceled: number;
+        paused: number;
+        total: number;
+      }
+    >;
+    bySpecialty: Record<
+      string,
+      {
+        inProgress: number;
+        completed: number;
+        canceled: number;
+        paused: number;
+        total: number;
+      }
+    >;
+    averageDuration: number; // in minutes
+  };
+  professionals: {
+    total: number;
+    byAttendanceCount: Record<string, number>; // professionalName: count
+    byLocation: Record<string, { professionals: Array<{ id: string; name: string }>; total: number }>;
+  };
+  patients: {
+    total: number;
+    byAttendanceCount: Record<string, number>; // top patients by attendance count
   };
 }

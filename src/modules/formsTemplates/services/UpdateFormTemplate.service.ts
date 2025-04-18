@@ -29,6 +29,7 @@ export class UpdateFormTemplateService {
   ) {}
 
   async execute(id: string, updateFormTemplateDto: UpdateFormTemplateDto) {
+    console.log('updateFormTemplateDto:', updateFormTemplateDto);
     const queryRunner =
       this.formTemplateRepository.manager.connection.createQueryRunner();
     await queryRunner.connect();
@@ -50,8 +51,14 @@ export class UpdateFormTemplateService {
         updateFormTemplateDto.description ?? pgTemplate.description;
       pgTemplate.category =
         updateFormTemplateDto.category ?? pgTemplate.category;
+      pgTemplate.type = updateFormTemplateDto.type ?? pgTemplate.type;
       pgTemplate.isPublished =
         updateFormTemplateDto.isPublished ?? pgTemplate.isPublished;
+      pgTemplate.is_global =
+        updateFormTemplateDto.is_global ?? pgTemplate.is_global;
+      pgTemplate.location_id = pgTemplate.is_global
+        ? null
+        : (updateFormTemplateDto.location_id ?? pgTemplate.location_id);
 
       // Buscar e atualizar o documento no MongoDB
       const mongoTemplate = await this.formTemplateMongoModel.findById(
@@ -59,7 +66,7 @@ export class UpdateFormTemplateService {
       );
 
       if (!mongoTemplate) {
-        throw new NotFoundException('MongoDB document not found');
+        throw new NotFoundException('MongoDB documento não encontrado');
       }
 
       // Atualizar campos no MongoDB

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional } from 'class-validator';
+import { IsOptional, IsUUID } from 'class-validator';
 
 export class StartAttendanceDto {
   @ApiProperty({
@@ -28,5 +28,23 @@ export class StartAttendanceDto {
     type: 'string',
   })
   @IsOptional()
+  @IsUUID()
   appointmentId?: string;
+
+  @ApiProperty({
+    description:
+      'Specialty ID (required for standalone attendances without appointment)',
+    type: 'string',
+    example: '123e4567-e89b-12d3-a456-426614174003',
+  })
+  @IsUUID()
+  specialtyId: string;
+
+  @ApiProperty({
+    description: 'Location ID (required for standalone attendances)',
+    type: 'string',
+    example: '123e4567-e89b-12d3-a456-426614174004',
+  })
+  @IsUUID()
+  locationId: string;
 }

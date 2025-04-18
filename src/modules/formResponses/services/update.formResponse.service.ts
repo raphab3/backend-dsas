@@ -1,4 +1,4 @@
-import { Injectable, HttpException } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
@@ -23,26 +23,61 @@ export class UpdateFormResponseService {
         throw new HttpException('Form response not found', 404);
       }
 
-      if (!Array.isArray(data.fieldUpdates)) {
-        throw new HttpException('Invalid fieldUpdates format', 400);
-      }
-
       for (const update of data.fieldUpdates) {
         const session = formResponse.sessions.find((s) =>
           s.fields.some((f) => f.name === update.fieldId),
         );
+
         if (session) {
           const field = session.fields.find((f) => f.name === update.fieldId);
           if (field) {
-            field.response = update.value;
+            console.log('Processing field update:', {
+              fieldName: field.name,
+              fieldType: field.type,
+              currentResponse: field.response,
+              updateValue: update.value,
+            });
+
+            if (field.type === 'document_template') {
+              const existingVariables = field.response?.variables || {};
+
+              if (typeof update.value === 'object') {
+                field.content = update.value.content || field.content;
+                field.response = {
+                  content: update.value.content || field.content,
+                  variables: {
+                    ...existingVariables,
+                    ...(update.value.variables || {}),
+                  },
+                };
+              } else {
+                field.content = update.value;
+                field.response = {
+                  content: update.value,
+                  variables: existingVariables,
+                };
+              }
+
+              console.log('Updated document field state:', {
+                content: field.content.substring(0, 100) + '...',
+                variables: field.response.variables,
+              });
+            } else {
+              field.response = update.value;
+            }
           }
         }
       }
 
-      await formResponse.save();
-    } catch (e) {
-      console.error('Error updating form response:', e);
-      throw new HttpException(e.message, 400);
+      const updatedResponse = await formResponse.save();
+      console.log('Successfully updated form response');
+      return updatedResponse;
+    } catch (error) {
+      console.error('Error in UpdateFormResponseService:', error);
+      throw new HttpException(
+        error.message || 'Error updating form response',
+        error.status || 400,
+      );
     }
   }
 }

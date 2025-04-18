@@ -30,7 +30,7 @@ services:
     networks:
       - sigsaude_net
     ports:
-      - "27017:27017"
+      - "${MONGODB_PORT}:27017"
 
   mongo-express:
     container_name: sigsaude_mongo_express

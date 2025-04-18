@@ -7,6 +7,7 @@ import { SyncPermissionsInRolesService } from './services/SyncPermissionsInRoles
 import { GenerateRolesService } from './services/GenerateRoles.service';
 import { DistributionsLocationsForAllPersonsSigService } from './services/distributionsLocationsForAllPersonsSig.service';
 import { CitiesGeneratesService } from './services/CitiesGenerates.service';
+import { ImportCidsService } from '@modules/cids/services/import-cids.service';
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
@@ -90,6 +91,16 @@ async function bootstrap() {
       console.log('Executando CitiesGeneratesService...');
       const citiesGeneratesService = app.get(CitiesGeneratesService);
       await citiesGeneratesService.execute({ uf });
+      break;
+    case '6':
+      /*
+       * Executa o serviço de seed de CIDs
+       * Usa o serviço CidSeederService
+       * Usado para popular dados de CIDs no banco de dados
+       * */
+      console.log('Executando ImportCidsService...');
+      const importCidsService = app.get(ImportCidsService);
+      await importCidsService.execute();
       break;
     default:
       console.log('Escolha uma opção válida para executar a seed.');

@@ -1,3 +1,4 @@
+import { Attendance } from '@modules/attendances/entities/attendance.entity';
 import { LocationCityEnum } from '@modules/locations/interfaces/ILocation';
 import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
 import { Professional } from '@modules/professionals/typeorm/entities/professional.entity';
@@ -52,6 +53,9 @@ export class Location {
 
   @ManyToMany(() => Professional, (professional) => professional.locations)
   professionals: Professional[];
+
+  @OneToMany(() => Attendance, (attendance) => attendance.location)
+  attendances: Attendance[];
 
   @CreateDateColumn()
   created_at: Date;

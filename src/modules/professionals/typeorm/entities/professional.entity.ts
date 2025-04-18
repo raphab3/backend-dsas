@@ -4,6 +4,7 @@ import { IProfessional } from '@modules/professionals/interfaces/IProfessional';
 import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
 import { Specialty } from '@modules/specialties/typeorm/entities/Specialty.entity';
 import { Trainee } from '@modules/trainees/entities/trainee.entity';
+import { VitalSigns } from '@modules/VitalSigns/entities/VitalSigns.entity';
 import {
   Column,
   CreateDateColumn,
@@ -58,6 +59,9 @@ export class Professional implements IProfessional {
     },
   })
   locations: Location[];
+
+  @OneToMany(() => VitalSigns, (vitalSigns) => vitalSigns.registeredBy)
+  vitalSings: VitalSigns[];
 
   @OneToMany(() => Trainee, (trainee) => trainee.supervisor)
   trainees: Trainee[];

@@ -66,12 +66,16 @@ export class S3Provider {
         `Iniciando upload multipart - Tamanho do arquivo: ${fileStats.size} bytes`,
       );
 
+      // Determinar o Content-Type baseado na extensão do arquivo
+      const contentType =
+        config?.contentType || this.getContentTypeFromKey(key);
+
       // Iniciar upload multipart
       const multipartUpload = await this.s3Client.send(
         new CreateMultipartUploadCommand({
           Bucket: this.bucket,
           Key: key,
-          ContentType: config?.contentType,
+          ContentType: contentType,
           Metadata: config?.metadata,
         }),
       );
@@ -186,18 +190,24 @@ export class S3Provider {
     config?: S3UploadConfig,
   ): Promise<string> {
     try {
+      // Determinar Content-Type baseado na extensão se não for especificado
+      const contentType =
+        config?.contentType || this.getContentTypeFromKey(key);
+
       const command = new PutObjectCommand({
         Bucket: this.bucket,
         Key: key,
         Body: content,
-        ContentType: config?.contentType ?? 'application/octet-stream',
-        ContentDisposition: config?.contentDisposition,
+        ContentType: contentType,
+        ContentDisposition: config?.contentDisposition || 'inline',
         Metadata: config?.metadata,
         ACL: config?.acl,
       });
 
       await this.s3Client.send(command);
-      this.logger.log(`Content uploaded successfully to S3: ${key}`);
+      this.logger.log(
+        `Content uploaded successfully to S3: ${key} with ContentType: ${contentType}`,
+      );
       return key;
     } catch (error) {
       this.logger.error(`Failed to upload content to S3: ${error.message}`);
@@ -210,9 +220,16 @@ export class S3Provider {
    */
   async getSignedUrl(key: string, expiresIn: number = 3600): Promise<string> {
     try {
+      // Determinar o Content-Type baseado na extensão
+      const contentType = this.getContentTypeFromKey(key);
+      const isPdf = contentType === 'application/pdf';
+
+      // Configurar o objeto GetObject com os parâmetros apropriados
       const command = new GetObjectCommand({
         Bucket: this.bucket,
         Key: key,
+        ResponseContentType: contentType,
+        ResponseContentDisposition: isPdf ? 'inline' : 'attachment',
       });
 
       return await getSignedUrl(this.s3Client, command, { expiresIn });
@@ -257,6 +274,42 @@ export class S3Provider {
       this.logger.error(`Failed to list objects: ${error.message}`);
       throw error;
     }
+  }
+
+  /**
+   * Faz download do conteúdo de um objeto do S3
+   */
+  async downloadContent(key: string): Promise<Buffer> {
+    try {
+      const command = new GetObjectCommand({
+        Bucket: this.bucket,
+        Key: key,
+      });
+
+      const response = await this.s3Client.send(command);
+
+      // Converter o stream para um buffer
+      if (response.Body instanceof Readable) {
+        return await this.streamToBuffer(response.Body);
+      } else {
+        throw new Error('S3 response body is not a readable stream');
+      }
+    } catch (error) {
+      this.logger.error(`Failed to download content from S3: ${error.message}`);
+      throw error;
+    }
+  }
+
+  /**
+   * Converte um stream para buffer
+   */
+  private async streamToBuffer(stream: Readable): Promise<Buffer> {
+    return new Promise<Buffer>((resolve, reject) => {
+      const chunks: Buffer[] = [];
+      stream.on('data', (chunk) => chunks.push(Buffer.from(chunk)));
+      stream.on('end', () => resolve(Buffer.concat(chunks)));
+      stream.on('error', reject);
+    });
   }
 
   /**
@@ -334,5 +387,37 @@ export class S3Provider {
       this.logger.error(`Failed to delete objects: ${error.message}`);
       throw error;
     }
+  }
+
+  /**
+   * Determina o Content-Type baseado na extensão do arquivo
+   */
+  private getContentTypeFromKey(key: string): string {
+    const extension = key.split('.').pop()?.toLowerCase();
+
+    const mimeTypes = {
+      pdf: 'application/pdf',
+      jpg: 'image/jpeg',
+      jpeg: 'image/jpeg',
+      png: 'image/png',
+      gif: 'image/gif',
+      bmp: 'image/bmp',
+      webp: 'image/webp',
+      svg: 'image/svg+xml',
+      doc: 'application/msword',
+      docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      xls: 'application/vnd.ms-excel',
+      xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      ppt: 'application/vnd.ms-powerpoint',
+      pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+      txt: 'text/plain',
+      html: 'text/html',
+      csv: 'text/csv',
+      zip: 'application/zip',
+    };
+
+    return extension && mimeTypes[extension]
+      ? mimeTypes[extension]
+      : 'application/octet-stream';
   }
 }
