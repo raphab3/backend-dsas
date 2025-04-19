@@ -17,6 +17,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { GeneratePdfService } from './generate-pdf.service';
+import { DocumentVerificationService } from './document-verification.service';
 
 interface CreateDocumentFromTemplateDto {
   form_template_id: string;
@@ -38,6 +39,7 @@ export class CreateDocumentFromTemplateService {
     private formTemplateMongoModel: Model<FormTemplateMongoDocument>,
     private createFormResponseService: CreateFormResponseService,
     private generatePdfService: GeneratePdfService,
+    private documentVerificationService: DocumentVerificationService,
   ) {}
 
   async execute(data: CreateDocumentFromTemplateDto): Promise<Document> {
@@ -73,6 +75,9 @@ export class CreateDocumentFromTemplateService {
 
       this.logger.log(`Conteúdo extraído: ${content.substring(0, 200)}...`);
 
+      // Gerar código de verificação para o documento
+      const verificationCode = this.documentVerificationService.generateVerificationCode();
+
       const document = this.documentRepository.create({
         name: `Documento baseado em ${formTemplate.name}`,
         description: formTemplate.description || '',
@@ -85,6 +90,7 @@ export class CreateDocumentFromTemplateService {
         form_response_id: formResponse._id.toString(),
         is_signature_required: false,
         created_by: data.created_by,
+        verification_code: verificationCode,
       });
 
       const savedDocument = await this.documentRepository.save(document);

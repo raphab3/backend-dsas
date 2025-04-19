@@ -9,6 +9,7 @@ import {
 import { User } from '@modules/users/typeorm/entities/user.entity';
 import { S3Provider } from '@shared/providers/StorageProvider/services/S3StorageProvider';
 import { DocumentVersion } from '../entities/documentVersion.entity';
+import { DocumentVerificationService } from './document-verification.service';
 
 interface UploadMetadata {
   name?: string;
@@ -30,6 +31,7 @@ export class UploadDocumentService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private s3Provider: S3Provider,
+    private documentVerificationService: DocumentVerificationService,
   ) {}
 
   async execute(file: any, metadata: UploadMetadata): Promise<Document> {
@@ -67,6 +69,9 @@ export class UploadDocumentService {
         },
       });
 
+      // Gerar código de verificação para o documento
+      const verificationCode = this.documentVerificationService.generateVerificationCode();
+
       // Criar o documento
       const document = this.documentRepository.create({
         name: metadata.name || file.originalname,
@@ -77,6 +82,7 @@ export class UploadDocumentService {
         header_template_id: metadata.header_template_id,
         footer_template_id: metadata.footer_template_id,
         created_by: metadata.created_by,
+        verification_code: verificationCode,
       });
 
       // Salvar o documento

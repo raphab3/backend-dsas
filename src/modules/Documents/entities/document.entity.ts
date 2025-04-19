@@ -98,6 +98,10 @@ export class Document {
   @Column({ default: false })
   is_signature_required: boolean;
 
+  @Column({ nullable: true })
+  @Index()
+  verification_code: string;
+
   @ManyToOne(() => User)
   @JoinColumn({ name: 'created_by' })
   creator: User;

@@ -647,4 +647,21 @@ export class PdfSignerService {
       );
     }
   }
+
+  // Métodos para uso direto do SignPdfProvider (para o módulo de atendimentos)
+  async signPdfDirect(params: {
+    pdfBuffer: Buffer;
+    certificate: string;
+    password: string;
+    privateKey: string;
+    reason?: string;
+    location?: string;
+    contactInfo?: string;
+  }) {
+    return this.signPdfProvider.sign(params);
+  }
+
+  async verifyPdfDirect(pdfBuffer: Buffer) {
+    return this.signPdfProvider.verify(pdfBuffer);
+  }
 }

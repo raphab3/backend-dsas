@@ -17,6 +17,9 @@ import {
   Delete,
   Query,
   UploadedFile,
+  Res,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '@shared/guards/Jwt-auth.guard';
 import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
@@ -40,6 +43,8 @@ import { CreateDocumentFromTemplateService } from '../services/Create-document-f
 import { S3Provider } from '@shared/providers/StorageProvider/services/S3StorageProvider';
 import { DocumentSignature } from '@modules/DigitalSignatures/entities/document-signature.entity';
 import { PdfSignerService } from '@modules/DigitalSignatures/services/pdf-signer.service';
+import { Response } from 'express';
+import { Public } from '@shared/decorators';
 
 @ApiTags('documents')
 @Controller('documents')
@@ -95,6 +100,52 @@ export class DocumentController {
     console.log('key', key);
     const signedUrl = await this.s3Provider.getSignedUrl(key, 3600);
     return { download_url: signedUrl };
+  }
+
+  @Get('download')
+  @Public()
+  @ApiOperation({ summary: 'Download file directly' })
+  async downloadFile(@Query('key') key: string, @Res() res: Response) {
+    try {
+      if (!key) {
+        throw new HttpException(
+          'Key parameter is required',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      // Verify if the file exists
+      const exists = await this.s3Provider.objectExists(key);
+      if (!exists) {
+        throw new HttpException('File not found', HttpStatus.NOT_FOUND);
+      }
+
+      // Get the file content
+      const fileBuffer = await this.s3Provider.downloadContent(key);
+
+      // Determine content type based on file extension
+      const contentType = key.endsWith('.pdf')
+        ? 'application/pdf'
+        : 'application/octet-stream';
+
+      // Set response headers
+      res.setHeader('Content-Type', contentType);
+      res.setHeader(
+        'Content-Disposition',
+        contentType === 'application/pdf' ? 'inline' : 'attachment',
+      );
+
+      // Send the file
+      return res.send(fileBuffer);
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        `Error downloading file: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Get(':id')

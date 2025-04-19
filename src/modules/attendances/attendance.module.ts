@@ -1,7 +1,7 @@
 import { StartAttendanceService } from './services/start.attendance.service';
 import { FindAllAttendanceService } from './services/findAll.attendance.service';
 import { FindOneAttendanceService } from './services/findOne.attendance.service';
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { RemoveAttendanceService } from './services/remove.attendance.service';
 import { Attendance } from './entities/attendance.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -42,6 +42,12 @@ import { Location } from '@modules/locations/typeorm/entities/location.entity';
 import { ProvidersModule } from '@shared/providers/providers.module';
 import { GuardModule } from '@shared/guards/guard.module';
 import { User } from '@modules/users/typeorm/entities/user.entity';
+import { AttendancePdfService } from './services/attendance-pdf.service';
+import { AttendanceSignatureService } from './services/attendance-signature.service';
+import { AttendanceSignatureController } from './controllers/attendance-signature.controller';
+import { AttendanceSignature } from './entities/attendanceSignature.entity';
+import { DigitalSignaturesModule } from '@modules/DigitalSignatures/digital-signatures.module';
+import { Certificate } from '@modules/DigitalSignatures/entities/certificate.entity';
 
 const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([
   Attendance,
@@ -56,6 +62,8 @@ const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([
   AttendanceAttachment,
   Attachment,
   User,
+  AttendanceSignature,
+  Certificate,
 ]);
 
 const SCHEMA_TEMPLATES = MongooseModule.forFeature([
@@ -64,7 +72,11 @@ const SCHEMA_TEMPLATES = MongooseModule.forFeature([
 ]);
 
 @Module({
-  controllers: [AttendanceController, AttendanceHealthInfoController],
+  controllers: [
+    AttendanceController,
+    AttendanceHealthInfoController,
+    AttendanceSignatureController,
+  ],
   providers: [
     FindOneAttendanceService,
     FindAllAttendanceService,
@@ -78,6 +90,8 @@ const SCHEMA_TEMPLATES = MongooseModule.forFeature([
     DeleteFormResponseService,
     UpdateAttendanceHealthInfoService,
     AttendanceAttachmentService,
+    AttendancePdfService,
+    AttendanceSignatureService,
   ],
   imports: [
     TYPE_ORM_TEMPLATES,
@@ -89,6 +103,8 @@ const SCHEMA_TEMPLATES = MongooseModule.forFeature([
     PatientHealthModule,
     AttachmentModule,
     GuardModule,
+    forwardRef(() => DigitalSignaturesModule),
   ],
+  exports: [StartAttendanceService, AttendanceSignatureService],
 })
 export class AttendanceModule {}

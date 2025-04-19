@@ -21,6 +21,7 @@ import {
 } from '@modules/formResponses/schemas/form_response.schema';
 import { CreateDocumentDto } from '../dto/create-Document.dto';
 import { GeneratePdfService } from './generate-pdf.service';
+import { DocumentVerificationService } from './document-verification.service';
 
 @Injectable()
 export class CreateDocumentService {
@@ -38,6 +39,7 @@ export class CreateDocumentService {
     @InjectModel(FormTemplateMongo.name)
     private formTemplateMongoModel: Model<FormTemplateMongoDocument>,
     private generatePdfService: GeneratePdfService,
+    private documentVerificationService: DocumentVerificationService,
   ) {}
 
   async execute(createDocumentDto: CreateDocumentDto): Promise<Document> {
@@ -96,6 +98,9 @@ export class CreateDocumentService {
     }
 
     try {
+      // Gerar código de verificação para o documento
+      const verificationCode = this.documentVerificationService.generateVerificationCode();
+
       const document = this.documentRepository.create({
         name: createDocumentDto.name,
         description: createDocumentDto.description,
@@ -110,6 +115,7 @@ export class CreateDocumentService {
         footer_template_id: createDocumentDto.footer_template_id,
         is_signature_required: createDocumentDto.is_signature_required || false,
         created_by: createDocumentDto.created_by,
+        verification_code: verificationCode,
       });
 
       const savedDocument = await this.documentRepository.save(document);

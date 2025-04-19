@@ -15,6 +15,7 @@ import {
   FormTemplateMongoDocument,
 } from '@modules/formsTemplates/schemas/forms_template.schema';
 import { FormTemplate } from '@modules/formsTemplates/entities/forms_template.entity';
+import { DocumentVerificationService } from './document-verification.service';
 
 @Injectable()
 export class CombineDocumentsService {
@@ -29,6 +30,7 @@ export class CombineDocumentsService {
     private formTemplateRepository: Repository<FormTemplate>,
     @InjectModel(FormTemplateMongo.name)
     private formTemplateMongoModel: Model<FormTemplateMongoDocument>,
+    private documentVerificationService: DocumentVerificationService,
   ) {}
 
   async execute(combineDocumentsDto: CombineDocumentsDto) {
@@ -154,6 +156,9 @@ export class CombineDocumentsService {
         combinedContent += `<div class="document-footer">${footerContent}</div>`;
       }
 
+      // Gerar código de verificação para o documento
+      const verificationCode = this.documentVerificationService.generateVerificationCode();
+
       // Criar novo documento combinado
       const combinedDocument = this.documentRepository.create({
         name: combineDocumentsDto.name,
@@ -168,6 +173,7 @@ export class CombineDocumentsService {
         footer_template_id: combineDocumentsDto.footer_template_id || null,
         parent_document_ids: combineDocumentsDto.document_ids,
         created_by: combineDocumentsDto.created_by,
+        verification_code: verificationCode,
       });
 
       const savedDocument =

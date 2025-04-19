@@ -34,6 +34,7 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
 import Attachment from '@modules/attachments/entities/Attachment';
 import { AttendanceAttachment } from '@modules/attendances/entities/attendanceAttachment.entity';
 import { FormShareToken } from '@modules/formShares/entities/formShareToken.entity';
+import { AttendanceSignature } from '@modules/attendances/entities/attendanceSignature.entity';
 
 export const entities = [
   User,
@@ -68,6 +69,7 @@ export const entities = [
   Attachment,
   AttendanceAttachment,
   FormShareToken,
+  AttendanceSignature,
 ];
 
 export const databaseConfig: DataSourceOptions = {

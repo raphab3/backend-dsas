@@ -11,6 +11,8 @@ import {
   FormTemplateMongoSchema,
 } from '@modules/formsTemplates/schemas/forms_template.schema';
 import { DocumentController } from './controllers/Document.controller';
+import { DocumentVerificationController } from './controllers/document-verification.controller';
+import { DocumentVerificationService } from './services/document-verification.service';
 import {
   FormResponseMongo,
   FormResponseMongoSchema,
@@ -30,6 +32,9 @@ import { DeleteDocumentService } from './services/delete-document.service';
 import { CreateDocumentFromTemplateService } from './services/Create-document-from-template.service';
 import { FormsResponseModule } from '@modules/formResponses/form_responses.module';
 import { DigitalSignaturesModule } from '@modules/DigitalSignatures/digital-signatures.module';
+import { Attendance } from '@modules/attendances/entities/attendance.entity';
+import { AttendanceModule } from '@modules/attendances/attendance.module';
+import { AttendanceSignature } from '@modules/attendances/entities/attendanceSignature.entity';
 
 const ENTITIES = TypeOrmModule.forFeature([
   Document,
@@ -37,6 +42,8 @@ const ENTITIES = TypeOrmModule.forFeature([
   SignatureRequirement,
   FormTemplate,
   User,
+  Attendance,
+  AttendanceSignature,
 ]);
 
 const SCHEMAS = MongooseModule.forFeature([
@@ -55,12 +62,16 @@ const SERVICES = [
   RequestSignatureService,
   UploadDocumentService,
   CombineDocumentsService,
+  DocumentVerificationService,
 ];
 
-const forwardRefModules = [forwardRef(() => DigitalSignaturesModule)];
+const forwardRefModules = [
+  forwardRef(() => DigitalSignaturesModule),
+  forwardRef(() => AttendanceModule),
+];
 
 @Module({
-  controllers: [DocumentController],
+  controllers: [DocumentController, DocumentVerificationController],
   providers: [...SERVICES],
   imports: [
     ENTITIES,
@@ -76,6 +87,7 @@ const forwardRefModules = [forwardRef(() => DigitalSignaturesModule)];
     UpdateDocumentService,
     FindDocumentByIdService,
     GeneratePdfService,
+    DocumentVerificationService,
   ],
 })
 export class DocumentModule {}

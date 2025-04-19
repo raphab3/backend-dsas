@@ -281,17 +281,23 @@ export class S3Provider {
    */
   async downloadContent(key: string): Promise<Buffer> {
     try {
+      this.logger.debug(`Downloading content from S3: ${key}`);
+
       const command = new GetObjectCommand({
         Bucket: this.bucket,
         Key: key,
       });
 
       const response = await this.s3Client.send(command);
+      this.logger.debug(`S3 response received for ${key}, content type: ${response.ContentType}`);
 
       // Converter o stream para um buffer
       if (response.Body instanceof Readable) {
-        return await this.streamToBuffer(response.Body);
+        const buffer = await this.streamToBuffer(response.Body);
+        this.logger.debug(`Content converted to buffer: type=${typeof buffer}, isBuffer=${Buffer.isBuffer(buffer)}, length=${buffer.length}`);
+        return buffer;
       } else {
+        this.logger.error(`S3 response body is not a readable stream for ${key}`);
         throw new Error('S3 response body is not a readable stream');
       }
     } catch (error) {
@@ -306,9 +312,22 @@ export class S3Provider {
   private async streamToBuffer(stream: Readable): Promise<Buffer> {
     return new Promise<Buffer>((resolve, reject) => {
       const chunks: Buffer[] = [];
-      stream.on('data', (chunk) => chunks.push(Buffer.from(chunk)));
-      stream.on('end', () => resolve(Buffer.concat(chunks)));
-      stream.on('error', reject);
+
+      stream.on('data', (chunk) => {
+        this.logger.debug(`Received chunk: type=${typeof chunk}, isBuffer=${Buffer.isBuffer(chunk)}, length=${chunk.length || 'unknown'}`);
+        chunks.push(Buffer.from(chunk));
+      });
+
+      stream.on('end', () => {
+        const buffer = Buffer.concat(chunks);
+        this.logger.debug(`Stream converted to buffer: chunks=${chunks.length}, total size=${buffer.length}`);
+        resolve(buffer);
+      });
+
+      stream.on('error', (err) => {
+        this.logger.error(`Error converting stream to buffer: ${err.message}`);
+        reject(err);
+      });
     });
   }
 
