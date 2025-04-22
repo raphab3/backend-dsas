@@ -219,6 +219,12 @@ export const groupsOfPermissions = {
     PermissionsEnum.find_all_cids,
     PermissionsEnum.find_one_cid,
     PermissionsEnum.create_form_response,
+    PermissionsEnum.find_all_documents,
+    PermissionsEnum.find_one_document,
+    PermissionsEnum.create_attendance,
+    PermissionsEnum.find_all_attendances,
+    PermissionsEnum.find_one_attendance,
+    PermissionsEnum.update_attendance,
   ],
   patient: [
     PermissionsEnum.find_all_appointments,
