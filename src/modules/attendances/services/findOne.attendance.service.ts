@@ -2,12 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Attendance } from '../entities/attendance.entity';
-import { VitalSigns } from '@modules/VitalSigns/entities/VitalSigns.entity';
 import { PatientHealthInfoService } from '@modules/patientHealth/services/patient-health-info.service';
 import { PatientAllergy } from '@modules/patientHealth/entities/allergy.entity';
 import { ChronicCondition } from '@modules/patientHealth/entities/chronicCondition.entity';
 import { AttendanceAttachment } from '../entities/attendanceAttachment.entity';
 import { S3Provider } from '@shared/providers/StorageProvider/services/S3StorageProvider';
+import { FindExamsByAttendanceService } from '@modules/patientHealth/nestedsModules/exams/services/find-exams-by-attendance.service';
+import { FindReferralsByAttendanceService } from '@modules/patientHealth/nestedsModules/referrals/services/find-referrals-by-attendance.service';
+import { Exam } from '@modules/patientHealth/nestedsModules/exams/entities/exam.entity';
+import { Referral } from '@modules/patientHealth/nestedsModules/referrals/entities/referral.entity';
+import { VitalSigns } from '../../patientHealth/nestedsModules/VitalSigns/entities/VitalSigns.entity';
+import { MedicalRecord } from '@modules/patientHealth/nestedsModules/medicalRecord/entities/medical-record.entity';
 
 interface IPatientInfo {
   id: string;
@@ -19,6 +24,7 @@ interface IPatientInfo {
   is_dependent: boolean;
   degree_of_kinship?: string;
   tipo_servidor?: string;
+  matricula?: string;
   healthInfo?: {
     allergies: PatientAllergy[];
     chronicConditions: ChronicCondition[];
@@ -60,10 +66,16 @@ interface IResponse {
   } | null;
   patient: IPatientInfo;
   vitalSigns: VitalSigns | null;
+  medicalRecord: MedicalRecord | null;
+  isFollowUp: boolean;
+  needsFollowUp: boolean;
+  isFirstAttendance: boolean;
   createdAt: string | Date;
   updatedAt: string | Date;
   documents: Document[];
   attachments: IAttachmentInfo[];
+  exams: Exam[];
+  referrals: Referral[];
   summary: any;
 }
 
@@ -74,6 +86,8 @@ export class FindOneAttendanceService {
     private attendanceRepository: Repository<Attendance>,
     private patientHealthInfoService: PatientHealthInfoService,
     private storageProvider: S3Provider,
+    private findExamsByAttendanceService: FindExamsByAttendanceService,
+    private findReferralsByAttendanceService: FindReferralsByAttendanceService,
   ) {}
 
   async findOne(id: string): Promise<IResponse> {
@@ -85,6 +99,7 @@ export class FindOneAttendanceService {
       .leftJoinAndSelect('patient.dependent', 'dependent')
       .leftJoinAndSelect('patient.person_sig', 'person_sig')
       .leftJoinAndSelect('attendance.vitalSigns', 'vitalSigns')
+      .leftJoinAndSelect('attendance.medicalRecord', 'medicalRecord')
       .leftJoinAndSelect('attendance.appointment', 'appointment')
       .leftJoinAndSelect('appointment.schedule', 'schedule')
       .leftJoinAndSelect('schedule.specialty', 'schedule_specialty')
@@ -111,6 +126,12 @@ export class FindOneAttendanceService {
     const attachments = await this.processAttachments(
       attendance.attendanceAttachments,
     );
+
+    // Buscar exames relacionados ao atendimento
+    const exams = await this.findExamsByAttendanceService.execute(id);
+
+    // Buscar encaminhamentos relacionados ao atendimento
+    const referrals = await this.findReferralsByAttendanceService.execute(id);
 
     return {
       id: attendance.id,
@@ -139,11 +160,17 @@ export class FindOneAttendanceService {
         : null,
       patient: patientInfo,
       vitalSigns: attendance.vitalSigns,
+      isFollowUp: attendance.isFollowUp || false,
+      needsFollowUp: attendance.needsFollowUp || false,
+      isFirstAttendance: attendance.isFirstAttendance || false,
       createdAt: attendance.createdAt,
       updatedAt: attendance.updatedAt,
       summary: attendance.summary,
+      medicalRecord: attendance.medicalRecord,
       documents: [],
       attachments: attachments,
+      exams: exams,
+      referrals: referrals,
     };
   }
 
@@ -191,6 +218,7 @@ export class FindOneAttendanceService {
       gender: patient.person_sig?.sexo === 'M' ? 'male' : 'female',
       phone: patient.person_sig?.telefone ?? '',
       tipo_servidor: patient.person_sig?.tipo_servidor ?? '',
+      matricula: patient.person_sig?.matricula ?? '',
       is_dependent: false,
       healthInfo,
     };

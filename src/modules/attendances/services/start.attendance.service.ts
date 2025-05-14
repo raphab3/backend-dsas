@@ -33,6 +33,27 @@ export class StartAttendanceService {
         throw new NotFoundException('Patient not found');
       }
 
+      // 1.1 Check if patient has a previous attendance that needs follow-up
+      const previousAttendance = await queryRunner.manager.findOne(Attendance, {
+        where: {
+          patient: { id: startAttendanceDto.patientId },
+          needsFollowUp: true,
+          status: AttendanceStatusEnum.COMPLETED,
+        },
+        order: { endAttendance: 'DESC' },
+      });
+
+      // 1.2 Check if patient has a previous attendance with this professional
+      const previousAttendanceWithProfessional =
+        await queryRunner.manager.findOne(Attendance, {
+          where: {
+            patient: { id: startAttendanceDto.patientId },
+            professional: { id: startAttendanceDto.professionalId },
+            status: AttendanceStatusEnum.COMPLETED,
+          },
+          order: { endAttendance: 'DESC' },
+        });
+
       // 2. Validate if professional exists
       const professional = await queryRunner.manager.findOne(Professional, {
         where: { id: startAttendanceDto.professionalId },
@@ -132,7 +153,20 @@ export class StartAttendanceService {
         appointment,
         specialty,
         location,
+        isFollowUp:
+          startAttendanceDto.isFollowUp || (previousAttendance ? true : false),
+        isFirstAttendance:
+          startAttendanceDto.isFirstAttendance !== undefined
+            ? startAttendanceDto.isFirstAttendance
+            : !previousAttendanceWithProfessional, // É o primeiro atendimento com este profissional
       });
+
+      // If this is a follow-up from a previous attendance that needed follow-up,
+      // update the previous attendance to mark it as followed up
+      if (previousAttendance && !startAttendanceDto.isFollowUp) {
+        previousAttendance.needsFollowUp = false;
+        await queryRunner.manager.save(Attendance, previousAttendance);
+      }
 
       const savedAttendance = await queryRunner.manager.save(
         Attendance,

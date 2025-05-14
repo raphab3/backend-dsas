@@ -1,10 +1,10 @@
+import { VitalSigns } from '@modules/patientHealth/nestedsModules/VitalSigns/entities/VitalSigns.entity';
 import { Location } from '@modules/locations/typeorm/entities/location.entity';
 import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
 import { IProfessional } from '@modules/professionals/interfaces/IProfessional';
 import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
 import { Specialty } from '@modules/specialties/typeorm/entities/Specialty.entity';
 import { Trainee } from '@modules/trainees/entities/trainee.entity';
-import { VitalSigns } from '@modules/VitalSigns/entities/VitalSigns.entity';
 import {
   Column,
   CreateDateColumn,

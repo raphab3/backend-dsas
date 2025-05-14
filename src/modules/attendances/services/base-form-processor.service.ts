@@ -1,8 +1,8 @@
-import { CreateClinicalMetricDto } from '@modules/clinicalMetrics/dto/create-clinicalMetric.dto';
 import { FormResponseMongoDocument } from '@modules/formResponses/schemas/form_response.schema';
 import { Injectable } from '@nestjs/common';
 import { FormProcessor, ExtractedData } from '../types';
 import { Document } from '@modules/Documents/entities/document.entity';
+import { CreateClinicalMetricDto } from '../../patientHealth/nestedsModules/clinicalMetrics/dto/create-clinicalMetric.dto';
 
 @Injectable()
 export class BaseFormProcessor implements FormProcessor {

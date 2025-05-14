@@ -5,7 +5,6 @@ import {
   ApiQuery,
   ApiParam,
 } from '@nestjs/swagger';
-import { FindAllVitalSignsService } from '@modules/VitalSigns/services/findAll.VitalSigns.service';
 import {
   Controller,
   Get,
@@ -29,6 +28,7 @@ import { UpsertVitalSignsService } from '../services/upsert.VitalSign.service';
 import { GetVitalSignsHistoryService } from '../services/getHistory.VitalSigns.service';
 import { GetLatestVitalSignsService } from '../services/getLatest.VitalSigns.service';
 import { QueryVitalSignsHistoryDto } from '../dto/query-VitalSignsHistory.dto';
+import { FindAllVitalSignsService } from '../services/findAll.VitalSigns.service';
 
 @ApiTags('vital-signs')
 @Controller('vital-signs')

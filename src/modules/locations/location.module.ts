@@ -25,6 +25,6 @@ const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Location]);
     FindAllCitieService,
   ],
   imports: [TYPE_ORM_TEMPLATES, AuditModule],
-  exports: [LocationRepository],
+  exports: [LocationRepository, TypeOrmModule.forFeature([Location])],
 })
 export class LocationModule {}

@@ -13,14 +13,12 @@ import { Patient } from '@modules/patients/typeorm/entities/patient.entity';
 import { Professional } from '@modules/professionals/typeorm/entities/professional.entity';
 import { FormsResponseModule } from '@modules/formResponses/form_responses.module';
 import { Appointment } from '@modules/appointments/typeorm/entities/Appointment.entity';
-import { ClinicalMetricModule } from '@modules/clinicalMetrics/clinicalMetric.module';
 import { UpdateAttendanceHealthInfoService } from './services/update-attendance-health-info.service';
 import { AttendanceHealthInfoController } from './controllers/attendance-health-info.controller';
 import { AttendanceAttachment } from './entities/attendanceAttachment.entity';
 import { AttendanceAttachmentService } from './services/attendance-attachment.service';
 import { AttachmentModule } from '@modules/attachments/Attachment.module';
 import Attachment from '@modules/attachments/entities/Attachment';
-import { ClinicalMetric } from '@modules/clinicalMetrics/entities/clinicalMetric.entity';
 import { PatientHealthModule } from '@modules/patientHealth/patient-health.module';
 import {
   FormResponseMongo,
@@ -48,6 +46,13 @@ import { AttendanceSignatureController } from './controllers/attendance-signatur
 import { AttendanceSignature } from './entities/attendanceSignature.entity';
 import { DigitalSignaturesModule } from '@modules/DigitalSignatures/digital-signatures.module';
 import { Certificate } from '@modules/DigitalSignatures/entities/certificate.entity';
+import { ExamsModule } from '@modules/patientHealth/nestedsModules/exams/exams.module';
+import { ReferralsModule } from '@modules/patientHealth/nestedsModules/referrals/referrals.module';
+import { MedicalRecordModule } from '../patientHealth/nestedsModules/medicalRecord/medical-record.module';
+import { ClinicalMetricModule } from '../patientHealth/nestedsModules/clinicalMetrics/clinicalMetric.module';
+import { ClinicalMetric } from '../patientHealth/nestedsModules/clinicalMetrics/entities/clinicalMetric.entity';
+import { PatientMedication } from '@modules/patientHealth/entities/medication.entity';
+import { MedicalRecord } from '../patientHealth/nestedsModules/medicalRecord/entities/medical-record.entity';
 
 const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([
   Attendance,
@@ -64,6 +69,8 @@ const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([
   User,
   AttendanceSignature,
   Certificate,
+  PatientMedication,
+  MedicalRecord,
 ]);
 
 const SCHEMA_TEMPLATES = MongooseModule.forFeature([
@@ -103,8 +110,15 @@ const SCHEMA_TEMPLATES = MongooseModule.forFeature([
     PatientHealthModule,
     AttachmentModule,
     GuardModule,
+    ExamsModule,
+    ReferralsModule,
+    MedicalRecordModule,
     forwardRef(() => DigitalSignaturesModule),
   ],
-  exports: [StartAttendanceService, AttendanceSignatureService],
+  exports: [
+    StartAttendanceService,
+    AttendanceSignatureService,
+    TypeOrmModule.forFeature([Attendance]),
+  ],
 })
 export class AttendanceModule {}

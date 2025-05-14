@@ -1,11 +1,4 @@
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CreateClinicalMetricDto } from '@modules/clinicalMetrics/dto/create-clinicalMetric.dto';
-import { CreateClinicalMetricService } from '@modules/clinicalMetrics/services/create.clinicalMetric.service';
-import { FindAllClinicalMetricService } from '@modules/clinicalMetrics/services/findAll.clinicalMetric.service';
-import { FindOneClinicalMetricService } from '@modules/clinicalMetrics/services/findOne.clinicalMetric.service';
-import { RemoveClinicalMetricService } from '@modules/clinicalMetrics/services/remove.clinicalMetric.service';
-import { UpdateClinicalMetricDto } from '@modules/clinicalMetrics/dto/update-clinicalMetric.dto';
-import { UpdateClinicalMetricService } from '@modules/clinicalMetrics/services/update.clinicalMetric.service';
 import {
   Controller,
   Get,
@@ -24,6 +17,13 @@ import { PermissionsEnum } from '@modules/permissions/interfaces/permissionsEnum
 import { QueryClinicalMetricDto } from '../dto/query-clinicalMetric.dto';
 import AuditInterceptor from '@shared/interceptors/AuditInterceptor';
 import { AuditLog } from '@modules/audits/decorators';
+import { CreateClinicalMetricDto } from '../dto/create-clinicalMetric.dto';
+import { UpdateClinicalMetricDto } from '../dto/update-clinicalMetric.dto';
+import { CreateClinicalMetricService } from '../services/create.clinicalMetric.service';
+import { FindAllClinicalMetricService } from '../services/findAll.clinicalMetric.service';
+import { FindOneClinicalMetricService } from '../services/findOne.clinicalMetric.service';
+import { RemoveClinicalMetricService } from '../services/remove.clinicalMetric.service';
+import { UpdateClinicalMetricService } from '../services/update.clinicalMetric.service';
 
 @ApiTags('clinicalMetric')
 @Controller('clinicalMetric')

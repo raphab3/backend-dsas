@@ -38,6 +38,7 @@ import { QueryAttendanceDto } from '../dto/query-attendance.dto';
 import { CreateAttendanceEvolutionDto } from '../dto/create-attendance-evolution.dto';
 import { AddFormResponseDto } from '../dto/add-form-response.dto';
 import { UpdateAttendanceSpecialtyLocationDto } from '../dto/update-attendance-specialty-location.dto';
+import { UpdateAttendanceFollowUpDto } from '../dto/update-attendance-follow-up.dto';
 import { AddFormResponseService } from '../services/add-form-response.service';
 import { DeleteFormResponseService } from '../services/delete-form-response.service';
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
@@ -116,6 +117,17 @@ export class AttendanceController {
     @Body() data: UpdateAttendanceSpecialtyLocationDto,
   ) {
     return this.updateAttendanceService.updateSpecialtyLocation(id, data);
+  }
+
+  @Patch(':id/follow-up')
+  @AuditLog('MARCAR RETORNO')
+  @ApiOperation({ summary: 'Mark attendance as needing follow-up' })
+  @Permission(PermissionsEnum.update_attendance)
+  async updateFollowUp(
+    @Param('id') id: string,
+    @Body() data: UpdateAttendanceFollowUpDto,
+  ) {
+    return this.updateAttendanceService.updateFollowUp(id, data);
   }
 
   @Get()

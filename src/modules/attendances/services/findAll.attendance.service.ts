@@ -5,9 +5,11 @@ import { Attendance } from '../entities/attendance.entity';
 import { QueryAttendanceDto } from '../dto/query-attendance.dto';
 import { IPaginatedResult } from '@shared/interfaces/IPaginations';
 import { paginate } from '@shared/utils/Pagination';
-import { VitalSigns } from '@modules/VitalSigns/entities/VitalSigns.entity';
 import { AttendanceAttachment } from '../entities/attendanceAttachment.entity';
 import { S3Provider } from '@shared/providers/StorageProvider/services/S3StorageProvider';
+import { Exam } from '@modules/patientHealth/nestedsModules/exams/entities/exam.entity';
+import { Referral } from '@modules/patientHealth/nestedsModules/referrals/entities/referral.entity';
+import { VitalSigns } from '../../patientHealth/nestedsModules/VitalSigns/entities/VitalSigns.entity';
 
 interface IPatientInfo {
   id: string;
@@ -52,6 +54,11 @@ export interface IResponse {
   patient: IPatientInfo;
   vitalSigns: VitalSigns;
   attachments: IAttachmentInfo[];
+  exams?: Exam[];
+  referrals?: Referral[];
+  isFollowUp: boolean;
+  needsFollowUp: boolean;
+  isFirstAttendance: boolean;
   createdAt: string | Date;
   updatedAt: string | Date;
 }
@@ -159,6 +166,9 @@ export class FindAllAttendanceService {
           patient: this.getPatientInfo(data.patient),
           vitalSigns: data.vitalSigns,
           attachments,
+          isFollowUp: data.isFollowUp || false,
+          needsFollowUp: data.needsFollowUp || false,
+          isFirstAttendance: data.isFirstAttendance || false,
           createdAt: data.createdAt,
           updatedAt: data.updatedAt,
         };

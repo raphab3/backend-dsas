@@ -30,6 +30,6 @@ const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([
     RemoveProfessionalService,
   ],
   imports: [TYPE_ORM_TEMPLATES, PersonSigModule, AuditModule],
-  exports: [ProfessionalRepository],
+  exports: [ProfessionalRepository, TypeOrmModule.forFeature([Professional])],
 })
 export class ProfessionalModule {}

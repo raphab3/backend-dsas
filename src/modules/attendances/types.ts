@@ -1,6 +1,6 @@
-import { CreateClinicalMetricDto } from '@modules/clinicalMetrics/dto/create-clinicalMetric.dto';
 import { Document } from '@modules/Documents/entities/document.entity';
 import { FormResponseMongoDocument } from '@modules/formResponses/schemas/form_response.schema';
+import { CreateClinicalMetricDto } from '../patientHealth/nestedsModules/clinicalMetrics/dto/create-clinicalMetric.dto';
 
 export enum AttendanceStatusEnum {
   IN_PROGRESS = 'in_progress',

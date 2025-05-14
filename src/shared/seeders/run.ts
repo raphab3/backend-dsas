@@ -7,7 +7,8 @@ import { SyncPermissionsInRolesService } from './services/SyncPermissionsInRoles
 import { GenerateRolesService } from './services/GenerateRoles.service';
 import { DistributionsLocationsForAllPersonsSigService } from './services/distributionsLocationsForAllPersonsSig.service';
 import { CitiesGeneratesService } from './services/CitiesGenerates.service';
-import { ImportCidsService } from '@modules/cids/services/import-cids.service';
+import { ImportCidsService } from '@modules/patientHealth/nestedsModules/cids/services/import-cids.service';
+import { ExamTypeSeedService } from './services/ExamType.seed.service';
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
@@ -101,6 +102,16 @@ async function bootstrap() {
       console.log('Executando ImportCidsService...');
       const importCidsService = app.get(ImportCidsService);
       await importCidsService.execute();
+      break;
+    case '7':
+      /*
+       * Executa o serviço de seed de Tipos de Exames
+       * Usa o serviço ExamTypeSeedService
+       * Usado para popular dados de tipos de exames no banco de dados
+       * */
+      console.log('Executando ExamTypeSeedService...');
+      const examTypeSeedService = app.get(ExamTypeSeedService);
+      await examTypeSeedService.execute();
       break;
     default:
       console.log('Escolha uma opção válida para executar a seed.');

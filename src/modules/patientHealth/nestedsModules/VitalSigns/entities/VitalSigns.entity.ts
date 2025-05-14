@@ -46,17 +46,40 @@ export class VitalSigns {
     precision: 5,
     scale: 2,
     nullable: true,
+    comment: 'BMI (Body Mass Index) calculated from weight and height',
+  })
+  bmi: number;
+
+  @Column({
+    type: 'decimal',
+    precision: 5,
+    scale: 2,
+    nullable: true,
+    comment: 'Abdominal circumference in centimeters',
+  })
+  abdominalCircumference: number;
+
+  @Column({
+    type: 'decimal',
+    precision: 5,
+    scale: 2,
+    nullable: true,
   })
   bloodGlucose: number;
 
-  @Column({ type: 'jsonb' })
-  metadata: {
-    measurementConditions?: string;
-    equipmentUsed?: string;
-    notes?: string;
-    position?: 'SITTING' | 'STANDING' | 'LYING';
-    [key: string]: any;
-  };
+  // @Column({
+  //   type: 'enum',
+  //   enum: [
+  //     'UNDERWEIGHT',
+  //     'NORMAL',
+  //     'OVERWEIGHT',
+  //     'OBESITY_GRADE_1',
+  //     'OBESITY_GRADE_2',
+  //     'OBESITY_GRADE_3',
+  //   ],
+  //   nullable: true,
+  // })
+  // imc: string;
 
   @ManyToOne(() => Patient, (patient) => patient.vitalSings)
   patient: Patient;

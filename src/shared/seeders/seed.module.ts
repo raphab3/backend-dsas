@@ -9,12 +9,14 @@ import { SyncPermissionsService } from './services/SyncPermissions.service';
 import { GenerateRolesService } from './services/GenerateRoles.service';
 import { DistributionsLocationsForAllPersonsSigService } from './services/distributionsLocationsForAllPersonsSig.service';
 import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
-import { Cid } from '@modules/cids/entities/cid.entity';
-import { ImportCidsService } from '@modules/cids/services/import-cids.service';
+import { Cid } from '@modules/patientHealth/nestedsModules/cids/entities/cid.entity';
+import { ImportCidsService } from '@modules/patientHealth/nestedsModules/cids/services/import-cids.service';
+import { ExamType } from '@modules/patientHealth/nestedsModules/exams/entities/exam-type.entity';
+import { ExamTypeSeedService } from './services/ExamType.seed.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Location, Role, Permission, PersonSig, Cid]),
+    TypeOrmModule.forFeature([Location, Role, Permission, PersonSig, Cid, ExamType]),
   ],
   providers: [
     LocationSeedService,
@@ -23,6 +25,7 @@ import { ImportCidsService } from '@modules/cids/services/import-cids.service';
     GenerateRolesService,
     DistributionsLocationsForAllPersonsSigService,
     ImportCidsService,
+    ExamTypeSeedService,
   ],
 })
 export class SeedModule {}

@@ -11,6 +11,7 @@ import { Patient } from '@modules/patients/typeorm/entities/patient.entity';
 import { Attendance } from '@modules/attendances/entities/attendance.entity';
 import { addDays } from 'date-fns';
 import { ConfigService } from '@nestjs/config';
+import env from '@config/env';
 
 @Injectable()
 export class FormShareService {
@@ -134,7 +135,7 @@ export class FormShareService {
   getFormUrl(shortCode: string): string {
     const baseUrl = this.configService.get<string>(
       'PUBLIC_FORM_URL',
-      'http://localhost:3000',
+      env.BACKOFFICE_URL,
     );
     return `${baseUrl}/forms/public/${shortCode}`;
   }

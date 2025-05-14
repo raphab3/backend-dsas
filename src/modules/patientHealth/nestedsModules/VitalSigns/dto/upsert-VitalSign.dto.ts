@@ -1,11 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsUUID,
-  IsObject,
-} from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsUUID } from 'class-validator';
 
 export class UpsertVitalSignsDto {
   @ApiProperty()
@@ -53,19 +47,18 @@ export class UpsertVitalSignsDto {
   @IsOptional()
   height?: number;
 
+  @ApiProperty({ description: 'BMI (Body Mass Index)' })
+  @IsNumber()
+  @IsOptional()
+  bmi?: number;
+
+  @ApiProperty({ description: 'Abdominal circumference in centimeters' })
+  @IsNumber()
+  @IsOptional()
+  abdominalCircumference?: number;
+
   @ApiProperty()
   @IsNumber()
   @IsOptional()
   bloodGlucose?: number;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsObject()
-  metadata?: {
-    measurementConditions?: string;
-    equipmentUsed?: string;
-    notes?: string;
-    position?: 'SITTING' | 'STANDING' | 'LYING';
-    [key: string]: any;
-  };
 }

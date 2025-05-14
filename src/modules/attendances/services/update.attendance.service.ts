@@ -5,6 +5,7 @@ import { Attendance } from '../entities/attendance.entity';
 import { Specialty } from '@modules/specialties/typeorm/entities/Specialty.entity';
 import { Location } from '@modules/locations/typeorm/entities/location.entity';
 import { UpdateAttendanceSpecialtyLocationDto } from '../dto/update-attendance-specialty-location.dto';
+import { UpdateAttendanceFollowUpDto } from '../dto/update-attendance-follow-up.dto';
 
 interface UpdateAttendanceEvolutionDto {
   content: string;
@@ -80,6 +81,23 @@ export class UpdateAttendanceService {
 
       attendance.location = location;
     }
+
+    return this.attendanceRepository.save(attendance);
+  }
+
+  async updateFollowUp(
+    id: string,
+    data: UpdateAttendanceFollowUpDto,
+  ): Promise<Attendance> {
+    const attendance = await this.attendanceRepository.findOne({
+      where: { id },
+    });
+
+    if (!attendance) {
+      throw new NotFoundException('Attendance not found');
+    }
+
+    attendance.needsFollowUp = data.needsFollowUp;
 
     return this.attendanceRepository.save(attendance);
   }

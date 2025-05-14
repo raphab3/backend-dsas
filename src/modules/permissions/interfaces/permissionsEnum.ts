@@ -124,6 +124,26 @@ export enum PermissionsEnum {
   find_one_cid = 'find_one_cid',
 
   create_form_response = 'create_form_response',
+
+  // Permissões para Exames
+  create_exam_type = 'create_exam_type',
+  read_exam_type = 'read_exam_type',
+  update_exam_type = 'update_exam_type',
+  create_exam = 'create_exam',
+  read_exam = 'read_exam',
+  update_exam = 'update_exam',
+  delete_exam_attachment = 'delete_exam_attachment',
+
+  // Permissões para Encaminhamentos
+  create_referral = 'create_referral',
+  read_referral = 'read_referral',
+  update_referral = 'update_referral',
+
+  create_patient_health_info = 'create_patient_health_info',
+  find_all_patient_health_info = 'find_all_patient_health_info',
+  find_one_patient_health_info = 'find_one_patient_health_info',
+  update_patient_health_info = 'update_patient_health_info',
+  remove_patient_health_info = 'remove_patient_health_info',
 }
 
 export const PermissionsEnumList: PermissionsEnum[] = Object.keys(
@@ -225,6 +245,16 @@ export const groupsOfPermissions = {
     PermissionsEnum.find_all_attendances,
     PermissionsEnum.find_one_attendance,
     PermissionsEnum.update_attendance,
+    // Permissões para Exames
+    PermissionsEnum.read_exam_type,
+    PermissionsEnum.create_exam,
+    PermissionsEnum.read_exam,
+    PermissionsEnum.update_exam,
+    PermissionsEnum.delete_exam_attachment,
+    // Permissões para Encaminhamentos
+    PermissionsEnum.create_referral,
+    PermissionsEnum.read_referral,
+    PermissionsEnum.update_referral,
   ],
   patient: [
     PermissionsEnum.find_all_appointments,

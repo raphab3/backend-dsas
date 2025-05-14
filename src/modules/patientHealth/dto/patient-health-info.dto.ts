@@ -3,6 +3,7 @@ import { IsArray, IsOptional, IsString, IsUUID, ValidateNested } from 'class-val
 import { Type } from 'class-transformer';
 import { CreateAllergyDto } from './create-allergy.dto';
 import { CreateChronicConditionDto } from './create-chronic-condition.dto';
+import { CreateMedicationDto } from './medication.dto';
 
 export class PatientHealthInfoDto {
   @ApiProperty({
@@ -72,4 +73,28 @@ export class PatientHealthInfoDto {
   @Type(() => CreateChronicConditionDto)
   @IsOptional()
   detailedChronicConditions?: CreateChronicConditionDto[];
+
+  @ApiProperty({
+    description: 'List of medications (simple format)',
+    type: [Object],
+    example: [
+      { name: 'Paracetamol', dosage: '500mg', frequency: 'TWICE_DAILY' },
+      'Dipirona'
+    ],
+    required: false,
+  })
+  @IsArray()
+  @IsOptional()
+  medications?: Array<string | { name: string; dosage?: string; frequency?: string }>;
+
+  @ApiProperty({
+    description: 'List of detailed medications',
+    type: [CreateMedicationDto],
+    required: false,
+  })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateMedicationDto)
+  @IsOptional()
+  detailedMedications?: CreateMedicationDto[];
 }

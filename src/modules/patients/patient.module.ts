@@ -24,6 +24,6 @@ const TYPE_ORM_TEMPLATES = TypeOrmModule.forFeature([Patient]);
     RemovePatientService,
   ],
   imports: [TYPE_ORM_TEMPLATES, PersonSigModule, AuditModule],
-  exports: [PatientRepository],
+  exports: [PatientRepository, TypeOrmModule.forFeature([Patient])],
 })
 export class PatientModule {}

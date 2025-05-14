@@ -6,10 +6,15 @@ import { PatientHealthInfoDto } from '../dto/patient-health-info.dto';
 @ApiTags('Patient Health Info')
 @Controller('patient-health-info')
 export class PatientHealthInfoController {
-  constructor(private readonly patientHealthInfoService: PatientHealthInfoService) {}
+  constructor(
+    private readonly patientHealthInfoService: PatientHealthInfoService,
+  ) {}
 
   @Post()
-  @ApiOperation({ summary: 'Atualizar informações de saúde do paciente (alergias e doenças crônicas)' })
+  @ApiOperation({
+    summary:
+      'Atualizar informações de saúde do paciente (alergias e doenças crônicas)',
+  })
   updateHealthInfo(@Body() dto: PatientHealthInfoDto) {
     return this.patientHealthInfoService.updatePatientHealthInfo(dto);
   }

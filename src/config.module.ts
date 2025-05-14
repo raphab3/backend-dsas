@@ -34,14 +34,16 @@ import { FormsResponseModule } from '@modules/formResponses/form_responses.modul
 import { FormTemplateModule } from '@modules/formsTemplates/form_template.module';
 import { AttendanceModule } from '@modules/attendances/attendance.module';
 import { GroupFormTemplateModule } from '@modules/groupFormTemplates/groupFormTemplate.module';
-import { VitalSignsModule } from '@modules/VitalSigns/VitalSign.module';
 import { DocumentModule } from '@modules/Documents/Document.module';
 import { DigitalSignaturesModule } from '@modules/DigitalSignatures/digital-signatures.module';
 import { NotificationsModule } from '@shared/providers/Notification/notifications.module';
-import { CidModule } from '@modules/cids/cid.module';
+import { CidModule } from '@modules/patientHealth/nestedsModules/cids/cid.module';
 import { AttachmentModule } from '@modules/attachments/Attachment.module';
 import { GuardModule } from '@shared/guards/guard.module';
 import { FormSharesModule } from '@modules/formShares/form-shares.module';
+import { ExamsModule } from '@modules/patientHealth/nestedsModules/exams/exams.module';
+import { ReferralsModule } from '@modules/patientHealth/nestedsModules/referrals/referrals.module';
+import { VitalSignsModule } from '@modules/patientHealth/nestedsModules/VitalSigns/VitalSign.module';
 
 export const RATE_LIMIT_MODULE = ThrottlerModule.forRoot([
   {
@@ -80,6 +82,8 @@ export const MODULES = [
   CidModule,
   AttachmentModule,
   FormSharesModule,
+  ExamsModule,
+  ReferralsModule,
 ];
 
 export const EXTRA_MODULES = [

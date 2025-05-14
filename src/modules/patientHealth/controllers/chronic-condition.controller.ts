@@ -16,7 +16,9 @@ import { UpdateChronicConditionDto } from '../dto/update-chronic-condition.dto';
 @ApiTags('Patient Chronic Conditions')
 @Controller('patient-chronic-conditions')
 export class ChronicConditionController {
-  constructor(private readonly chronicConditionService: ChronicConditionService) {}
+  constructor(
+    private readonly chronicConditionService: ChronicConditionService,
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Criar uma nova condição crônica' })
@@ -25,7 +27,9 @@ export class ChronicConditionController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Listar todas as condições crônicas ou filtrar por paciente' })
+  @ApiOperation({
+    summary: 'Listar todas as condições crônicas ou filtrar por paciente',
+  })
   findAll(@Query('patientId') patientId?: string) {
     if (patientId) {
       return this.chronicConditionService.findByPatient(patientId);
@@ -41,7 +45,10 @@ export class ChronicConditionController {
 
   @Patch(':id')
   @ApiOperation({ summary: 'Atualizar uma condição crônica' })
-  update(@Param('id') id: string, @Body() updateConditionDto: UpdateChronicConditionDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateConditionDto: UpdateChronicConditionDto,
+  ) {
     return this.chronicConditionService.update(id, updateConditionDto);
   }
 

@@ -56,7 +56,6 @@ export class UpsertVitalSignsService {
       weight: upsertVitalSignsDto.weight,
       height: upsertVitalSignsDto.height,
       bloodGlucose: upsertVitalSignsDto.bloodGlucose,
-      metadata: upsertVitalSignsDto.metadata,
       attendance: { id: attendance.id },
       patient: { id: attendance.patient.id },
       registeredBy: { id: professional.id },

@@ -1,7 +1,7 @@
 import { Appointment } from '@modules/appointments/typeorm/entities/Appointment.entity';
+import { VitalSigns } from '@modules/patientHealth/nestedsModules/VitalSigns/entities/VitalSigns.entity';
 import { Dependent } from '@modules/dependents/typeorm/entities/dependent.entity';
 import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
-import { VitalSigns } from '@modules/VitalSigns/entities/VitalSigns.entity';
 import {
   CreateDateColumn,
   Entity,

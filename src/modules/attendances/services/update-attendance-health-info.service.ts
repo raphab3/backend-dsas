@@ -3,7 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Attendance } from '../entities/attendance.entity';
 import { UpdateAttendanceHealthInfoDto } from '../dto/update-attendance-health-info.dto';
-import { ClinicalMetric, MetricType } from '@modules/clinicalMetrics/entities/clinicalMetric.entity';
+import {
+  ClinicalMetric,
+  MetricType,
+} from '../../patientHealth/nestedsModules/clinicalMetrics/entities/clinicalMetric.entity';
 
 @Injectable()
 export class UpdateAttendanceHealthInfoService {
@@ -38,7 +41,10 @@ export class UpdateAttendanceHealthInfoService {
     return attendance;
   }
 
-  private async processAllergies(attendance: Attendance, allergies: string[]): Promise<void> {
+  private async processAllergies(
+    attendance: Attendance,
+    allergies: string[],
+  ): Promise<void> {
     // Remover métricas de alergia existentes para este atendimento
     await this.clinicalMetricRepository.delete({
       attendance: { id: attendance.id },
@@ -46,7 +52,7 @@ export class UpdateAttendanceHealthInfoService {
     });
 
     // Criar novas métricas para cada alergia
-    const allergyMetrics = allergies.map(allergy => {
+    const allergyMetrics = allergies.map((allergy) => {
       return this.clinicalMetricRepository.create({
         patient: attendance.patient,
         professional: attendance.professional,
@@ -66,7 +72,10 @@ export class UpdateAttendanceHealthInfoService {
     await this.clinicalMetricRepository.save(allergyMetrics);
   }
 
-  private async processChronicConditions(attendance: Attendance, conditions: string[]): Promise<void> {
+  private async processChronicConditions(
+    attendance: Attendance,
+    conditions: string[],
+  ): Promise<void> {
     // Remover métricas de condição existentes para este atendimento
     await this.clinicalMetricRepository.delete({
       attendance: { id: attendance.id },
@@ -74,7 +83,7 @@ export class UpdateAttendanceHealthInfoService {
     });
 
     // Criar novas métricas para cada condição crônica
-    const conditionMetrics = conditions.map(condition => {
+    const conditionMetrics = conditions.map((condition) => {
       return this.clinicalMetricRepository.create({
         patient: attendance.patient,
         professional: attendance.professional,

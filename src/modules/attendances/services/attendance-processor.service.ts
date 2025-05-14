@@ -1,4 +1,3 @@
-import { CreateClinicalMetricService } from '@modules/clinicalMetrics/services/create.clinicalMetric.service';
 import {
   FormResponseMongo,
   FormResponseMongoDocument,
@@ -10,6 +9,7 @@ import { DataSource, QueryRunner } from 'typeorm';
 import { Attendance } from '../entities/attendance.entity';
 import { ExtractedData } from '../types';
 import { BaseFormProcessor } from './base-form-processor.service';
+import { CreateClinicalMetricService } from '../../patientHealth/nestedsModules/clinicalMetrics/services/create.clinicalMetric.service';
 
 @Injectable()
 export class AttendanceProcessorService {

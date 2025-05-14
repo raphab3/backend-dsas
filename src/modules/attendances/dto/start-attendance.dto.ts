@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsUUID } from 'class-validator';
+import { IsBoolean, IsOptional, IsUUID } from 'class-validator';
 
 export class StartAttendanceDto {
   @ApiProperty({
@@ -47,4 +47,24 @@ export class StartAttendanceDto {
   })
   @IsUUID()
   locationId: string;
+
+  @ApiProperty({
+    description: 'Mark if this is a follow-up attendance',
+    type: 'boolean',
+    example: false,
+    required: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  isFollowUp?: boolean;
+
+  @ApiProperty({
+    description: 'Mark if this is a first-time attendance with this professional. If not provided, it will be automatically determined based on patient history with this professional.',
+    type: 'boolean',
+    example: true,
+    required: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  isFirstAttendance?: boolean;
 }

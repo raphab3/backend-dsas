@@ -20,8 +20,9 @@ import {
 } from 'typeorm';
 import { AttendanceStatusEnum } from '../types';
 import { format } from 'date-fns';
-import { ClinicalMetric } from '@modules/clinicalMetrics/entities/clinicalMetric.entity';
-import { VitalSigns } from '@modules/VitalSigns/entities/VitalSigns.entity';
+import { ClinicalMetric } from '../../patientHealth/nestedsModules/clinicalMetrics/entities/clinicalMetric.entity';
+import { VitalSigns } from '../../patientHealth/nestedsModules/VitalSigns/entities/VitalSigns.entity';
+import { MedicalRecord } from '../../patientHealth/nestedsModules/medicalRecord/entities/medical-record.entity';
 
 @Entity('attendances')
 @Index('IDX_UNIQUE_CODE', ['code'], { unique: true })
@@ -112,11 +113,26 @@ export class Attendance {
   })
   vitalSigns: VitalSigns;
 
+  @OneToOne(() => MedicalRecord, (medicalRecord) => medicalRecord.attendance, {
+    eager: true,
+    cascade: true,
+  })
+  medicalRecord: MedicalRecord;
+
   @OneToMany(
     () => AttendanceAttachment,
     (attendanceAttachment) => attendanceAttachment.attendance,
   )
   attendanceAttachments: AttendanceAttachment[];
+
+  @Column({ type: 'boolean', default: false })
+  isFollowUp: boolean;
+
+  @Column({ type: 'boolean', default: false })
+  needsFollowUp: boolean;
+
+  @Column({ type: 'boolean', default: false })
+  isFirstAttendance: boolean;
 
   @CreateDateColumn()
   createdAt: Date;

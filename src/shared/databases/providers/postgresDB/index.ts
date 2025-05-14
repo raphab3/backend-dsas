@@ -3,7 +3,6 @@ import { Appointment } from '@modules/appointments/typeorm/entities/Appointment.
 import { Asset } from '@modules/assets/typeorm/entities/Asset.entity';
 import { Attendance } from '@modules/attendances/entities/attendance.entity';
 import { Audit } from '@modules/audits/typeorm/entities/Audit.entity';
-import { ClinicalMetric } from '@modules/clinicalMetrics/entities/clinicalMetric.entity';
 import { Dependent } from '@modules/dependents/typeorm/entities/dependent.entity';
 import { Certificate } from '@modules/DigitalSignatures/entities/certificate.entity';
 import { DocumentSignature } from '@modules/DigitalSignatures/entities/document-signature.entity';
@@ -18,7 +17,7 @@ import { Location } from '@modules/locations/typeorm/entities/location.entity';
 import { Patient } from '@modules/patients/typeorm/entities/patient.entity';
 import { PatientAllergy } from '@modules/patientHealth/entities/allergy.entity';
 import { ChronicCondition } from '@modules/patientHealth/entities/chronicCondition.entity';
-import { Cid } from '@modules/cids/entities/cid.entity';
+import { Cid } from '@modules/patientHealth/nestedsModules/cids/entities/cid.entity';
 import { Permission } from '@modules/permissions/typeorm/entities/permission.entity';
 import { PersonSig } from '@modules/persosnSig/typeorm/entities/personSig.entity';
 import { Professional } from '@modules/professionals/typeorm/entities/professional.entity';
@@ -27,7 +26,6 @@ import { Schedule } from '@modules/schedules/typeorm/entities/schedule.entity';
 import { Specialty } from '@modules/specialties/typeorm/entities/Specialty.entity';
 import { Trainee } from '@modules/trainees/entities/trainee.entity';
 import { User } from '@modules/users/typeorm/entities/user.entity';
-import { VitalSigns } from '@modules/VitalSigns/entities/VitalSigns.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSourceOptions, DataSource } from 'typeorm';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
@@ -35,6 +33,14 @@ import Attachment from '@modules/attachments/entities/Attachment';
 import { AttendanceAttachment } from '@modules/attendances/entities/attendanceAttachment.entity';
 import { FormShareToken } from '@modules/formShares/entities/formShareToken.entity';
 import { AttendanceSignature } from '@modules/attendances/entities/attendanceSignature.entity';
+import { Referral } from '@modules/patientHealth/nestedsModules/referrals/entities/referral.entity';
+import { Exam } from '@modules/patientHealth/nestedsModules/exams/entities/exam.entity';
+import { ExamType } from '@modules/patientHealth/nestedsModules/exams/entities/exam-type.entity';
+import { ExamAttachment } from '@modules/patientHealth/nestedsModules/exams/entities/exam-attachment.entity';
+import { ClinicalMetric } from '@modules/patientHealth/nestedsModules/clinicalMetrics/entities/clinicalMetric.entity';
+import { VitalSigns } from '@modules/patientHealth/nestedsModules/VitalSigns/entities/VitalSigns.entity';
+import { PatientMedication } from '@modules/patientHealth/entities/medication.entity';
+import { MedicalRecord } from '@modules/patientHealth/nestedsModules/medicalRecord/entities/medical-record.entity';
 
 export const entities = [
   User,
@@ -70,6 +76,12 @@ export const entities = [
   AttendanceAttachment,
   FormShareToken,
   AttendanceSignature,
+  Referral,
+  Exam,
+  ExamType,
+  ExamAttachment,
+  MedicalRecord,
+  PatientMedication,
 ];
 
 export const databaseConfig: DataSourceOptions = {
